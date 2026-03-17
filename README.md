@@ -1,4 +1,5 @@
-html_content = '''<!DOCTYPE html>
+index.html
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -13,20 +14,20 @@ html_content = '''<!DOCTYPE html>
             --gold: #c9a961;
             --dark: #2c1810;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Lato', sans-serif;
             background: var(--cream);
             color: var(--dark);
             overflow-x: hidden;
         }
-        
+
         /* Header */
         header {
             background: linear-gradient(135deg, var(--rose-gold) 0%, #e8c4c4 100%);
@@ -35,7 +36,7 @@ html_content = '''<!DOCTYPE html>
             position: relative;
             overflow: hidden;
         }
-        
+
         header::before {
             content: '';
             position: absolute;
@@ -48,12 +49,12 @@ html_content = '''<!DOCTYPE html>
             animation: sparkle 20s linear infinite;
             opacity: 0.5;
         }
-        
+
         @keyframes sparkle {
             0% { transform: translate(0, 0); }
             100% { transform: translate(20px, 20px); }
         }
-        
+
         .logo {
             font-family: 'Playfair Display', serif;
             font-size: 2.5rem;
@@ -62,7 +63,7 @@ html_content = '''<!DOCTYPE html>
             position: relative;
             z-index: 1;
         }
-        
+
         .subtitle {
             font-family: 'Lato', sans-serif;
             font-weight: 300;
@@ -72,14 +73,14 @@ html_content = '''<!DOCTYPE html>
             letter-spacing: 3px;
             text-transform: uppercase;
         }
-        
+
         /* Container */
         .container {
             max-width: 900px;
             margin: 0 auto;
             padding: 2rem 1rem;
         }
-        
+
         /* Seção do Cardápio */
         .menu-section {
             background: white;
@@ -90,7 +91,7 @@ html_content = '''<!DOCTYPE html>
             position: relative;
             overflow: hidden;
         }
-        
+
         .menu-section::after {
             content: '🧁';
             position: absolute;
@@ -99,7 +100,7 @@ html_content = '''<!DOCTYPE html>
             font-size: 2rem;
             opacity: 0.2;
         }
-        
+
         h2 {
             font-family: 'Playfair Display', serif;
             color: var(--chocolate);
@@ -109,7 +110,7 @@ html_content = '''<!DOCTYPE html>
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         /* Upload de PDF */
         .pdf-upload {
             border: 3px dashed var(--rose-gold);
@@ -121,35 +122,35 @@ html_content = '''<!DOCTYPE html>
             cursor: pointer;
             position: relative;
         }
-        
+
         .pdf-upload:hover {
             border-color: var(--chocolate);
             background: #fff5f5;
             transform: translateY(-2px);
         }
-        
+
         .pdf-upload.dragover {
             border-color: var(--gold);
             background: #fffef5;
             transform: scale(1.02);
         }
-        
+
         .upload-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
         }
-        
+
         .upload-text {
             color: var(--chocolate);
             font-weight: 600;
             margin-bottom: 0.5rem;
         }
-        
+
         .upload-hint {
             color: #999;
             font-size: 0.9rem;
         }
-        
+
         input[type="file"] {
             position: absolute;
             width: 100%;
@@ -159,7 +160,7 @@ html_content = '''<!DOCTYPE html>
             opacity: 0;
             cursor: pointer;
         }
-        
+
         .pdf-preview {
             display: none;
             margin-top: 1.5rem;
@@ -170,11 +171,11 @@ html_content = '''<!DOCTYPE html>
             gap: 1rem;
             animation: slideIn 0.3s ease;
         }
-        
+
         .pdf-preview.active {
             display: flex;
         }
-        
+
         @keyframes slideIn {
             from {
                 opacity: 0;
@@ -185,26 +186,26 @@ html_content = '''<!DOCTYPE html>
                 transform: translateY(0);
             }
         }
-        
+
         .pdf-icon {
             font-size: 2rem;
         }
-        
+
         .pdf-info {
             flex: 1;
             text-align: left;
         }
-        
+
         .pdf-name {
             font-weight: 700;
             color: var(--chocolate);
         }
-        
+
         .pdf-size {
             font-size: 0.85rem;
             color: #666;
         }
-        
+
         .remove-pdf {
             background: #ff6b6b;
             color: white;
@@ -215,12 +216,12 @@ html_content = '''<!DOCTYPE html>
             font-size: 0.85rem;
             transition: all 0.2s;
         }
-        
+
         .remove-pdf:hover {
             background: #ff5252;
             transform: scale(1.05);
         }
-        
+
         /* Seção de Sabores */
         .flavors-section {
             background: white;
@@ -229,14 +230,14 @@ html_content = '''<!DOCTYPE html>
             margin-bottom: 2rem;
             box-shadow: 0 10px 40px rgba(93, 64, 55, 0.1);
         }
-        
+
         .flavors-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 1rem;
             margin-top: 1.5rem;
         }
-        
+
         .flavor-card {
             border: 2px solid #eee;
             border-radius: 15px;
@@ -247,7 +248,7 @@ html_content = '''<!DOCTYPE html>
             position: relative;
             overflow: hidden;
         }
-        
+
         .flavor-card::before {
             content: '';
             position: absolute;
@@ -259,19 +260,19 @@ html_content = '''<!DOCTYPE html>
             opacity: 0;
             transition: opacity 0.3s;
         }
-        
+
         .flavor-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
-        
+
         .flavor-card.selected {
             border-color: var(--gold);
             background: linear-gradient(135deg, #fff9e6 0%, #fff5d6 100%);
             transform: scale(1.05);
             box-shadow: 0 8px 25px rgba(201, 169, 97, 0.3);
         }
-        
+
         .flavor-card.selected::after {
             content: '✓';
             position: absolute;
@@ -288,25 +289,25 @@ html_content = '''<!DOCTYPE html>
             font-size: 0.8rem;
             font-weight: bold;
         }
-        
+
         .flavor-icon {
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
             display: block;
         }
-        
+
         .flavor-name {
             font-weight: 700;
             color: var(--chocolate);
             font-size: 0.95rem;
         }
-        
+
         .flavor-desc {
             font-size: 0.8rem;
             color: #888;
             margin-top: 0.3rem;
         }
-        
+
         /* Formulário de Pedido */
         .order-form {
             background: white;
@@ -314,11 +315,11 @@ html_content = '''<!DOCTYPE html>
             padding: 2.5rem;
             box-shadow: 0 10px 40px rgba(93, 64, 55, 0.1);
         }
-        
+
         .form-group {
             margin-bottom: 1.5rem;
         }
-        
+
         label {
             display: block;
             margin-bottom: 0.5rem;
@@ -326,7 +327,7 @@ html_content = '''<!DOCTYPE html>
             font-weight: 600;
             font-size: 0.95rem;
         }
-        
+
         input[type="text"],
         input[type="tel"],
         textarea,
@@ -340,7 +341,7 @@ html_content = '''<!DOCTYPE html>
             transition: all 0.3s;
             background: #fafafa;
         }
-        
+
         input:focus,
         textarea:focus,
         select:focus {
@@ -349,12 +350,12 @@ html_content = '''<!DOCTYPE html>
             background: white;
             box-shadow: 0 0 0 3px rgba(212, 165, 165, 0.1);
         }
-        
+
         textarea {
             resize: vertical;
             min-height: 100px;
         }
-        
+
         .selected-flavor-display {
             background: linear-gradient(135deg, #fff9e6 0%, #fff5d6 100%);
             border: 2px solid var(--gold);
@@ -366,37 +367,37 @@ html_content = '''<!DOCTYPE html>
             gap: 1rem;
             animation: pulse 2s infinite;
         }
-        
+
         .selected-flavor-display.active {
             display: flex;
         }
-        
+
         @keyframes pulse {
             0%, 100% { box-shadow: 0 0 0 0 rgba(201, 169, 97, 0.4); }
             50% { box-shadow: 0 0 0 10px rgba(201, 169, 97, 0); }
         }
-        
+
         .selected-icon {
             font-size: 2rem;
         }
-        
+
         .selected-text {
             flex: 1;
         }
-        
+
         .selected-label {
             font-size: 0.85rem;
             color: #888;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        
+
         .selected-name {
             font-weight: 700;
             color: var(--chocolate);
             font-size: 1.1rem;
         }
-        
+
         /* Botão WhatsApp */
         .whatsapp-btn {
             width: 100%;
@@ -417,7 +418,7 @@ html_content = '''<!DOCTYPE html>
             position: relative;
             overflow: hidden;
         }
-        
+
         .whatsapp-btn::before {
             content: '';
             position: absolute;
@@ -428,30 +429,30 @@ html_content = '''<!DOCTYPE html>
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
             transition: left 0.5s;
         }
-        
+
         .whatsapp-btn:hover::before {
             left: 100%;
         }
-        
+
         .whatsapp-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
         }
-        
+
         .whatsapp-btn:active {
             transform: translateY(0);
         }
-        
+
         .whatsapp-btn:disabled {
             background: #ccc;
             cursor: not-allowed;
             box-shadow: none;
         }
-        
+
         .whatsapp-icon {
             font-size: 1.5rem;
         }
-        
+
         /* Footer */
         footer {
             text-align: center;
@@ -460,35 +461,35 @@ html_content = '''<!DOCTYPE html>
             font-size: 0.9rem;
             opacity: 0.8;
         }
-        
+
         .heart {
             color: var(--rose-gold);
             animation: heartbeat 1.5s ease infinite;
             display: inline-block;
         }
-        
+
         @keyframes heartbeat {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.2); }
         }
-        
+
         /* Responsivo */
         @media (max-width: 600px) {
             .logo {
                 font-size: 1.8rem;
             }
-            
+
             .menu-section,
             .flavors-section,
             .order-form {
                 padding: 1.5rem;
             }
-            
+
             .flavors-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-        
+
         /* Notificação */
         .notification {
             position: fixed;
@@ -505,11 +506,11 @@ html_content = '''<!DOCTYPE html>
             z-index: 1000;
             animation: slideInRight 0.3s ease;
         }
-        
+
         .notification.show {
             display: flex;
         }
-        
+
         @keyframes slideInRight {
             from {
                 transform: translateX(100%);
@@ -521,13 +522,14 @@ html_content = '''<!DOCTYPE html>
             }
         }
     </style>
+<base target="_blank">
 </head>
 <body>
     <header>
         <h1 class="logo">Ateliê de Bolos e Doces</h1>
         <p class="subtitle">Mariana Almeida</p>
     </header>
-    
+
     <div class="container">
         <!-- Seção de Upload do Cardápio -->
         <section class="menu-section">
@@ -538,7 +540,7 @@ html_content = '''<!DOCTYPE html>
                 <div class="upload-text">Arraste seu cardápio PDF aqui</div>
                 <div class="upload-hint">ou clique para selecionar o arquivo</div>
             </div>
-            
+
             <div class="pdf-preview" id="pdfPreview">
                 <div class="pdf-icon">📑</div>
                 <div class="pdf-info">
@@ -548,7 +550,7 @@ html_content = '''<!DOCTYPE html>
                 <button class="remove-pdf" onclick="removePDF()">Remover</button>
             </div>
         </section>
-        
+
         <!-- Seção de Sabores de Chocolate -->
         <section class="flavors-section">
             <h2>🍫 Escolha o Sabor do Chocolate</h2>
@@ -558,31 +560,31 @@ html_content = '''<!DOCTYPE html>
                     <div class="flavor-name">Ao Leite</div>
                     <div class="flavor-desc">Cremoso e suave</div>
                 </div>
-                
+
                 <div class="flavor-card" data-flavor="Meio Amargo" onclick="selectFlavor(this)">
                     <span class="flavor-icon">🍫</span>
                     <div class="flavor-name">Meio Amargo</div>
                     <div class="flavor-desc">Equilíbrio perfeito</div>
                 </div>
-                
+
                 <div class="flavor-card" data-flavor="Amargo 70%" onclick="selectFlavor(this)">
                     <span class="flavor-icon">🖤</span>
                     <div class="flavor-name">Amargo 70%</div>
                     <div class="flavor-desc">Intenso e sofisticado</div>
                 </div>
-                
+
                 <div class="flavor-card" data-flavor="Branco" onclick="selectFlavor(this)">
                     <span class="flavor-icon">🤍</span>
                     <div class="flavor-name">Branco</div>
                     <div class="flavor-desc">Doce e delicado</div>
                 </div>
-                
+
                 <div class="flavor-card" data-flavor="Com Avelã" onclick="selectFlavor(this)">
                     <span class="flavor-icon">🌰</span>
                     <div class="flavor-name">Com Avelã</div>
                     <div class="flavor-desc">Crocante e especial</div>
                 </div>
-                
+
                 <div class="flavor-card" data-flavor="Com Café" onclick="selectFlavor(this)">
                     <span class="flavor-icon">☕</span>
                     <div class="flavor-name">Com Café</div>
@@ -590,11 +592,11 @@ html_content = '''<!DOCTYPE html>
                 </div>
             </div>
         </section>
-        
+
         <!-- Formulário de Pedido -->
         <section class="order-form">
             <h2>✨ Finalizar Pedido</h2>
-            
+
             <div class="selected-flavor-display" id="selectedDisplay">
                 <span class="selected-icon" id="selectedIcon">🍫</span>
                 <div class="selected-text">
@@ -602,17 +604,17 @@ html_content = '''<!DOCTYPE html>
                     <div class="selected-name" id="selectedFlavorName">Meio Amargo</div>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <label for="nome">Seu Nome *</label>
                 <input type="text" id="nome" placeholder="Digite seu nome completo" required>
             </div>
-            
+
             <div class="form-group">
                 <label for="telefone">WhatsApp *</label>
                 <input type="tel" id="telefone" placeholder="(11) 99999-9999" required>
             </div>
-            
+
             <div class="form-group">
                 <label for="quantidade">Quantidade</label>
                 <select id="quantidade">
@@ -623,51 +625,54 @@ html_content = '''<!DOCTYPE html>
                     <option value="outro">Outra quantidade (especificar)</option>
                 </select>
             </div>
-            
+
             <div class="form-group">
                 <label for="observacoes">Observações Especiais</label>
                 <textarea id="observacoes" placeholder="Alguma preferência especial? Decoração específica? Nos conte!"></textarea>
             </div>
-            
+
             <button class="whatsapp-btn" onclick="sendToWhatsApp()">
                 <span class="whatsapp-icon">💬</span>
                 Enviar Pedido pelo WhatsApp
             </button>
         </section>
     </div>
-    
+
     <footer>
         Feito com <span class="heart">❤</span> por Mariana Almeida
     </footer>
-    
+
     <div class="notification" id="notification">
         <span>✓</span>
         <span id="notificationText">PDF carregado com sucesso!</span>
     </div>
-    
+
     <script>
         let selectedFlavor = null;
         let selectedFlavorIcon = '🍫';
         let pdfFile = null;
-        
+
+        // NÚMERO DA MARIANA CONFIGURADO
+        const numeroWhatsApp = '5512996733698';
+
         // Upload de PDF
         const dropZone = document.getElementById('dropZone');
         const pdfInput = document.getElementById('pdfInput');
         const pdfPreview = document.getElementById('pdfPreview');
-        
+
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
             dropZone.classList.add('dragover');
         });
-        
+
         dropZone.addEventListener('dragleave', () => {
             dropZone.classList.remove('dragover');
         });
-        
+
         dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
             dropZone.classList.remove('dragover');
-            
+
             const files = e.dataTransfer.files;
             if (files.length > 0 && files[0].type === 'application/pdf') {
                 handlePDF(files[0]);
@@ -675,13 +680,13 @@ html_content = '''<!DOCTYPE html>
                 showNotification('Por favor, envie apenas arquivos PDF', 'error');
             }
         });
-        
+
         pdfInput.addEventListener('change', (e) => {
             if (e.target.files.length > 0) {
                 handlePDF(e.target.files[0]);
             }
         });
-        
+
         function handlePDF(file) {
             pdfFile = file;
             document.getElementById('pdfName').textContent = file.name;
@@ -690,7 +695,7 @@ html_content = '''<!DOCTYPE html>
             dropZone.style.display = 'none';
             showNotification('PDF carregado com sucesso!');
         }
-        
+
         function removePDF() {
             pdfFile = null;
             pdfPreview.classList.remove('active');
@@ -698,94 +703,91 @@ html_content = '''<!DOCTYPE html>
             pdfInput.value = '';
             showNotification('PDF removido');
         }
-        
+
         // Seleção de Sabor
         function selectFlavor(element) {
             // Remove seleção anterior
             document.querySelectorAll('.flavor-card').forEach(card => {
                 card.classList.remove('selected');
             });
-            
+
             // Adiciona seleção ao clicado
             element.classList.add('selected');
-            
+
             // Atualiza variáveis
             selectedFlavor = element.dataset.flavor;
             selectedFlavorIcon = element.querySelector('.flavor-icon').textContent;
-            
+
             // Atualiza display
             document.getElementById('selectedDisplay').classList.add('active');
             document.getElementById('selectedFlavorName').textContent = selectedFlavor;
             document.getElementById('selectedIcon').textContent = selectedFlavorIcon;
-            
+
             // Animação de confirmação
             showNotification(`Sabor ${selectedFlavor} selecionado!`);
         }
-        
+
         // Envio para WhatsApp
         function sendToWhatsApp() {
             const nome = document.getElementById('nome').value;
             const telefone = document.getElementById('telefone').value;
             const quantidade = document.getElementById('quantidade').value;
             const observacoes = document.getElementById('observacoes').value;
-            
+
             // Validação
             if (!nome || !telefone) {
                 showNotification('Por favor, preencha seu nome e telefone', 'error');
                 return;
             }
-            
+
             if (!selectedFlavor) {
                 showNotification('Por favor, selecione um sabor de chocolate', 'error');
                 return;
             }
-            
+
             // Monta mensagem
             let mensagem = `*Novo Pedido - Ateliê Mariana Almeida*%0A%0A`;
             mensagem += `*Cliente:* ${nome}%0A`;
             mensagem += `*Contato:* ${telefone}%0A`;
             mensagem += `*Sabor Escolhido:* ${selectedFlavor}%0A`;
             mensagem += `*Quantidade:* ${quantidade}%0A`;
-            
+
             if (pdfFile) {
                 mensagem += `*Cardápio:* ${pdfFile.name} (anexado)%0A`;
             }
-            
+
             if (observacoes) {
                 mensagem += `*Observações:* ${observacoes}%0A`;
             }
-            
+
             mensagem += `%0AAguardo confirmação! 😊`;
-            
-            // Número do WhatsApp da Mariana (substituir pelo número real)
-            const numeroWhatsApp = '5511999999999'; // ← ALTERAR PARA O NÚMERO REAL
-            
+
             // Abre WhatsApp
             const url = `https://wa.me/${numeroWhatsApp}?text=${mensagem}`;
             window.open(url, '_blank');
-            
+
             showNotification('Redirecionando para o WhatsApp...');
         }
-        
+
         // Sistema de Notificações
         function showNotification(text, type = 'success') {
             const notification = document.getElementById('notification');
             const notificationText = document.getElementById('notificationText');
-            
+
             notificationText.textContent = text;
             notification.style.background = type === 'error' ? '#ff6b6b' : 'var(--chocolate)';
             notification.classList.add('show');
-            
+
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 3000);
         }
-        
+
         // Máscara para telefone
         document.getElementById('telefone').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\\D/g, '');
+            let value = e.target.value.replace(/\D/g, '');
             if (value.length > 11) value = value.slice(0, 11);
-            
+
             if (value.length > 7) {
                 value = `(${value.slice(0,2)}) ${value.slice(2,7)}-${value.slice(7)}`;
             } else if (value.length > 2) {
@@ -793,24 +795,9 @@ html_content = '''<!DOCTYPE html>
             } else if (value.length > 0) {
                 value = `(${value}`;
             }
-            
+
             e.target.value = value;
         });
     </script>
 </body>
-</html>'''
-
-# Salvar o arquivo
-with open('/mnt/kimi/output/index.html', 'w', encoding='utf-8') as f:
-    f.write(html_content)
-
-print("✅ Site criado com sucesso!")
-print("📁 Arquivo salvo em: /mnt/kimi/output/index.html")
-print("\n🎨 Características do site:")
-print("   • Design elegante em tons de rose gold e chocolate")
-print("   • Upload de PDF com drag & drop")
-print("   • 6 opções de sabores de chocolate interativas")
-print("   • Integração com WhatsApp")
-print("   • Totalmente responsivo")
-print("\n⚠️  IMPORTANTE: Altere o número de WhatsApp na linha 485 do código")
-print("   Atual: '5511999999999' → Substitua pelo número real da Mariana")
+</html>
