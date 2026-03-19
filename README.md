@@ -1,4 +1,3 @@
-index.html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -111,6 +110,16 @@ index.html
             gap: 0.5rem;
         }
 
+        .pdf-counter {
+            background: var(--rose-gold);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-left: auto;
+        }
+
         /* Upload de PDF */
         .pdf-upload {
             border: 3px dashed var(--rose-gold);
@@ -121,6 +130,7 @@ index.html
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
+            margin-bottom: 1rem;
         }
 
         .pdf-upload:hover {
@@ -133,6 +143,12 @@ index.html
             border-color: var(--gold);
             background: #fffef5;
             transform: scale(1.02);
+        }
+
+        .pdf-upload.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
         }
 
         .upload-icon {
@@ -161,48 +177,64 @@ index.html
             cursor: pointer;
         }
 
-        .pdf-preview {
-            display: none;
-            margin-top: 1.5rem;
-            padding: 1rem;
-            background: #f0f0f0;
-            border-radius: 10px;
+        /* Lista de PDFs */
+        .pdf-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .pdf-item {
+            display: flex;
             align-items: center;
             gap: 1rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            border-left: 4px solid var(--rose-gold);
             animation: slideIn 0.3s ease;
+            transition: all 0.3s;
         }
 
-        .pdf-preview.active {
+        .pdf-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .pdf-number {
+            background: var(--chocolate);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
             display: flex;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
         }
 
         .pdf-icon {
-            font-size: 2rem;
+            font-size: 1.8rem;
         }
 
         .pdf-info {
             flex: 1;
             text-align: left;
+            min-width: 0;
         }
 
         .pdf-name {
             font-weight: 700;
             color: var(--chocolate);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .pdf-size {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #666;
         }
 
@@ -215,11 +247,23 @@ index.html
             cursor: pointer;
             font-size: 0.85rem;
             transition: all 0.2s;
+            flex-shrink: 0;
         }
 
         .remove-pdf:hover {
             background: #ff5252;
             transform: scale(1.05);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Seção de Sabores */
@@ -488,6 +532,16 @@ index.html
             .flavors-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .pdf-item {
+                flex-wrap: wrap;
+            }
+
+            .pdf-info {
+                width: 100%;
+                order: 3;
+                margin-top: 0.5rem;
+            }
         }
 
         /* Notificação */
@@ -531,23 +585,22 @@ index.html
     </header>
 
     <div class="container">
-        <!-- Seção de Upload do Cardápio -->
+        <!-- Seção de Upload do Cardápio - 4 PDFs -->
         <section class="menu-section">
-            <h2>📋 Seu Cardápio</h2>
+            <h2>
+                📋 Seus Cardápios
+                <span class="pdf-counter" id="pdfCounter">0/4</span>
+            </h2>
+
             <div class="pdf-upload" id="dropZone">
-                <input type="file" id="pdfInput" accept=".pdf">
-                <div class="upload-icon">📄</div>
-                <div class="upload-text">Arraste seu cardápio PDF aqui</div>
-                <div class="upload-hint">ou clique para selecionar o arquivo</div>
+                <input type="file" id="pdfInput" accept=".pdf" multiple>
+                <div class="upload-icon">📁</div>
+                <div class="upload-text">Arraste seus cardápios PDF aqui</div>
+                <div class="upload-hint">ou clique para selecionar até 4 arquivos</div>
             </div>
 
-            <div class="pdf-preview" id="pdfPreview">
-                <div class="pdf-icon">📑</div>
-                <div class="pdf-info">
-                    <div class="pdf-name" id="pdfName">cardapio.pdf</div>
-                    <div class="pdf-size" id="pdfSize">2.5 MB</div>
-                </div>
-                <button class="remove-pdf" onclick="removePDF()">Remover</button>
+            <div class="pdf-list" id="pdfList">
+                <!-- PDFs serão inseridos aqui dinamicamente -->
             </div>
         </section>
 
@@ -644,13 +697,14 @@ index.html
 
     <div class="notification" id="notification">
         <span>✓</span>
-        <span id="notificationText">PDF carregado com sucesso!</span>
+        <span id="notificationText">PDF adicionado!</span>
     </div>
 
     <script>
         let selectedFlavor = null;
         let selectedFlavorIcon = '🍫';
-        let pdfFile = null;
+        let pdfFiles = [];
+        const MAX_PDFS = 4;
 
         // NÚMERO DA MARIANA CONFIGURADO
         const numeroWhatsApp = '5512996733698';
@@ -658,11 +712,14 @@ index.html
         // Upload de PDF
         const dropZone = document.getElementById('dropZone');
         const pdfInput = document.getElementById('pdfInput');
-        const pdfPreview = document.getElementById('pdfPreview');
+        const pdfList = document.getElementById('pdfList');
+        const pdfCounter = document.getElementById('pdfCounter');
 
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
-            dropZone.classList.add('dragover');
+            if (pdfFiles.length < MAX_PDFS) {
+                dropZone.classList.add('dragover');
+            }
         });
 
         dropZone.addEventListener('dragleave', () => {
@@ -673,57 +730,100 @@ index.html
             e.preventDefault();
             dropZone.classList.remove('dragover');
 
-            const files = e.dataTransfer.files;
-            if (files.length > 0 && files[0].type === 'application/pdf') {
-                handlePDF(files[0]);
-            } else {
-                showNotification('Por favor, envie apenas arquivos PDF', 'error');
-            }
+            const files = Array.from(e.dataTransfer.files).filter(f => f.type === 'application/pdf');
+            addPDFs(files);
         });
 
         pdfInput.addEventListener('change', (e) => {
             if (e.target.files.length > 0) {
-                handlePDF(e.target.files[0]);
+                addPDFs(Array.from(e.target.files));
             }
         });
 
-        function handlePDF(file) {
-            pdfFile = file;
-            document.getElementById('pdfName').textContent = file.name;
-            document.getElementById('pdfSize').textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
-            pdfPreview.classList.add('active');
-            dropZone.style.display = 'none';
-            showNotification('PDF carregado com sucesso!');
+        function addPDFs(newFiles) {
+            const availableSlots = MAX_PDFS - pdfFiles.length;
+
+            if (availableSlots <= 0) {
+                showNotification('Limite de 4 PDFs atingido!', 'error');
+                return;
+            }
+
+            const filesToAdd = newFiles.slice(0, availableSlots);
+
+            filesToAdd.forEach(file => {
+                pdfFiles.push(file);
+                renderPDFItem(file, pdfFiles.length);
+            });
+
+            updateCounter();
+
+            if (filesToAdd.length > 0) {
+                showNotification(`${filesToAdd.length} PDF(s) adicionado(s)!`);
+            }
+
+            if (newFiles.length > availableSlots) {
+                showNotification(`${newFiles.length - availableSlots} arquivo(s) ignorado(s) - limite atingido`, 'error');
+            }
+
+            pdfInput.value = '';
         }
 
-        function removePDF() {
-            pdfFile = null;
-            pdfPreview.classList.remove('active');
-            dropZone.style.display = 'block';
-            pdfInput.value = '';
+        function renderPDFItem(file, index) {
+            const item = document.createElement('div');
+            item.className = 'pdf-item';
+            item.id = `pdf-${index}`;
+            item.innerHTML = `
+                <div class="pdf-number">${index}</div>
+                <div class="pdf-icon">📄</div>
+                <div class="pdf-info">
+                    <div class="pdf-name">${file.name}</div>
+                    <div class="pdf-size">${(file.size / 1024).toFixed(1)} KB</div>
+                </div>
+                <button class="remove-pdf" onclick="removePDF(${index})">Remover</button>
+            `;
+            pdfList.appendChild(item);
+        }
+
+        function removePDF(index) {
+            pdfFiles.splice(index - 1, 1);
+            refreshPDFList();
+            updateCounter();
             showNotification('PDF removido');
+        }
+
+        function refreshPDFList() {
+            pdfList.innerHTML = '';
+            pdfFiles.forEach((file, idx) => {
+                renderPDFItem(file, idx + 1);
+            });
+        }
+
+        function updateCounter() {
+            pdfCounter.textContent = `${pdfFiles.length}/${MAX_PDFS}`;
+
+            if (pdfFiles.length >= MAX_PDFS) {
+                dropZone.classList.add('disabled');
+                dropZone.querySelector('.upload-text').textContent = 'Limite de 4 PDFs atingido';
+            } else {
+                dropZone.classList.remove('disabled');
+                dropZone.querySelector('.upload-text').textContent = 'Arraste seus cardápios PDF aqui';
+            }
         }
 
         // Seleção de Sabor
         function selectFlavor(element) {
-            // Remove seleção anterior
             document.querySelectorAll('.flavor-card').forEach(card => {
                 card.classList.remove('selected');
             });
 
-            // Adiciona seleção ao clicado
             element.classList.add('selected');
-
-            // Atualiza variáveis
             selectedFlavor = element.dataset.flavor;
             selectedFlavorIcon = element.querySelector('.flavor-icon').textContent;
 
-            // Atualiza display
             document.getElementById('selectedDisplay').classList.add('active');
             document.getElementById('selectedFlavorName').textContent = selectedFlavor;
             document.getElementById('selectedIcon').textContent = selectedFlavorIcon;
 
-            // Animação de confirmação
             showNotification(`Sabor ${selectedFlavor} selecionado!`);
         }
 
@@ -734,7 +834,6 @@ index.html
             const quantidade = document.getElementById('quantidade').value;
             const observacoes = document.getElementById('observacoes').value;
 
-            // Validação
             if (!nome || !telefone) {
                 showNotification('Por favor, preencha seu nome e telefone', 'error');
                 return;
@@ -745,15 +844,17 @@ index.html
                 return;
             }
 
-            // Monta mensagem
             let mensagem = `*Novo Pedido - Ateliê Mariana Almeida*%0A%0A`;
             mensagem += `*Cliente:* ${nome}%0A`;
             mensagem += `*Contato:* ${telefone}%0A`;
             mensagem += `*Sabor Escolhido:* ${selectedFlavor}%0A`;
             mensagem += `*Quantidade:* ${quantidade}%0A`;
 
-            if (pdfFile) {
-                mensagem += `*Cardápio:* ${pdfFile.name} (anexado)%0A`;
+            if (pdfFiles.length > 0) {
+                mensagem += `*Cardápios Anexados:* ${pdfFiles.length} arquivo(s)%0A`;
+                pdfFiles.forEach((file, idx) => {
+                    mensagem += `  ${idx + 1}. ${file.name}%0A`;
+                });
             }
 
             if (observacoes) {
@@ -762,7 +863,6 @@ index.html
 
             mensagem += `%0AAguardo confirmação! 😊`;
 
-            // Abre WhatsApp
             const url = `https://wa.me/${numeroWhatsApp}?text=${mensagem}`;
             window.open(url, '_blank');
 
