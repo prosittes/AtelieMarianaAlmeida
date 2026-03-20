@@ -12,13 +12,11 @@
             --cream: #faf7f2;
             --gold: #c9a961;
             --dark: #2c1810;
+            --success: #4caf50;
+            --drive: #4285f4;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Lato', sans-serif;
@@ -27,7 +25,6 @@
             overflow-x: hidden;
         }
 
-        /* Header */
         header {
             background: linear-gradient(135deg, var(--rose-gold) 0%, #e8c4c4 100%);
             padding: 2rem 1rem;
@@ -39,10 +36,8 @@
         header::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
             background: radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px);
             background-size: 20px 20px;
             animation: sparkle 20s linear infinite;
@@ -73,14 +68,12 @@
             text-transform: uppercase;
         }
 
-        /* Container */
         .container {
             max-width: 900px;
             margin: 0 auto;
             padding: 2rem 1rem;
         }
 
-        /* Seção do Cardápio */
         .menu-section {
             background: white;
             border-radius: 20px;
@@ -92,7 +85,7 @@
         }
 
         .menu-section::after {
-            content: '🧁';
+            content: '📚';
             position: absolute;
             top: 20px;
             right: 20px;
@@ -110,136 +103,66 @@
             gap: 0.5rem;
         }
 
-        .pdf-counter {
-            background: var(--rose-gold);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            margin-left: auto;
-        }
-
-        /* Upload de PDF */
-        .pdf-upload {
-            border: 3px dashed var(--rose-gold);
-            border-radius: 15px;
-            padding: 2rem;
-            text-align: center;
-            background: #fff9f9;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            margin-bottom: 1rem;
-        }
-
-        .pdf-upload:hover {
-            border-color: var(--chocolate);
-            background: #fff5f5;
-            transform: translateY(-2px);
-        }
-
-        .pdf-upload.dragover {
-            border-color: var(--gold);
-            background: #fffef5;
-            transform: scale(1.02);
-        }
-
-        .pdf-upload.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        .upload-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .upload-text {
-            color: var(--chocolate);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .upload-hint {
-            color: #999;
-            font-size: 0.9rem;
-        }
-
-        input[type="file"] {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        /* Lista de PDFs */
-        .pdf-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-        }
-
-        .pdf-item {
-            display: flex;
-            align-items: center;
+        .pdf-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
-            padding: 1rem;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 12px;
-            border-left: 4px solid var(--rose-gold);
-            animation: slideIn 0.3s ease;
-            transition: all 0.3s;
+            margin-bottom: 2rem;
         }
 
-        .pdf-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        .pdf-card {
+            background: linear-gradient(135deg, #fff9f9 0%, #fff5f5 100%);
+            border: 2px solid var(--rose-gold);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .pdf-number {
-            background: var(--chocolate);
+        .pdf-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(212, 165, 165, 0.3);
+            border-color: var(--chocolate);
+        }
+
+        .pdf-card.selected {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-color: var(--success);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .pdf-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--success);
             color: white;
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 0.85rem;
-            flex-shrink: 0;
-        }
-
-        .pdf-icon {
-            font-size: 1.8rem;
-        }
-
-        .pdf-info {
-            flex: 1;
-            text-align: left;
-            min-width: 0;
-        }
-
-        .pdf-name {
-            font-weight: 700;
-            color: var(--chocolate);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .pdf-size {
             font-size: 0.8rem;
-            color: #666;
+            font-weight: bold;
         }
 
-        .remove-pdf {
-            background: #ff6b6b;
+        .pdf-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .pdf-title { font-weight: 700; color: var(--chocolate); margin-bottom: 0.3rem; }
+        .pdf-desc { font-size: 0.8rem; color: #888; margin-bottom: 1rem; }
+
+        .pdf-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-drive {
+            background: var(--drive);
             color: white;
             border: none;
             padding: 0.5rem 1rem;
@@ -247,26 +170,104 @@
             cursor: pointer;
             font-size: 0.85rem;
             transition: all 0.2s;
-            flex-shrink: 0;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
         }
 
-        .remove-pdf:hover {
-            background: #ff5252;
+        .btn-drive:hover {
+            background: #3367d6;
             transform: scale(1.05);
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .btn-select {
+            background: white;
+            color: var(--chocolate);
+            border: 2px solid var(--chocolate);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
         }
 
-        /* Seção de Sabores */
+        .btn-select:hover {
+            background: var(--chocolate);
+            color: white;
+        }
+
+        .btn-select.selected {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        /* Área Admin */
+        .admin-section {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border: 2px dashed #ccc;
+        }
+
+        .admin-title {
+            font-size: 1rem;
+            color: var(--chocolate);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .admin-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .admin-item label {
+            display: block;
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.3rem;
+        }
+
+        .admin-item input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Lato', sans-serif;
+        }
+
+        .btn-admin {
+            background: var(--gold);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 700;
+            margin-top: 1rem;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .btn-admin:hover {
+            background: var(--chocolate);
+            transform: translateY(-2px);
+        }
+
+        /* Sabores */
         .flavors-section {
             background: white;
             border-radius: 20px;
@@ -275,11 +276,57 @@
             box-shadow: 0 10px 40px rgba(93, 64, 55, 0.1);
         }
 
+        .selection-mode {
+            background: #f0f0f0;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .mode-label { font-weight: 600; color: var(--chocolate); }
+
+        .mode-toggle {
+            display: flex;
+            gap: 0.5rem;
+            background: white;
+            padding: 0.3rem;
+            border-radius: 20px;
+        }
+
+        .mode-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            background: transparent;
+            color: #666;
+        }
+
+        .mode-btn.active {
+            background: var(--rose-gold);
+            color: white;
+        }
+
+        .selected-count {
+            background: var(--gold);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
         .flavors-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 1rem;
-            margin-top: 1.5rem;
         }
 
         .flavor-card {
@@ -293,18 +340,6 @@
             overflow: hidden;
         }
 
-        .flavor-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.4) 100%);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
         .flavor-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
@@ -313,7 +348,6 @@
         .flavor-card.selected {
             border-color: var(--gold);
             background: linear-gradient(135deg, #fff9e6 0%, #fff5d6 100%);
-            transform: scale(1.05);
             box-shadow: 0 8px 25px rgba(201, 169, 97, 0.3);
         }
 
@@ -334,25 +368,11 @@
             font-weight: bold;
         }
 
-        .flavor-icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            display: block;
-        }
+        .flavor-icon { font-size: 2.5rem; margin-bottom: 0.5rem; display: block; }
+        .flavor-name { font-weight: 700; color: var(--chocolate); font-size: 0.95rem; }
+        .flavor-desc { font-size: 0.8rem; color: #888; margin-top: 0.3rem; }
 
-        .flavor-name {
-            font-weight: 700;
-            color: var(--chocolate);
-            font-size: 0.95rem;
-        }
-
-        .flavor-desc {
-            font-size: 0.8rem;
-            color: #888;
-            margin-top: 0.3rem;
-        }
-
-        /* Formulário de Pedido */
+        /* Formulário */
         .order-form {
             background: white;
             border-radius: 20px;
@@ -360,9 +380,34 @@
             box-shadow: 0 10px 40px rgba(93, 64, 55, 0.1);
         }
 
-        .form-group {
+        .selection-summary {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff5d6 100%);
+            border: 2px solid var(--gold);
+            border-radius: 12px;
+            padding: 1.5rem;
             margin-bottom: 1.5rem;
         }
+
+        .summary-title {
+            font-weight: 700;
+            color: var(--chocolate);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .summary-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(255,255,255,0.5);
+            border-radius: 8px;
+        }
+
+        .summary-icon { font-size: 1.2rem; }
+
+        .form-group { margin-bottom: 1.5rem; }
 
         label {
             display: block;
@@ -400,49 +445,6 @@
             min-height: 100px;
         }
 
-        .selected-flavor-display {
-            background: linear-gradient(135deg, #fff9e6 0%, #fff5d6 100%);
-            border: 2px solid var(--gold);
-            border-radius: 12px;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            display: none;
-            align-items: center;
-            gap: 1rem;
-            animation: pulse 2s infinite;
-        }
-
-        .selected-flavor-display.active {
-            display: flex;
-        }
-
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(201, 169, 97, 0.4); }
-            50% { box-shadow: 0 0 0 10px rgba(201, 169, 97, 0); }
-        }
-
-        .selected-icon {
-            font-size: 2rem;
-        }
-
-        .selected-text {
-            flex: 1;
-        }
-
-        .selected-label {
-            font-size: 0.85rem;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .selected-name {
-            font-weight: 700;
-            color: var(--chocolate);
-            font-size: 1.1rem;
-        }
-
-        /* Botão WhatsApp */
         .whatsapp-btn {
             width: 100%;
             padding: 1.2rem;
@@ -459,23 +461,6 @@
             gap: 0.8rem;
             transition: all 0.3s;
             box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .whatsapp-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .whatsapp-btn:hover::before {
-            left: 100%;
         }
 
         .whatsapp-btn:hover {
@@ -483,21 +468,8 @@
             box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
         }
 
-        .whatsapp-btn:active {
-            transform: translateY(0);
-        }
+        .whatsapp-icon { font-size: 1.5rem; }
 
-        .whatsapp-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        .whatsapp-icon {
-            font-size: 1.5rem;
-        }
-
-        /* Footer */
         footer {
             text-align: center;
             padding: 2rem;
@@ -517,34 +489,6 @@
             50% { transform: scale(1.2); }
         }
 
-        /* Responsivo */
-        @media (max-width: 600px) {
-            .logo {
-                font-size: 1.8rem;
-            }
-
-            .menu-section,
-            .flavors-section,
-            .order-form {
-                padding: 1.5rem;
-            }
-
-            .flavors-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .pdf-item {
-                flex-wrap: wrap;
-            }
-
-            .pdf-info {
-                width: 100%;
-                order: 3;
-                margin-top: 0.5rem;
-            }
-        }
-
-        /* Notificação */
         .notification {
             position: fixed;
             top: 20px;
@@ -561,19 +505,20 @@
             animation: slideInRight 0.3s ease;
         }
 
-        .notification.show {
-            display: flex;
-        }
+        .notification.show { display: flex; }
 
         @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @media (max-width: 600px) {
+            .logo { font-size: 1.8rem; }
+            .menu-section, .flavors-section, .order-form { padding: 1.5rem; }
+            .flavors-grid { grid-template-columns: repeat(2, 1fr); }
+            .pdf-grid { grid-template-columns: 1fr; }
+            .admin-grid { grid-template-columns: 1fr; }
+            .selection-mode { flex-direction: column; align-items: stretch; }
         }
     </style>
 <base target="_blank">
@@ -585,63 +530,110 @@
     </header>
 
     <div class="container">
-        <!-- Seção de Upload do Cardápio - 4 PDFs -->
+        <!-- Cardápios do Google Drive via Firebase -->
         <section class="menu-section">
-            <h2>
-                📋 Seus Cardápios
-                <span class="pdf-counter" id="pdfCounter">0/4</span>
-            </h2>
+            <h2>📚 Nossos Cardápios</h2>
+            <p style="color: #666; margin-bottom: 1.5rem;">Selecione os cardápios que deseja baixar ou enviar no pedido:</p>
 
-            <div class="pdf-upload" id="dropZone">
-                <input type="file" id="pdfInput" accept=".pdf" multiple>
-                <div class="upload-icon">📁</div>
-                <div class="upload-text">Arraste seus cardápios PDF aqui</div>
-                <div class="upload-hint">ou clique para selecionar até 4 arquivos</div>
+            <div class="pdf-grid" id="pdfGrid">
+                <!-- Carregado dinamicamente do Firebase -->
             </div>
 
-            <div class="pdf-list" id="pdfList">
-                <!-- PDFs serão inseridos aqui dinamicamente -->
+            <!-- Área Admin para atualizar links do Drive -->
+            <div class="admin-section">
+                <div class="admin-title">🔐 Área Administrativa - Atualizar Cardápios (Google Drive)</div>
+                <div class="admin-grid" id="adminGrid">
+                    <!-- 4 campos para os links -->
+                    <div class="admin-item">
+                        <label>Cardápio 1 - Nome</label>
+                        <input type="text" id="adminNome1" placeholder="Ex: Bolos Tradicionais">
+                    </div>
+                    <div class="admin-item">
+                        <label>Cardápio 1 - Link Drive</label>
+                        <input type="text" id="adminLink1" placeholder="https://drive.google.com/...">
+                    </div>
+                    <div class="admin-item">
+                        <label>Cardápio 2 - Nome</label>
+                        <input type="text" id="adminNome2" placeholder="Ex: Doces Finos">
+                    </div>
+                    <div class="admin-item">
+                        <label>Cardápio 2 - Link Drive</label>
+                        <input type="text" id="adminLink2" placeholder="https://drive.google.com/...">
+                    </div>
+                    <div class="admin-item">
+                        <label>Cardápio 3 - Nome</label>
+                        <input type="text" id="adminNome3" placeholder="Ex: Kit Festas">
+                    </div>
+                    <div class="admin-item">
+                        <label>Cardápio 3 - Link Drive</label>
+                        <input type="text" id="adminLink3" placeholder="https://drive.google.com/...">
+                    </div>
+                    <div class="admin-item">
+                        <label>Cardápio 4 - Nome</label>
+                        <input type="text" id="adminNome4" placeholder="Ex: Encomendas Especiais">
+                    </div>
+                    <div class="admin-item">
+                        <label>Cardápio 4 - Link Drive</label>
+                        <input type="text" id="adminLink4" placeholder="https://drive.google.com/...">
+                    </div>
+                </div>
+                <button class="btn-admin" onclick="salvarCardapios()">💾 Salvar Alterações no Firebase</button>
             </div>
         </section>
 
-        <!-- Seção de Sabores de Chocolate -->
+        <!-- Sabores - Múltipla Escolha -->
         <section class="flavors-section">
-            <h2>🍫 Escolha o Sabor do Chocolate</h2>
+            <h2>🍫 Escolha os Sabores</h2>
+
+            <div class="selection-mode">
+                <span class="mode-label">Modo de seleção:</span>
+                <div class="mode-toggle">
+                    <button class="mode-btn active" id="btnUnico" onclick="setMode('unico')">Um sabor</button>
+                    <button class="mode-btn" id="btnMultiplo" onclick="setMode('multiplo')">Múltiplos sabores</button>
+                </div>
+                <span class="selected-count" id="saborCount">0 selecionado</span>
+            </div>
+
             <div class="flavors-grid">
-                <div class="flavor-card" data-flavor="Ao Leite" onclick="selectFlavor(this)">
+                <div class="flavor-card" data-flavor="Ao Leite" onclick="toggleFlavor(this)">
                     <span class="flavor-icon">🥛</span>
                     <div class="flavor-name">Ao Leite</div>
                     <div class="flavor-desc">Cremoso e suave</div>
                 </div>
-
-                <div class="flavor-card" data-flavor="Meio Amargo" onclick="selectFlavor(this)">
+                <div class="flavor-card" data-flavor="Meio Amargo" onclick="toggleFlavor(this)">
                     <span class="flavor-icon">🍫</span>
                     <div class="flavor-name">Meio Amargo</div>
                     <div class="flavor-desc">Equilíbrio perfeito</div>
                 </div>
-
-                <div class="flavor-card" data-flavor="Amargo 70%" onclick="selectFlavor(this)">
+                <div class="flavor-card" data-flavor="Amargo 70%" onclick="toggleFlavor(this)">
                     <span class="flavor-icon">🖤</span>
                     <div class="flavor-name">Amargo 70%</div>
                     <div class="flavor-desc">Intenso e sofisticado</div>
                 </div>
-
-                <div class="flavor-card" data-flavor="Branco" onclick="selectFlavor(this)">
+                <div class="flavor-card" data-flavor="Branco" onclick="toggleFlavor(this)">
                     <span class="flavor-icon">🤍</span>
                     <div class="flavor-name">Branco</div>
                     <div class="flavor-desc">Doce e delicado</div>
                 </div>
-
-                <div class="flavor-card" data-flavor="Com Avelã" onclick="selectFlavor(this)">
+                <div class="flavor-card" data-flavor="Com Avelã" onclick="toggleFlavor(this)">
                     <span class="flavor-icon">🌰</span>
                     <div class="flavor-name">Com Avelã</div>
                     <div class="flavor-desc">Crocante e especial</div>
                 </div>
-
-                <div class="flavor-card" data-flavor="Com Café" onclick="selectFlavor(this)">
+                <div class="flavor-card" data-flavor="Com Café" onclick="toggleFlavor(this)">
                     <span class="flavor-icon">☕</span>
                     <div class="flavor-name">Com Café</div>
                     <div class="flavor-desc">Energia e sabor</div>
+                </div>
+                <div class="flavor-card" data-flavor="Com Morango" onclick="toggleFlavor(this)">
+                    <span class="flavor-icon">🍓</span>
+                    <div class="flavor-name">Com Morango</div>
+                    <div class="flavor-desc">Frutado e fresco</div>
+                </div>
+                <div class="flavor-card" data-flavor="Com Laranja" onclick="toggleFlavor(this)">
+                    <span class="flavor-icon">🍊</span>
+                    <div class="flavor-name">Com Laranja</div>
+                    <div class="flavor-desc">Cítrico e refrescante</div>
                 </div>
             </div>
         </section>
@@ -650,12 +642,10 @@
         <section class="order-form">
             <h2>✨ Finalizar Pedido</h2>
 
-            <div class="selected-flavor-display" id="selectedDisplay">
-                <span class="selected-icon" id="selectedIcon">🍫</span>
-                <div class="selected-text">
-                    <div class="selected-label">Sabor Selecionado</div>
-                    <div class="selected-name" id="selectedFlavorName">Meio Amargo</div>
-                </div>
+            <div class="selection-summary" id="resumoPedido">
+                <div class="summary-title">📋 Resumo do Pedido</div>
+                <div id="resumoCardapios"></div>
+                <div id="resumoSabores"></div>
             </div>
 
             <div class="form-group">
@@ -665,7 +655,7 @@
 
             <div class="form-group">
                 <label for="telefone">WhatsApp *</label>
-                <input type="tel" id="telefone" placeholder="(11) 99999-9999" required>
+                <input type="tel" id="telefone" placeholder="(12) 99673-3698" required>
             </div>
 
             <div class="form-group">
@@ -681,7 +671,7 @@
 
             <div class="form-group">
                 <label for="observacoes">Observações Especiais</label>
-                <textarea id="observacoes" placeholder="Alguma preferência especial? Decoração específica? Nos conte!"></textarea>
+                <textarea id="observacoes" placeholder="Alguma preferência especial? Decoração? Data de entrega? Nos conte tudo!"></textarea>
             </div>
 
             <button class="whatsapp-btn" onclick="sendToWhatsApp()">
@@ -697,223 +687,286 @@
 
     <div class="notification" id="notification">
         <span>✓</span>
-        <span id="notificationText">PDF adicionado!</span>
+        <span id="notificationText">Operação realizada!</span>
     </div>
 
-    <script>
-        let selectedFlavor = null;
-        let selectedFlavorIcon = '🍫';
-        let pdfFiles = [];
-        const MAX_PDFS = 4;
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // NÚMERO DA MARIANA CONFIGURADO
+        const firebaseConfig = {
+            apiKey: "AIzaSyA93ymW78OYYHc2qGoF-5D_RgWdCzkxh58",
+            authDomain: "atelie-mariana.firebaseapp.com",
+            projectId: "atelie-mariana",
+            storageBucket: "atelie-mariana.firebasestorage.app",
+            messagingSenderId: "416743252478",
+            appId: "1:416743252478:web:543a9c03574dfca3d960af",
+            measurementId: "G-B7HEZJ8VVQ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Variáveis globais
+        let selectedPdfs = [];
+        let selectedFlavors = [];
+        let selectionMode = 'unico';
+        let pdfList = [];
         const numeroWhatsApp = '5512996733698';
 
-        // Upload de PDF
-        const dropZone = document.getElementById('dropZone');
-        const pdfInput = document.getElementById('pdfInput');
-        const pdfList = document.getElementById('pdfList');
-        const pdfCounter = document.getElementById('pdfCounter');
+        // Links padrão do Google Drive (os 4 que você mandou)
+        const defaultLinks = [
+            { id: '1', nome: 'Cardápio 1', url: 'https://drive.google.com/file/d/1XnDlMUBN-cllJ0MEJirPzuoO2_Apxv8r/view?usp=drive_link', ordem: 1 },
+            { id: '2', nome: 'Cardápio 2', url: 'https://drive.google.com/file/d/1M_9MFlRxQ2vFsFEjpPdnxUKiiRQclTGS/view?usp=drive_link', ordem: 2 },
+            { id: '3', nome: 'Cardápio 3', url: 'https://drive.google.com/file/d/114rRmqSy_tYVQW4_39obVeKYZ54c5oHn/view?usp=drive_link', ordem: 3 },
+            { id: '4', nome: 'Cardápio 4', url: 'https://drive.google.com/file/d/1he4ujy7ynS6CSAG5ld4NXt2cf0EMzcko/view?usp=drive_link', ordem: 4 }
+        ];
 
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            if (pdfFiles.length < MAX_PDFS) {
-                dropZone.classList.add('dragover');
+        // Inicializar
+        window.addEventListener('load', async () => {
+            await inicializarCardapios();
+            carregarCardapios();
+            updateResumo();
+        });
+
+        // Inicializar cardápios no Firebase se não existirem
+        async function inicializarCardapios() {
+            const snapshot = await getDocs(collection(db, "cardapios"));
+            if (snapshot.empty) {
+                // Criar os 4 cardápios padrão
+                for (const pdf of defaultLinks) {
+                    await setDoc(doc(db, "cardapios", pdf.id), pdf);
+                }
+                console.log("Cardápios padrão criados no Firebase");
             }
-        });
+        }
 
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.classList.remove('dragover');
-        });
+        // Carregar cardápios do Firebase
+        async function carregarCardapios() {
+            const q = query(collection(db, "cardapios"), orderBy("ordem"));
+            const snapshot = await getDocs(q);
 
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('dragover');
-
-            const files = Array.from(e.dataTransfer.files).filter(f => f.type === 'application/pdf');
-            addPDFs(files);
-        });
-
-        pdfInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                addPDFs(Array.from(e.target.files));
-            }
-        });
-
-        function addPDFs(newFiles) {
-            const availableSlots = MAX_PDFS - pdfFiles.length;
-
-            if (availableSlots <= 0) {
-                showNotification('Limite de 4 PDFs atingido!', 'error');
-                return;
-            }
-
-            const filesToAdd = newFiles.slice(0, availableSlots);
-
-            filesToAdd.forEach(file => {
-                pdfFiles.push(file);
-                renderPDFItem(file, pdfFiles.length);
+            pdfList = [];
+            snapshot.forEach((doc) => {
+                pdfList.push({ id: doc.id, ...doc.data() });
             });
 
-            updateCounter();
+            renderPDFGrid();
 
-            if (filesToAdd.length > 0) {
-                showNotification(`${filesToAdd.length} PDF(s) adicionado(s)!`);
-            }
-
-            if (newFiles.length > availableSlots) {
-                showNotification(`${newFiles.length - availableSlots} arquivo(s) ignorado(s) - limite atingido`, 'error');
-            }
-
-            pdfInput.value = '';
-        }
-
-        function renderPDFItem(file, index) {
-            const item = document.createElement('div');
-            item.className = 'pdf-item';
-            item.id = `pdf-${index}`;
-            item.innerHTML = `
-                <div class="pdf-number">${index}</div>
-                <div class="pdf-icon">📄</div>
-                <div class="pdf-info">
-                    <div class="pdf-name">${file.name}</div>
-                    <div class="pdf-size">${(file.size / 1024).toFixed(1)} KB</div>
-                </div>
-                <button class="remove-pdf" onclick="removePDF(${index})">Remover</button>
-            `;
-            pdfList.appendChild(item);
-        }
-
-        function removePDF(index) {
-            pdfFiles.splice(index - 1, 1);
-            refreshPDFList();
-            updateCounter();
-            showNotification('PDF removido');
-        }
-
-        function refreshPDFList() {
-            pdfList.innerHTML = '';
-            pdfFiles.forEach((file, idx) => {
-                renderPDFItem(file, idx + 1);
+            // Preencher área admin
+            pdfList.forEach((pdf, index) => {
+                const i = index + 1;
+                document.getElementById(`adminNome${i}`).value = pdf.nome || '';
+                document.getElementById(`adminLink${i}`).value = pdf.url || '';
             });
         }
 
-        function updateCounter() {
-            pdfCounter.textContent = `${pdfFiles.length}/${MAX_PDFS}`;
+        // Renderizar grid de PDFs
+        function renderPDFGrid() {
+            const grid = document.getElementById('pdfGrid');
+            grid.innerHTML = '';
 
-            if (pdfFiles.length >= MAX_PDFS) {
-                dropZone.classList.add('disabled');
-                dropZone.querySelector('.upload-text').textContent = 'Limite de 4 PDFs atingido';
+            pdfList.forEach((pdf) => {
+                const isSelected = selectedPdfs.includes(pdf.id);
+                const card = document.createElement('div');
+                card.className = `pdf-card ${isSelected ? 'selected' : ''}`;
+                card.innerHTML = `
+                    <div class="pdf-icon">📄</div>
+                    <div class="pdf-title">${pdf.nome}</div>
+                    <div class="pdf-desc">Cardápio disponível no Drive</div>
+                    <div class="pdf-actions">
+                        <a href="${pdf.url}" target="_blank" class="btn-drive">📁 Ver no Drive</a>
+                        <button class="btn-select ${isSelected ? 'selected' : ''}" onclick="togglePDF('${pdf.id}', this)">
+                            ${isSelected ? '✓ Selecionado' : 'Selecionar'}
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Toggle seleção de PDF
+        window.togglePDF = function(pdfId, btn) {
+            const index = selectedPdfs.indexOf(pdfId);
+            if (index > -1) {
+                selectedPdfs.splice(index, 1);
+                btn.textContent = 'Selecionar';
+                btn.classList.remove('selected');
+                btn.closest('.pdf-card').classList.remove('selected');
             } else {
-                dropZone.classList.remove('disabled');
-                dropZone.querySelector('.upload-text').textContent = 'Arraste seus cardápios PDF aqui';
+                selectedPdfs.push(pdfId);
+                btn.textContent = '✓ Selecionado';
+                btn.classList.add('selected');
+                btn.closest('.pdf-card').classList.add('selected');
+            }
+            updateResumo();
+            showNotification(selectedPdfs.length + ' cardápio(s) selecionado(s)');
+        };
+
+        // Salvar alterações dos cardápios (área admin)
+        window.salvarCardapios = async function() {
+            showNotification('Salvando alterações...');
+
+            try {
+                for (let i = 1; i <= 4; i++) {
+                    const nome = document.getElementById(`adminNome${i}`).value.trim();
+                    const url = document.getElementById(`adminLink${i}`).value.trim();
+
+                    if (nome && url) {
+                        await setDoc(doc(db, "cardapios", String(i)), {
+                            nome: nome,
+                            url: url,
+                            ordem: i
+                        });
+                    }
+                }
+
+                await carregarCardapios();
+                showNotification('Cardápios atualizados com sucesso!');
+            } catch (error) {
+                console.error(error);
+                showNotification('Erro ao salvar. Verifique as permissões do Firebase.', 'error');
+            }
+        };
+
+        // Mudar modo de seleção
+        window.setMode = function(mode) {
+            selectionMode = mode;
+            document.getElementById('btnUnico').classList.toggle('active', mode === 'unico');
+            document.getElementById('btnMultiplo').classList.toggle('active', mode === 'multiplo');
+
+            if (mode === 'unico' && selectedFlavors.length > 1) {
+                selectedFlavors = [selectedFlavors[0]];
+                updateFlavorUI();
+            }
+            updateResumo();
+        };
+
+        // Toggle sabor
+        window.toggleFlavor = function(element) {
+            const flavor = element.dataset.flavor;
+            const icon = element.querySelector('.flavor-icon').textContent;
+
+            if (selectionMode === 'unico') {
+                document.querySelectorAll('.flavor-card').forEach(card => card.classList.remove('selected'));
+                selectedFlavors = [{ name: flavor, icon: icon }];
+                element.classList.add('selected');
+            } else {
+                const index = selectedFlavors.findIndex(f => f.name === flavor);
+                if (index > -1) {
+                    selectedFlavors.splice(index, 1);
+                    element.classList.remove('selected');
+                } else {
+                    selectedFlavors.push({ name: flavor, icon: icon });
+                    element.classList.add('selected');
+                }
+            }
+
+            updateFlavorUI();
+            updateResumo();
+        };
+
+        function updateFlavorUI() {
+            document.querySelectorAll('.flavor-card').forEach(card => card.classList.remove('selected'));
+            selectedFlavors.forEach(flavor => {
+                const card = document.querySelector(`[data-flavor="${flavor.name}"]`);
+                if (card) card.classList.add('selected');
+            });
+
+            const count = selectedFlavors.length;
+            document.getElementById('saborCount').textContent = count + (count === 1 ? ' selecionado' : ' selecionados');
+        }
+
+        function updateResumo() {
+            const resumoCardapios = document.getElementById('resumoCardapios');
+            const resumoSabores = document.getElementById('resumoSabores');
+
+            if (selectedPdfs.length > 0) {
+                let html = '<div style="margin-bottom: 1rem;"><strong>📚 Cardápios:</strong></div>';
+                selectedPdfs.forEach(pdfId => {
+                    const pdf = pdfList.find(p => p.id === pdfId);
+                    if (pdf) html += `<div class="summary-item"><span class="summary-icon">📄</span> ${pdf.nome}</div>`;
+                });
+                resumoCardapios.innerHTML = html;
+            } else {
+                resumoCardapios.innerHTML = '<div style="color: #999; margin-bottom: 1rem;">Nenhum cardápio selecionado</div>';
+            }
+
+            if (selectedFlavors.length > 0) {
+                let html = '<div style="margin-bottom: 0.5rem; margin-top: 1rem;"><strong>🍫 Sabores:</strong></div>';
+                selectedFlavors.forEach(flavor => {
+                    html += `<div class="summary-item"><span class="summary-icon">${flavor.icon}</span> ${flavor.name}</div>`;
+                });
+                resumoSabores.innerHTML = html;
+            } else {
+                resumoSabores.innerHTML = '<div style="color: #999; margin-top: 1rem;">Nenhum sabor selecionado</div>';
             }
         }
 
-        // Seleção de Sabor
-        function selectFlavor(element) {
-            document.querySelectorAll('.flavor-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-
-            element.classList.add('selected');
-            selectedFlavor = element.dataset.flavor;
-            selectedFlavorIcon = element.querySelector('.flavor-icon').textContent;
-
-            document.getElementById('selectedDisplay').classList.add('active');
-            document.getElementById('selectedFlavorName').textContent = selectedFlavor;
-            document.getElementById('selectedIcon').textContent = selectedFlavorIcon;
-
-            showNotification(`Sabor ${selectedFlavor} selecionado!`);
-        }
-
-        // Envio para WhatsApp
-        function sendToWhatsApp() {
-            const nome = document.getElementById('nome').value;
-            const telefone = document.getElementById('telefone').value;
+        // Enviar WhatsApp
+        window.sendToWhatsApp = function() {
+            const nome = document.getElementById('nome').value.trim();
+            const telefone = document.getElementById('telefone').value.trim();
             const quantidade = document.getElementById('quantidade').value;
-            const observacoes = document.getElementById('observacoes').value;
+            const observacoes = document.getElementById('observacoes').value.trim();
 
             if (!nome || !telefone) {
-                showNotification('Por favor, preencha seu nome e telefone', 'error');
+                showNotification('Preencha seu nome e telefone', 'error');
                 return;
             }
 
-            if (!selectedFlavor) {
-                showNotification('Por favor, selecione um sabor de chocolate', 'error');
+            if (selectedFlavors.length === 0) {
+                showNotification('Selecione pelo menos um sabor', 'error');
                 return;
             }
 
-            let mensagem = `*Novo Pedido - Ateliê Mariana Almeida*%0A%0A`;
+            let mensagem = `*Novo Pedido - Ateliê Mariana Almeida* 🧁%0A%0A`;
             mensagem += `*Cliente:* ${nome}%0A`;
-            mensagem += `*Contato:* ${telefone}%0A`;
-            mensagem += `*Sabor Escolhido:* ${selectedFlavor}%0A`;
-            mensagem += `*Quantidade:* ${quantidade}%0A`;
+            mensagem += `*Contato:* ${telefone}%0A%0A`;
 
-            if (pdfFiles.length > 0) {
-                mensagem += `*Cardápios Anexados:* ${pdfFiles.length} arquivo(s)%0A`;
-                pdfFiles.forEach((file, idx) => {
-                    mensagem += `  ${idx + 1}. ${file.name}%0A`;
+            if (selectedPdfs.length > 0) {
+                mensagem += `*📚 Cardápios Selecionados:*%0A`;
+                selectedPdfs.forEach(pdfId => {
+                    const pdf = pdfList.find(p => p.id === pdfId);
+                    if (pdf) mensagem += `• ${pdf.nome}%0A`;
                 });
+                mensagem += `%0A`;
             }
 
-            if (observacoes) {
-                mensagem += `*Observações:* ${observacoes}%0A`;
-            }
+            mensagem += `*🍫 Sabores Escolhidos:*%0A`;
+            selectedFlavors.forEach(flavor => {
+                mensagem += `${flavor.icon} ${flavor.name}%0A`;
+            });
+            mensagem += `%0A`;
 
+            mensagem += `*📦 Quantidade:* ${quantidade}%0A`;
+
+            if (observacoes) mensagem += `%0A*📝 Observações:* ${observacoes}%0A`;
             mensagem += `%0AAguardo confirmação! 😊`;
 
-            const url = `https://wa.me/${numeroWhatsApp}?text=${mensagem}`;
-            window.open(url, '_blank');
+            window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagem}`, '_blank');
+            showNotification('Redirecionando para WhatsApp...');
+        };
 
-            showNotification('Redirecionando para o WhatsApp...');
-        }
-
-        // Sistema de Notificações
-        function showNotification(text, type = 'success') {
+        // Notificações
+        window.showNotification = function(text, type = 'success') {
             const notification = document.getElementById('notification');
-            const notificationText = document.getElementById('notificationText');
-
-            notificationText.textContent = text;
+            document.getElementById('notificationText').textContent = text;
             notification.style.background = type === 'error' ? '#ff6b6b' : 'var(--chocolate)';
             notification.classList.add('show');
+            setTimeout(() => notification.classList.remove('show'), 3000);
+        };
 
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-
-        // Máscara para telefone
+        // Máscara telefone
         document.getElementById('telefone').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length > 11) value = value.slice(0, 11);
-
-            if (value.length > 7) {
-                value = `(${value.slice(0,2)}) ${value.slice(2,7)}-${value.slice(7)}`;
-            } else if (value.length > 2) {
-                value = `(${value.slice(0,2)}) ${value.slice(2)}`;
-            } else if (value.length > 0) {
-                value = `(${value}`;
-            }
-
+            if (value.length > 7) value = `(${value.slice(0,2)}) ${value.slice(2,7)}-${value.slice(7)}`;
+            else if (value.length > 2) value = `(${value.slice(0,2)}) ${value.slice(2)}`;
+            else if (value.length > 0) value = `(${value}`;
             e.target.value = value;
         });
     </script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyA93ymW780YYHc2gOF-SD_RgWdCzkxh5g",
-    authDomain: "atelie-mariana.firebaseapp.com",
-    projectId: "atelie-mariana",
-    storageBucket: "atelie-mariana.appspot.com",
-    messagingSenderId: "416743252478",
-    appId: "1:416743252478:web:543a9c03574dfca3d96baf"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-</script>
 </body>
 </html>
