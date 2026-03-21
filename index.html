@@ -2,970 +2,771 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ateliê de Bolos e Doces Mariana Almeida</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ateliê Mariana Almeida - Bolos & Doces</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'serif': ['Playfair Display', 'serif'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'atelier': {
+                            50: '#fdf8f6',
+                            100: '#f9ebe5',
+                            200: '#f5d5c8',
+                            300: '#eeb4a3',
+                            400: '#e48b75',
+                            500: '#d9664e',
+                            600: '#c44d36',
+                            700: '#a33d2b',
+                            800: '#863528',
+                            900: '#6f3026',
+                        },
+                        'cream': '#faf7f2',
+                        'gold': '#d4a574',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --rose-gold: #d4a5a5;
-            --chocolate: #5d4037;
-            --cream: #faf7f2;
-            --gold: #c9a961;
-            --dark: #2c1810;
-            --success: #4caf50;
-            --drive: #4285f4;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
-            font-family: 'Lato', sans-serif;
-            background: var(--cream);
-            color: var(--dark);
-            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #faf7f2;
+            -webkit-tap-highlight-color: transparent;
         }
-
-        header {
-            background: linear-gradient(135deg, var(--rose-gold) 0%, #e8c4c4 100%);
-            padding: 2rem 1rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+        .font-serif { font-family: 'Playfair Display', serif; }
+        
+        /* Smooth scrolling */
+        html { scroll-behavior: smooth; }
+        
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @keyframes pulse-soft { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        
+        .animate-fade-in { animation: fadeIn 0.4s ease-out; }
+        .animate-slide-up { animation: slideUp 0.3s ease-out; }
+        .animate-pulse-soft { animation: pulse-soft 2s infinite; }
+        
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
-
-        header::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px);
-            background-size: 20px 20px;
-            animation: sparkle 20s linear infinite;
-            opacity: 0.5;
-        }
-
-        @keyframes sparkle {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(20px, 20px); }
-        }
-
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 1;
-        }
-
-        .subtitle {
-            font-family: 'Lato', sans-serif;
-            font-weight: 300;
-            font-size: 1.1rem;
-            color: white;
-            margin-top: 0.5rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-
-        .menu-section {
-            background: white;
-            border-radius: 20px;
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 40px rgba(93, 64, 55, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .menu-section::after {
-            content: '📚';
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 2rem;
-            opacity: 0.2;
-        }
-
-        h2 {
-            font-family: 'Playfair Display', serif;
-            color: var(--chocolate);
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .pdf-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .pdf-card {
-            background: linear-gradient(135deg, #fff9f9 0%, #fff5f5 100%);
-            border: 2px solid var(--rose-gold);
-            border-radius: 15px;
-            padding: 1.5rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .pdf-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(212, 165, 165, 0.3);
-            border-color: var(--chocolate);
-        }
-
-        .pdf-card.selected {
-            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-            border-color: var(--success);
-            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
-        }
-
-        .pdf-card.selected::after {
-            content: '✓';
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: var(--success);
-            color: white;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        .pdf-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
-        .pdf-title { font-weight: 700; color: var(--chocolate); margin-bottom: 0.3rem; }
-        .pdf-desc { font-size: 0.8rem; color: #888; margin-bottom: 1rem; }
-
-        .pdf-actions {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn-drive {
-            background: var(--drive);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .btn-drive:hover {
-            background: #3367d6;
-            transform: scale(1.05);
-        }
-
-        .btn-select {
-            background: white;
-            color: var(--chocolate);
-            border: 2px solid var(--chocolate);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-        }
-
-        .btn-select:hover {
-            background: var(--chocolate);
-            color: white;
-        }
-
-        .btn-select.selected {
-            background: var(--success);
-            border-color: var(--success);
-            color: white;
-        }
-
-        /* Área Admin */
-        .admin-section {
-            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-top: 1.5rem;
-            border: 2px dashed #ccc;
-        }
-
-        .admin-title {
-            font-size: 1rem;
-            color: var(--chocolate);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .admin-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        .admin-item {
-            background: white;
-            padding: 1rem;
-            border-radius: 10px;
-            border: 1px solid #ddd;
-        }
-
-        .admin-item label {
-            display: block;
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 0.3rem;
-        }
-
-        .admin-item input {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-family: 'Lato', sans-serif;
-        }
-
-        .btn-admin {
-            background: var(--gold);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 700;
-            margin-top: 1rem;
-            width: 100%;
-            transition: all 0.3s;
-        }
-
-        .btn-admin:hover {
-            background: var(--chocolate);
-            transform: translateY(-2px);
-        }
-
-        /* Sabores */
-        .flavors-section {
-            background: white;
-            border-radius: 20px;
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 40px rgba(93, 64, 55, 0.1);
-        }
-
-        .selection-mode {
-            background: #f0f0f0;
-            padding: 0.8rem 1rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .mode-label { font-weight: 600; color: var(--chocolate); }
-
-        .mode-toggle {
-            display: flex;
-            gap: 0.5rem;
-            background: white;
-            padding: 0.3rem;
-            border-radius: 20px;
-        }
-
-        .mode-btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.3s;
-            background: transparent;
-            color: #666;
-        }
-
-        .mode-btn.active {
-            background: var(--rose-gold);
-            color: white;
-        }
-
-        .selected-count {
-            background: var(--gold);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            font-weight: 700;
-        }
-
-        .flavors-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-        }
-
-        .flavor-card {
-            border: 2px solid #eee;
-            border-radius: 15px;
-            padding: 1.5rem 1rem;
-            text-align: center;
-            cursor: pointer;
+        
+        /* Product card hover effect */
+        .product-card {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
         }
-
-        .flavor-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-
-        .flavor-card.selected {
-            border-color: var(--gold);
-            background: linear-gradient(135deg, #fff9e6 0%, #fff5d6 100%);
-            box-shadow: 0 8px 25px rgba(201, 169, 97, 0.3);
-        }
-
-        .flavor-card.selected::after {
-            content: '✓';
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: var(--gold);
+        .product-card:active { transform: scale(0.98); }
+        
+        /* Category pill active state */
+        .category-pill.active {
+            background: linear-gradient(135deg, #d9664e 0%, #c44d36 100%);
             color: white;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(196, 77, 54, 0.3);
         }
-
-        .flavor-icon { font-size: 2.5rem; margin-bottom: 0.5rem; display: block; }
-        .flavor-name { font-weight: 700; color: var(--chocolate); font-size: 0.95rem; }
-        .flavor-desc { font-size: 0.8rem; color: #888; margin-top: 0.3rem; }
-
-        /* Formulário */
-        .order-form {
-            background: white;
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 40px rgba(93, 64, 55, 0.1);
+        
+        /* Floating cart button */
+        .fab {
+            box-shadow: 0 8px 30px rgba(196, 77, 54, 0.4);
         }
-
-        .selection-summary {
-            background: linear-gradient(135deg, #fff9e6 0%, #fff5d6 100%);
-            border: 2px solid var(--gold);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+        
+        /* Modal overlay */
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
         }
-
-        .summary-title {
-            font-weight: 700;
-            color: var(--chocolate);
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
+        
+        /* Image loading skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
         }
-
-        .summary-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-            padding: 0.5rem;
-            background: rgba(255,255,255,0.5);
-            border-radius: 8px;
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
-
-        .summary-icon { font-size: 1.2rem; }
-
-        .form-group { margin-bottom: 1.5rem; }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--chocolate);
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        input[type="text"],
-        input[type="tel"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-family: 'Lato', sans-serif;
-            font-size: 1rem;
-            transition: all 0.3s;
-            background: #fafafa;
-        }
-
-        input:focus,
-        textarea:focus,
-        select:focus {
-            outline: none;
-            border-color: var(--rose-gold);
-            background: white;
-            box-shadow: 0 0 0 3px rgba(212, 165, 165, 0.1);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .whatsapp-btn {
-            width: 100%;
-            padding: 1.2rem;
-            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.8rem;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-        }
-
-        .whatsapp-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
-        }
-
-        .whatsapp-icon { font-size: 1.5rem; }
-
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--chocolate);
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        .heart {
-            color: var(--rose-gold);
-            animation: heartbeat 1.5s ease infinite;
-            display: inline-block;
-        }
-
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--chocolate);
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            display: none;
-            align-items: center;
-            gap: 0.8rem;
-            z-index: 1000;
-            animation: slideInRight 0.3s ease;
-        }
-
-        .notification.show { display: flex; }
-
-        @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        @media (max-width: 600px) {
-            .logo { font-size: 1.8rem; }
-            .menu-section, .flavors-section, .order-form { padding: 1.5rem; }
-            .flavors-grid { grid-template-columns: repeat(2, 1fr); }
-            .pdf-grid { grid-template-columns: 1fr; }
-            .admin-grid { grid-template-columns: 1fr; }
-            .selection-mode { flex-direction: column; align-items: stretch; }
-        }
+        
+        /* Admin panel hidden by default */
+        .admin-section { display: none; }
+        .admin-section.visible { display: block; }
+        
+        /* Custom scrollbar for admin */
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #d9664e; border-radius: 3px; }
     </style>
 <base target="_blank">
 </head>
-<body>
-    <header>
-        <h1 class="logo">Ateliê de Bolos e Doces</h1>
-        <p class="subtitle">Mariana Almeida</p>
+<body class="text-gray-800 antialiased pb-24">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-40 glass shadow-sm">
+        <div class="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-atelier-400 to-atelier-600 flex items-center justify-center text-white font-serif text-lg font-bold shadow-lg">
+                    M
+                </div>
+                <div>
+                    <h1 class="font-serif text-lg font-bold text-gray-900 leading-tight">Ateliê Mariana</h1>
+                    <p class="text-xs text-atelier-600 font-medium">Bolos & Doces Artesanais</p>
+                </div>
+            </div>
+            <button onclick="toggleCart()" class="relative p-2 rounded-full hover:bg-atelier-100 transition-colors">
+                <i class="fas fa-shopping-bag text-atelier-700 text-xl"></i>
+                <span id="cart-badge" class="absolute -top-1 -right-1 w-5 h-5 bg-atelier-500 text-white text-xs font-bold rounded-full flex items-center justify-center hidden">0</span>
+            </button>
+        </div>
     </header>
 
-    <div class="container">
-        <!-- Cardápios do Google Drive via Firebase -->
-        <section class="menu-section">
-            <h2>📚 Nossos Cardápios</h2>
-            <p style="color: #666; margin-bottom: 1.5rem;">Selecione os cardápios que deseja baixar ou enviar no pedido:</p>
-
-            <div class="pdf-grid" id="pdfGrid">
-                <!-- Carregado dinamicamente do Firebase -->
+    <!-- Categories Navigation -->
+    <div class="sticky top-16 z-30 bg-cream/95 backdrop-blur-sm border-b border-atelier-100">
+        <div class="max-w-md mx-auto px-4 py-3">
+            <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1" id="category-container">
+                <button onclick="filterCategory('all')" class="category-pill active whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium bg-white border border-atelier-200 text-gray-700 transition-all">
+                    Todos
+                </button>
+                <button onclick="filterCategory('pronta-entrega')" class="category-pill whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium bg-white border border-atelier-200 text-gray-700 transition-all">
+                    Pronta Entrega
+                </button>
+                <button onclick="filterCategory('encomendas')" class="category-pill whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium bg-white border border-atelier-200 text-gray-700 transition-all">
+                    Encomendas
+                </button>
+                <button onclick="filterCategory('promocoes')" class="category-pill whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium bg-white border border-atelier-200 text-gray-700 transition-all">
+                    Promoções
+                </button>
             </div>
-
-            <!-- Área Admin para atualizar links do Drive -->
-            <div class="admin-section">
-                <div class="admin-title">🔐 Área Administrativa - Atualizar Cardápios (Google Drive)</div>
-                <div class="admin-grid" id="adminGrid">
-                    <!-- 4 campos para os links -->
-                    <div class="admin-item">
-                        <label>Cardápio 1 - Nome</label>
-                        <input type="text" id="adminNome1" placeholder="Ex: Bolos Tradicionais">
-                    </div>
-                    <div class="admin-item">
-                        <label>Cardápio 1 - Link Drive</label>
-                        <input type="text" id="adminLink1" placeholder="https://drive.google.com/...">
-                    </div>
-                    <div class="admin-item">
-                        <label>Cardápio 2 - Nome</label>
-                        <input type="text" id="adminNome2" placeholder="Ex: Doces Finos">
-                    </div>
-                    <div class="admin-item">
-                        <label>Cardápio 2 - Link Drive</label>
-                        <input type="text" id="adminLink2" placeholder="https://drive.google.com/...">
-                    </div>
-                    <div class="admin-item">
-                        <label>Cardápio 3 - Nome</label>
-                        <input type="text" id="adminNome3" placeholder="Ex: Kit Festas">
-                    </div>
-                    <div class="admin-item">
-                        <label>Cardápio 3 - Link Drive</label>
-                        <input type="text" id="adminLink3" placeholder="https://drive.google.com/...">
-                    </div>
-                    <div class="admin-item">
-                        <label>Cardápio 4 - Nome</label>
-                        <input type="text" id="adminNome4" placeholder="Ex: Encomendas Especiais">
-                    </div>
-                    <div class="admin-item">
-                        <label>Cardápio 4 - Link Drive</label>
-                        <input type="text" id="adminLink4" placeholder="https://drive.google.com/...">
-                    </div>
-                </div>
-                <button class="btn-admin" onclick="salvarCardapios()">💾 Salvar Alterações no Firebase</button>
-            </div>
-        </section>
-
-        <!-- Sabores - Múltipla Escolha -->
-        <section class="flavors-section">
-            <h2>🍫 Escolha os Sabores</h2>
-
-            <div class="selection-mode">
-                <span class="mode-label">Modo de seleção:</span>
-                <div class="mode-toggle">
-                    <button class="mode-btn active" id="btnUnico" onclick="setMode('unico')">Um sabor</button>
-                    <button class="mode-btn" id="btnMultiplo" onclick="setMode('multiplo')">Múltiplos sabores</button>
-                </div>
-                <span class="selected-count" id="saborCount">0 selecionado</span>
-            </div>
-
-            <div class="flavors-grid">
-                <div class="flavor-card" data-flavor="Ao Leite" onclick="toggleFlavor(this)">
-                    <span class="flavor-icon">🥛</span>
-                    <div class="flavor-name">Ao Leite</div>
-                    <div class="flavor-desc">Cremoso e suave</div>
-                </div>
-                <div class="flavor-card" data-flavor="Meio Amargo" onclick="toggleFlavor(this)">
-                    <span class="flavor-icon">🍫</span>
-                    <div class="flavor-name">Meio Amargo</div>
-                    <div class="flavor-desc">Equilíbrio perfeito</div>
-                </div>
-                <div class="flavor-card" data-flavor="Amargo 70%" onclick="toggleFlavor(this)">
-                    <span class="flavor-icon">🖤</span>
-                    <div class="flavor-name">Amargo 70%</div>
-                    <div class="flavor-desc">Intenso e sofisticado</div>
-                </div>
-                <div class="flavor-card" data-flavor="Branco" onclick="toggleFlavor(this)">
-                    <span class="flavor-icon">🤍</span>
-                    <div class="flavor-name">Branco</div>
-                    <div class="flavor-desc">Doce e delicado</div>
-                </div>
-                <div class="flavor-card" data-flavor="Com Avelã" onclick="toggleFlavor(this)">
-                    <span class="flavor-icon">🌰</span>
-                    <div class="flavor-name">Com Avelã</div>
-                    <div class="flavor-desc">Crocante e especial</div>
-                </div>
-                <div class="flavor-card" data-flavor="Com Café" onclick="toggleFlavor(this)">
-                    <span class="flavor-icon">☕</span>
-                    <div class="flavor-name">Com Café</div>
-                    <div class="flavor-desc">Energia e sabor</div>
-                </div>
-                <div class="flavor-card" data-flavor="Com Morango" onclick="toggleFlavor(this)">
-                    <span class="flavor-icon">🍓</span>
-                    <div class="flavor-name">Com Morango</div>
-                    <div class="flavor-desc">Frutado e fresco</div>
-                </div>
-                <div class="flavor-card" data-flavor="Com Laranja" onclick="toggleFlavor(this)">
-                    <span class="flavor-icon">🍊</span>
-                    <div class="flavor-name">Com Laranja</div>
-                    <div class="flavor-desc">Cítrico e refrescante</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Formulário de Pedido -->
-        <section class="order-form">
-            <h2>✨ Finalizar Pedido</h2>
-
-            <div class="selection-summary" id="resumoPedido">
-                <div class="summary-title">📋 Resumo do Pedido</div>
-                <div id="resumoCardapios"></div>
-                <div id="resumoSabores"></div>
-            </div>
-
-            <div class="form-group">
-                <label for="nome">Seu Nome *</label>
-                <input type="text" id="nome" placeholder="Digite seu nome completo" required>
-            </div>
-
-            <div class="form-group">
-                <label for="telefone">WhatsApp *</label>
-                <input type="tel" id="telefone" placeholder="(12) 99673-3698" required>
-            </div>
-
-            <div class="form-group">
-                <label for="quantidade">Quantidade</label>
-                <select id="quantidade">
-                    <option value="1">1 unidade</option>
-                    <option value="2">2 unidades</option>
-                    <option value="5">5 unidades</option>
-                    <option value="10">10 unidades</option>
-                    <option value="outro">Outra quantidade (especificar)</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="observacoes">Observações Especiais</label>
-                <textarea id="observacoes" placeholder="Alguma preferência especial? Decoração? Data de entrega? Nos conte tudo!"></textarea>
-            </div>
-
-            <button class="whatsapp-btn" onclick="sendToWhatsApp()">
-                <span class="whatsapp-icon">💬</span>
-                Enviar Pedido pelo WhatsApp
-            </button>
-        </section>
+        </div>
     </div>
 
-    <footer>
-        Feito com <span class="heart">❤</span> por Mariana Almeida
-    </footer>
+    <!-- Main Content -->
+    <main class="max-w-md mx-auto px-4 pt-4">
+        
+        <!-- Hero Section -->
+        <div class="mb-6 rounded-2xl overflow-hidden relative h-32 bg-gradient-to-r from-atelier-400 to-atelier-600 shadow-lg">
+            <div class="absolute inset-0 bg-black/10"></div>
+            <div class="absolute inset-0 flex items-center justify-center text-center p-4">
+                <div>
+                    <p class="text-white/90 text-xs font-medium mb-1 tracking-wider uppercase">Feito com amor</p>
+                    <h2 class="font-serif text-2xl text-white font-bold">Doces Artesanais</h2>
+                </div>
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/30 to-transparent"></div>
+        </div>
 
-    <div class="notification" id="notification">
-        <span>✓</span>
-        <span id="notificationText">Operação realizada!</span>
+        <!-- Products Grid -->
+        <div id="products-grid" class="grid grid-cols-2 gap-3 pb-6">
+            <!-- Products will be injected here by JavaScript -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden text-center py-12">
+            <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-atelier-100 flex items-center justify-center">
+                <i class="fas fa-cookie-bite text-3xl text-atelier-400"></i>
+            </div>
+            <p class="text-gray-500 text-sm">Nenhum produto nesta categoria</p>
+        </div>
+    </main>
+
+    <!-- Floating Action Button (Cart) -->
+    <button id="fab-cart" onclick="toggleCart()" class="fab fixed bottom-6 right-4 z-50 bg-gradient-to-r from-atelier-500 to-atelier-600 text-white px-6 py-4 rounded-full font-semibold flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300 hover:scale-105 active:scale-95">
+        <span class="text-sm">Finalizar Pedido</span>
+        <span id="fab-total" class="bg-white/20 px-2 py-1 rounded-lg text-sm">R$ 0,00</span>
+    </button>
+
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-overlay absolute inset-0" onclick="toggleCart()"></div>
+        <div class="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl animate-slide-up max-h-[85vh] overflow-hidden flex flex-col">
+            
+            <!-- Cart Header -->
+            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-white">
+                <div>
+                    <h3 class="font-serif text-xl font-bold text-gray-900">Seu Pedido</h3>
+                    <p class="text-xs text-gray-500 mt-0.5">Revise os itens antes de enviar</p>
+                </div>
+                <button onclick="toggleCart()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors">
+                    <i class="fas fa-times text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Cart Items -->
+            <div id="cart-items" class="flex-1 overflow-y-auto px-6 py-4 space-y-3 custom-scroll">
+                <!-- Cart items injected here -->
+            </div>
+
+            <!-- Cart Empty State -->
+            <div id="cart-empty" class="hidden flex-1 flex flex-col items-center justify-center py-8 text-center">
+                <div class="w-16 h-16 rounded-full bg-atelier-50 flex items-center justify-center mb-3">
+                    <i class="fas fa-shopping-basket text-2xl text-atelier-300"></i>
+                </div>
+                <p class="text-gray-400 text-sm">Seu carrinho está vazio</p>
+                <button onclick="toggleCart()" class="mt-3 text-atelier-600 text-sm font-medium">Ver cardápio</button>
+            </div>
+
+            <!-- Cart Footer -->
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 space-y-3">
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-gray-600">Subtotal</span>
+                    <span id="cart-subtotal" class="font-medium text-gray-900">R$ 0,00</span>
+                </div>
+                <div class="flex justify-between items-center text-lg font-bold">
+                    <span class="text-gray-900">Total</span>
+                    <span id="cart-total" class="text-atelier-600 font-serif text-xl">R$ 0,00</span>
+                </div>
+                <button onclick="sendWhatsAppOrder()" class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-4 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all active:scale-[0.98]">
+                    <i class="fab fa-whatsapp text-xl"></i>
+                    <span>Enviar Pedido via WhatsApp</span>
+                </button>
+                <p class="text-xs text-center text-gray-400 mt-2">
+                    Você será redirecionado para o WhatsApp da Mariana
+                </p>
+            </div>
+        </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, getDocs, query, orderBy, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    <!-- Admin Toggle Button (Discreet) -->
+    <div class="fixed bottom-6 left-4 z-40">
+        <button onclick="toggleAdmin()" class="w-10 h-10 rounded-full bg-gray-200/80 hover:bg-gray-300/80 flex items-center justify-center text-gray-500 transition-all" title="Gerenciar Itens">
+            <i class="fas fa-cog text-sm"></i>
+        </button>
+    </div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyA93ymW78OYYHc2qGoF-5D_RgWdCzkxh58",
-            authDomain: "atelie-mariana.firebaseapp.com",
-            projectId: "atelie-mariana",
-            storageBucket: "atelie-mariana.firebasestorage.app",
-            messagingSenderId: "416743252478",
-            appId: "1:416743252478:web:543a9c03574dfca3d960af",
-            measurementId: "G-B7HEZJ8VVQ"
-        };
+    <!-- Admin Panel -->
+    <div id="admin-panel" class="admin-section fixed inset-0 z-50 bg-white">
+        <div class="h-full flex flex-col max-w-md mx-auto">
+            
+            <!-- Admin Header -->
+            <div class="px-4 py-3 bg-atelier-600 text-white flex items-center justify-between shadow-lg">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-lock text-sm"></i>
+                    <h2 class="font-semibold text-sm">Painel Administrativo</h2>
+                </div>
+                <button onclick="toggleAdmin()" class="text-white/80 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+            <!-- Admin Content -->
+            <div class="flex-1 overflow-y-auto custom-scroll p-4 space-y-4 bg-gray-50">
+                
+                <!-- Add New Product -->
+                <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                    <h3 class="font-serif text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                        <i class="fas fa-plus-circle text-atelier-500 text-sm"></i>
+                        Adicionar Produto
+                    </h3>
+                    <form id="add-product-form" onsubmit="addProduct(event)" class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">Nome do Produto</label>
+                            <input type="text" id="new-name" required class="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-atelier-400 focus:ring-2 focus:ring-atelier-100 outline-none text-sm" placeholder="Ex: Bolo de Chocolate">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Preço (R$)</label>
+                                <input type="number" id="new-price" required step="0.01" min="0" class="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-atelier-400 focus:ring-2 focus:ring-atelier-100 outline-none text-sm" placeholder="0,00">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Categoria</label>
+                                <select id="new-category" class="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-atelier-400 focus:ring-2 focus:ring-atelier-100 outline-none text-sm">
+                                    <option value="pronta-entrega">Pronta Entrega</option>
+                                    <option value="encomendas">Encomendas</option>
+                                    <option value="promocoes">Promoções</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-600 mb-1">URL da Imagem</label>
+                            <input type="url" id="new-image" required class="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-atelier-400 focus:ring-2 focus:ring-atelier-100 outline-none text-sm" placeholder="https://exemplo.com/imagem.jpg">
+                        </div>
+                        <button type="submit" class="w-full bg-atelier-500 text-white py-2.5 rounded-lg font-medium text-sm hover:bg-atelier-600 transition-colors flex items-center justify-center gap-2">
+                            <i class="fas fa-save text-xs"></i>
+                            Salvar Produto
+                        </button>
+                    </form>
+                </div>
 
-        // Variáveis globais
-        let selectedPdfs = [];
-        let selectedFlavors = [];
-        let selectionMode = 'unico';
-        let pdfList = [];
-        const numeroWhatsApp = '5512996733698';
+                <!-- Manage Existing Products -->
+                <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                    <h3 class="font-serif text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                        <i class="fas fa-edit text-atelier-500 text-sm"></i>
+                        Gerenciar Produtos
+                    </h3>
+                    <div id="admin-products-list" class="space-y-2">
+                        <!-- Admin product items injected here -->
+                    </div>
+                </div>
 
-        // Links padrão do Google Drive (os 4 que você mandou)
-        const defaultLinks = [
-            { id: '1', nome: 'Cardápio 1', url: 'https://drive.google.com/file/d/1XnDlMUBN-cllJ0MEJirPzuoO2_Apxv8r/view?usp=drive_link', ordem: 1 },
-            { id: '2', nome: 'Cardápio 2', url: 'https://drive.google.com/file/d/1M_9MFlRxQ2vFsFEjpPdnxUKiiRQclTGS/view?usp=drive_link', ordem: 2 },
-            { id: '3', nome: 'Cardápio 3', url: 'https://drive.google.com/file/d/114rRmqSy_tYVQW4_39obVeKYZ54c5oHn/view?usp=drive_link', ordem: 3 },
-            { id: '4', nome: 'Cardápio 4', url: 'https://drive.google.com/file/d/1he4ujy7ynS6CSAG5ld4NXt2cf0EMzcko/view?usp=drive_link', ordem: 4 }
+                <!-- Data Management -->
+                <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                    <h3 class="font-serif text-lg font-bold text-gray-900 mb-3">Dados</h3>
+                    <div class="space-y-2">
+                        <button onclick="resetToDefault()" class="w-full px-3 py-2 rounded-lg border border-red-200 text-red-600 text-sm hover:bg-red-50 transition-colors text-left flex items-center gap-2">
+                            <i class="fas fa-undo text-xs"></i>
+                            Restaurar Padrões de Fábrica
+                        </button>
+                        <p class="text-xs text-gray-400">Os dados são salvos automaticamente no navegador deste dispositivo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Product Modal -->
+    <div id="edit-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 modal-overlay">
+        <div class="bg-white rounded-2xl w-full max-w-sm p-6 animate-fade-in shadow-2xl">
+            <h3 class="font-serif text-xl font-bold text-gray-900 mb-4">Editar Produto</h3>
+            <form id="edit-form" onsubmit="saveEdit(event)" class="space-y-3">
+                <input type="hidden" id="edit-id">
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Nome</label>
+                    <input type="text" id="edit-name" required class="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-atelier-400 focus:ring-2 focus:ring-atelier-100 outline-none text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Preço (R$)</label>
+                    <input type="number" id="edit-price" required step="0.01" min="0" class="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-atelier-400 focus:ring-2 focus:ring-atelier-100 outline-none text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">URL da Imagem</label>
+                    <input type="url" id="edit-image" required class="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-atelier-400 focus:ring-2 focus:ring-atelier-100 outline-none text-sm">
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <button type="button" onclick="closeEditModal()" class="flex-1 px-4 py-2 rounded-lg border border-gray-200 text-gray-600 text-sm hover:bg-gray-50 transition-colors">Cancelar</button>
+                    <button type="submit" class="flex-1 px-4 py-2 rounded-lg bg-atelier-500 text-white text-sm hover:bg-atelier-600 transition-colors">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Configurações
+        const WHATSAPP_NUMBER = '5512996733698'; // Número da Mariana
+        const STORAGE_KEY = 'atelie_mariana_products';
+        
+        // Dados padrão
+        const defaultProducts = [
+            {
+                id: 1,
+                name: 'Bolo de Chocolate Belga',
+                price: 85.00,
+                category: 'encomendas',
+                image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=400&fit=crop'
+            },
+            {
+                id: 2,
+                name: 'Cupcake Red Velvet',
+                price: 12.00,
+                category: 'pronta-entrega',
+                image: 'https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=400&h=400&fit=crop'
+            },
+            {
+                id: 3,
+                name: 'Torta de Limão Siciliano',
+                price: 65.00,
+                category: 'pronta-entrega',
+                image: 'https://images.unsplash.com/photo-1519915028121-7d3463d20b13?w=400&h=400&fit=crop'
+            },
+            {
+                id: 4,
+                name: 'Brigadeiro Gourmet (10un)',
+                price: 25.00,
+                category: 'promocoes',
+                image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=400&fit=crop'
+            },
+            {
+                id: 5,
+                name: 'Bolo de Cenoura com Cobertura',
+                price: 55.00,
+                category: 'pronta-entrega',
+                image: 'https://images.unsplash.com/photo-1565958011703-1f31be3fd4a4?w=400&h=400&fit=crop'
+            },
+            {
+                id: 6,
+                name: 'Cheesecake de Frutas Vermelhas',
+                price: 90.00,
+                category: 'encomendas',
+                image: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=400&h=400&fit=crop'
+            }
         ];
 
-        // Inicializar
-        window.addEventListener('load', async () => {
-            await inicializarCardapios();
-            carregarCardapios();
-            updateResumo();
+        // Estado da aplicação
+        let products = [];
+        let cart = {};
+        let currentCategory = 'all';
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProducts();
+            renderProducts();
+            updateCartUI();
         });
 
-        // Inicializar cardápios no Firebase se não existirem
-        async function inicializarCardapios() {
-            const snapshot = await getDocs(collection(db, "cardapios"));
-            if (snapshot.empty) {
-                // Criar os 4 cardápios padrão
-                for (const pdf of defaultLinks) {
-                    await setDoc(doc(db, "cardapios", pdf.id), pdf);
-                }
-                console.log("Cardápios padrão criados no Firebase");
+        // Carregar produtos do localStorage ou usar padrão
+        function loadProducts() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                products = JSON.parse(stored);
+            } else {
+                products = [...defaultProducts];
+                saveProducts();
             }
         }
 
-        // Carregar cardápios do Firebase
-        async function carregarCardapios() {
-            const q = query(collection(db, "cardapios"), orderBy("ordem"));
-            const snapshot = await getDocs(q);
-
-            pdfList = [];
-            snapshot.forEach((doc) => {
-                pdfList.push({ id: doc.id, ...doc.data() });
-            });
-
-            renderPDFGrid();
-
-            // Preencher área admin
-            pdfList.forEach((pdf, index) => {
-                const i = index + 1;
-                document.getElementById(`adminNome${i}`).value = pdf.nome || '';
-                document.getElementById(`adminLink${i}`).value = pdf.url || '';
-            });
+        // Salvar produtos no localStorage
+        function saveProducts() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
         }
 
-        // Renderizar grid de PDFs
-        function renderPDFGrid() {
-            const grid = document.getElementById('pdfGrid');
-            grid.innerHTML = '';
+        // Renderizar produtos
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            const emptyState = document.getElementById('empty-state');
+            
+            const filtered = currentCategory === 'all' 
+                ? products 
+                : products.filter(p => p.category === currentCategory);
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            emptyState.classList.add('hidden');
+            grid.innerHTML = filtered.map(product => `
+                <div class="product-card bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 animate-fade-in">
+                    <div class="relative aspect-square overflow-hidden bg-gray-100">
+                        <img src="${product.image}" 
+                             alt="${product.name}" 
+                             class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                             onerror="this.src='https://via.placeholder.com/400x400/f5d5c8/d9664e?text=Ateliê+Mariana'">
+                        ${product.category === 'promocoes' ? '<span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">PROMO</span>' : ''}
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-serif text-sm font-bold text-gray-900 leading-tight mb-1 line-clamp-2">${product.name}</h3>
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="text-atelier-600 font-bold text-sm">R$ ${formatPrice(product.price)}</span>
+                            <button onclick="addToCart(${product.id})" 
+                                    class="w-8 h-8 rounded-full bg-atelier-100 hover:bg-atelier-500 hover:text-white text-atelier-600 flex items-center justify-center transition-all active:scale-90 shadow-sm">
+                                <i class="fas fa-plus text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
 
-            pdfList.forEach((pdf) => {
-                const isSelected = selectedPdfs.includes(pdf.id);
-                const card = document.createElement('div');
-                card.className = `pdf-card ${isSelected ? 'selected' : ''}`;
-                card.innerHTML = `
-                    <div class="pdf-icon">📄</div>
-                    <div class="pdf-title">${pdf.nome}</div>
-                    <div class="pdf-desc">Cardápio disponível no Drive</div>
-                    <div class="pdf-actions">
-                        <a href="${pdf.url}" target="_blank" class="btn-drive">📁 Ver no Drive</a>
-                        <button class="btn-select ${isSelected ? 'selected' : ''}" onclick="togglePDF('${pdf.id}', this)">
-                            ${isSelected ? '✓ Selecionado' : 'Selecionar'}
+        // Filtrar categoria
+        function filterCategory(category) {
+            currentCategory = category;
+            
+            // Atualizar UI das tabs
+            document.querySelectorAll('.category-pill').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            renderProducts();
+        }
+
+        // Adicionar ao carrinho
+        function addToCart(productId) {
+            if (cart[productId]) {
+                cart[productId]++;
+            } else {
+                cart[productId] = 1;
+            }
+            
+            updateCartUI();
+            
+            // Animação de feedback
+            const btn = event.currentTarget;
+            btn.innerHTML = '<i class="fas fa-check text-xs"></i>';
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-plus text-xs"></i>';
+            }, 1000);
+        }
+
+        // Remover do carrinho
+        function removeFromCart(productId) {
+            if (cart[productId] > 1) {
+                cart[productId]--;
+            } else {
+                delete cart[productId];
+            }
+            updateCartUI();
+        }
+
+        // Atualizar UI do carrinho
+        function updateCartUI() {
+            const cartItems = document.getElementById('cart-items');
+            const cartEmpty = document.getElementById('cart-empty');
+            const cartBadge = document.getElementById('cart-badge');
+            const fabCart = document.getElementById('fab-cart');
+            const fabTotal = document.getElementById('fab-total');
+            
+            const items = Object.entries(cart);
+            const totalItems = items.reduce((sum, [, qty]) => sum + qty, 0);
+            const totalValue = items.reduce((sum, [id, qty]) => {
+                const product = products.find(p => p.id === parseInt(id));
+                return sum + (product ? product.price * qty : 0);
+            }, 0);
+            
+            // Atualizar badge
+            if (totalItems > 0) {
+                cartBadge.textContent = totalItems;
+                cartBadge.classList.remove('hidden');
+                fabCart.classList.remove('translate-y-20', 'opacity-0');
+                fabTotal.textContent = `R$ ${formatPrice(totalValue)}`;
+            } else {
+                cartBadge.classList.add('hidden');
+                fabCart.classList.add('translate-y-20', 'opacity-0');
+            }
+            
+            // Atualizar modal do carrinho
+            if (items.length === 0) {
+                cartItems.innerHTML = '';
+                cartEmpty.classList.remove('hidden');
+            } else {
+                cartEmpty.classList.add('hidden');
+                cartItems.innerHTML = items.map(([id, qty]) => {
+                    const product = products.find(p => p.id === parseInt(id));
+                    if (!product) return '';
+                    return `
+                        <div class="flex items-center gap-3 bg-gray-50 p-3 rounded-xl">
+                            <img src="${product.image}" class="w-16 h-16 rounded-lg object-cover bg-gray-200">
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-medium text-sm text-gray-900 truncate">${product.name}</h4>
+                                <p class="text-atelier-600 text-sm font-semibold">R$ ${formatPrice(product.price * qty)}</p>
+                            </div>
+                            <div class="flex items-center gap-2 bg-white rounded-lg p-1 shadow-sm">
+                                <button onclick="removeFromCart(${product.id})" class="w-6 h-6 rounded hover:bg-gray-100 text-gray-600 flex items-center justify-center text-xs">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span class="text-sm font-semibold w-4 text-center">${qty}</span>
+                                <button onclick="addToCart(${product.id})" class="w-6 h-6 rounded hover:bg-gray-100 text-atelier-600 flex items-center justify-center text-xs">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            // Atualizar totais
+            document.getElementById('cart-subtotal').textContent = `R$ ${formatPrice(totalValue)}`;
+            document.getElementById('cart-total').textContent = `R$ ${formatPrice(totalValue)}`;
+        }
+
+        // Toggle cart modal
+        function toggleCart() {
+            const modal = document.getElementById('cart-modal');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            } else {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Enviar pedido via WhatsApp
+        function sendWhatsAppOrder() {
+            const items = Object.entries(cart);
+            if (items.length === 0) return;
+            
+            let message = '🧁 *Pedido Ateliê Mariana*%0A%0A';
+            let total = 0;
+            
+            items.forEach(([id, qty]) => {
+                const product = products.find(p => p.id === parseInt(id));
+                if (product) {
+                    const subtotal = product.price * qty;
+                    total += subtotal;
+                    message += `• ${qty}x ${product.name}%0A`;
+                    message += `  R$ ${formatPrice(subtotal)}%0A%0A`;
+                }
+            });
+            
+            message += `%0A*Total: R$ ${formatPrice(total)}*`;
+            message += `%0A%0A_Olá Mariana! Gostaria de fazer este pedido._`;
+            
+            const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Toggle admin panel
+        function toggleAdmin() {
+            const panel = document.getElementById('admin-panel');
+            panel.classList.toggle('visible');
+            if (panel.classList.contains('visible')) {
+                renderAdminProducts();
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Renderizar lista de produtos no admin
+        function renderAdminProducts() {
+            const list = document.getElementById('admin-products-list');
+            list.innerHTML = products.map(product => `
+                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                    <img src="${product.image}" class="w-12 h-12 rounded-lg object-cover bg-gray-200">
+                    <div class="flex-1 min-w-0">
+                        <h4 class="font-medium text-sm text-gray-900 truncate">${product.name}</h4>
+                        <p class="text-xs text-gray-500">R$ ${formatPrice(product.price)} • ${getCategoryName(product.category)}</p>
+                    </div>
+                    <div class="flex gap-1">
+                        <button onclick="openEditModal(${product.id})" class="w-8 h-8 rounded-lg bg-white border border-gray-200 text-gray-600 hover:text-atelier-600 flex items-center justify-center">
+                            <i class="fas fa-pen text-xs"></i>
+                        </button>
+                        <button onclick="deleteProduct(${product.id})" class="w-8 h-8 rounded-lg bg-white border border-gray-200 text-gray-600 hover:text-red-600 flex items-center justify-center">
+                            <i class="fas fa-trash text-xs"></i>
                         </button>
                     </div>
-                `;
-                grid.appendChild(card);
-            });
+                </div>
+            `).join('');
         }
 
-        // Toggle seleção de PDF
-        window.togglePDF = function(pdfId, btn) {
-            const index = selectedPdfs.indexOf(pdfId);
-            if (index > -1) {
-                selectedPdfs.splice(index, 1);
-                btn.textContent = 'Selecionar';
-                btn.classList.remove('selected');
-                btn.closest('.pdf-card').classList.remove('selected');
-            } else {
-                selectedPdfs.push(pdfId);
-                btn.textContent = '✓ Selecionado';
-                btn.classList.add('selected');
-                btn.closest('.pdf-card').classList.add('selected');
-            }
-            updateResumo();
-            showNotification(selectedPdfs.length + ' cardápio(s) selecionado(s)');
-        };
-
-        // Salvar alterações dos cardápios (área admin)
-        window.salvarCardapios = async function() {
-            showNotification('Salvando alterações...');
-
-            try {
-                for (let i = 1; i <= 4; i++) {
-                    const nome = document.getElementById(`adminNome${i}`).value.trim();
-                    const url = document.getElementById(`adminLink${i}`).value.trim();
-
-                    if (nome && url) {
-                        await setDoc(doc(db, "cardapios", String(i)), {
-                            nome: nome,
-                            url: url,
-                            ordem: i
-                        });
-                    }
-                }
-
-                await carregarCardapios();
-                showNotification('Cardápios atualizados com sucesso!');
-            } catch (error) {
-                console.error(error);
-                showNotification('Erro ao salvar. Verifique as permissões do Firebase.', 'error');
-            }
-        };
-
-        // Mudar modo de seleção
-        window.setMode = function(mode) {
-            selectionMode = mode;
-            document.getElementById('btnUnico').classList.toggle('active', mode === 'unico');
-            document.getElementById('btnMultiplo').classList.toggle('active', mode === 'multiplo');
-
-            if (mode === 'unico' && selectedFlavors.length > 1) {
-                selectedFlavors = [selectedFlavors[0]];
-                updateFlavorUI();
-            }
-            updateResumo();
-        };
-
-        // Toggle sabor
-        window.toggleFlavor = function(element) {
-            const flavor = element.dataset.flavor;
-            const icon = element.querySelector('.flavor-icon').textContent;
-
-            if (selectionMode === 'unico') {
-                document.querySelectorAll('.flavor-card').forEach(card => card.classList.remove('selected'));
-                selectedFlavors = [{ name: flavor, icon: icon }];
-                element.classList.add('selected');
-            } else {
-                const index = selectedFlavors.findIndex(f => f.name === flavor);
-                if (index > -1) {
-                    selectedFlavors.splice(index, 1);
-                    element.classList.remove('selected');
-                } else {
-                    selectedFlavors.push({ name: flavor, icon: icon });
-                    element.classList.add('selected');
-                }
-            }
-
-            updateFlavorUI();
-            updateResumo();
-        };
-
-        function updateFlavorUI() {
-            document.querySelectorAll('.flavor-card').forEach(card => card.classList.remove('selected'));
-            selectedFlavors.forEach(flavor => {
-                const card = document.querySelector(`[data-flavor="${flavor.name}"]`);
-                if (card) card.classList.add('selected');
-            });
-
-            const count = selectedFlavors.length;
-            document.getElementById('saborCount').textContent = count + (count === 1 ? ' selecionado' : ' selecionados');
+        // Adicionar produto
+        function addProduct(e) {
+            e.preventDefault();
+            
+            const newProduct = {
+                id: Date.now(),
+                name: document.getElementById('new-name').value,
+                price: parseFloat(document.getElementById('new-price').value),
+                category: document.getElementById('new-category').value,
+                image: document.getElementById('new-image').value
+            };
+            
+            products.push(newProduct);
+            saveProducts();
+            renderProducts();
+            renderAdminProducts();
+            
+            // Limpar formulário
+            document.getElementById('add-product-form').reset();
+            
+            // Feedback
+            showToast('Produto adicionado com sucesso!');
         }
 
-        function updateResumo() {
-            const resumoCardapios = document.getElementById('resumoCardapios');
-            const resumoSabores = document.getElementById('resumoSabores');
+        // Abrir modal de edição
+        function openEditModal(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+            
+            document.getElementById('edit-id').value = product.id;
+            document.getElementById('edit-name').value = product.name;
+            document.getElementById('edit-price').value = product.price;
+            document.getElementById('edit-image').value = product.image;
+            
+            document.getElementById('edit-modal').classList.remove('hidden');
+            document.getElementById('edit-modal').classList.add('flex');
+        }
 
-            if (selectedPdfs.length > 0) {
-                let html = '<div style="margin-bottom: 1rem;"><strong>📚 Cardápios:</strong></div>';
-                selectedPdfs.forEach(pdfId => {
-                    const pdf = pdfList.find(p => p.id === pdfId);
-                    if (pdf) html += `<div class="summary-item"><span class="summary-icon">📄</span> ${pdf.nome}</div>`;
-                });
-                resumoCardapios.innerHTML = html;
-            } else {
-                resumoCardapios.innerHTML = '<div style="color: #999; margin-bottom: 1rem;">Nenhum cardápio selecionado</div>';
-            }
+        // Fechar modal de edição
+        function closeEditModal() {
+            document.getElementById('edit-modal').classList.add('hidden');
+            document.getElementById('edit-modal').classList.remove('flex');
+        }
 
-            if (selectedFlavors.length > 0) {
-                let html = '<div style="margin-bottom: 0.5rem; margin-top: 1rem;"><strong>🍫 Sabores:</strong></div>';
-                selectedFlavors.forEach(flavor => {
-                    html += `<div class="summary-item"><span class="summary-icon">${flavor.icon}</span> ${flavor.name}</div>`;
-                });
-                resumoSabores.innerHTML = html;
-            } else {
-                resumoSabores.innerHTML = '<div style="color: #999; margin-top: 1rem;">Nenhum sabor selecionado</div>';
+        // Salvar edição
+        function saveEdit(e) {
+            e.preventDefault();
+            
+            const id = parseInt(document.getElementById('edit-id').value);
+            const product = products.find(p => p.id === id);
+            
+            if (product) {
+                product.name = document.getElementById('edit-name').value;
+                product.price = parseFloat(document.getElementById('edit-price').value);
+                product.image = document.getElementById('edit-image').value;
+                
+                saveProducts();
+                renderProducts();
+                renderAdminProducts();
+                closeEditModal();
+                showToast('Produto atualizado!');
             }
         }
 
-        // Enviar WhatsApp
-        window.sendToWhatsApp = function() {
-            const nome = document.getElementById('nome').value.trim();
-            const telefone = document.getElementById('telefone').value.trim();
-            const quantidade = document.getElementById('quantidade').value;
-            const observacoes = document.getElementById('observacoes').value.trim();
-
-            if (!nome || !telefone) {
-                showNotification('Preencha seu nome e telefone', 'error');
-                return;
+        // Deletar produto
+        function deleteProduct(id) {
+            if (confirm('Tem certeza que deseja excluir este produto?')) {
+                products = products.filter(p => p.id !== id);
+                
+                // Remover do carrinho se estiver lá
+                if (cart[id]) delete cart[id];
+                
+                saveProducts();
+                renderProducts();
+                renderAdminProducts();
+                updateCartUI();
+                showToast('Produto removido');
             }
+        }
 
-            if (selectedFlavors.length === 0) {
-                showNotification('Selecione pelo menos um sabor', 'error');
-                return;
+        // Resetar para padrão
+        function resetToDefault() {
+            if (confirm('Isso apagará todos os produtos personalizados. Deseja continuar?')) {
+                products = [...defaultProducts];
+                cart = {};
+                saveProducts();
+                renderProducts();
+                renderAdminProducts();
+                updateCartUI();
+                showToast('Dados restaurados!');
             }
+        }
 
-            let mensagem = `*Novo Pedido - Ateliê Mariana Almeida* 🧁%0A%0A`;
-            mensagem += `*Cliente:* ${nome}%0A`;
-            mensagem += `*Contato:* ${telefone}%0A%0A`;
+        // Utilitários
+        function formatPrice(price) {
+            return price.toFixed(2).replace('.', ',');
+        }
 
-            if (selectedPdfs.length > 0) {
-                mensagem += `*📚 Cardápios Selecionados:*%0A`;
-                selectedPdfs.forEach(pdfId => {
-                    const pdf = pdfList.find(p => p.id === pdfId);
-                    if (pdf) mensagem += `• ${pdf.nome}%0A`;
-                });
-                mensagem += `%0A`;
+        function getCategoryName(cat) {
+            const names = {
+                'pronta-entrega': 'Pronta Entrega',
+                'encomendas': 'Encomendas',
+                'promocoes': 'Promoções'
+            };
+            return names[cat] || cat;
+        }
+
+        function showToast(message) {
+            // Criar toast temporário
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-full text-sm shadow-lg z-50 animate-fade-in';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.remove();
+            }, 2000);
+        }
+
+        // Fechar modal ao clicar fora
+        document.getElementById('edit-modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('edit-modal')) {
+                closeEditModal();
             }
-
-            mensagem += `*🍫 Sabores Escolhidos:*%0A`;
-            selectedFlavors.forEach(flavor => {
-                mensagem += `${flavor.icon} ${flavor.name}%0A`;
-            });
-            mensagem += `%0A`;
-
-            mensagem += `*📦 Quantidade:* ${quantidade}%0A`;
-
-            if (observacoes) mensagem += `%0A*📝 Observações:* ${observacoes}%0A`;
-            mensagem += `%0AAguardo confirmação! 😊`;
-
-            window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagem}`, '_blank');
-            showNotification('Redirecionando para WhatsApp...');
-        };
-
-        // Notificações
-        window.showNotification = function(text, type = 'success') {
-            const notification = document.getElementById('notification');
-            document.getElementById('notificationText').textContent = text;
-            notification.style.background = type === 'error' ? '#ff6b6b' : 'var(--chocolate)';
-            notification.classList.add('show');
-            setTimeout(() => notification.classList.remove('show'), 3000);
-        };
-
-        // Máscara telefone
-        document.getElementById('telefone').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 11) value = value.slice(0, 11);
-            if (value.length > 7) value = `(${value.slice(0,2)}) ${value.slice(2,7)}-${value.slice(7)}`;
-            else if (value.length > 2) value = `(${value.slice(0,2)}) ${value.slice(2)}`;
-            else if (value.length > 0) value = `(${value}`;
-            e.target.value = value;
         });
     </script>
 </body>
