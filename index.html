@@ -2,772 +2,212 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ateliê Mariana Almeida - Bolos & Doces</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Ateliê Mariana Almeida</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'serif': ['Playfair Display', 'serif'],
-                        'sans': ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        'atelier': {
-                            50: '#fdf8f6',
-                            100: '#f9ebe5',
-                            200: '#f5d5c8',
-                            300: '#eeb4a3',
-                            400: '#e48b75',
-                            500: '#d9664e',
-                            600: '#c44d36',
-                            700: '#a33d2b',
-                            800: '#863528',
-                            900: '#6f3026',
-                        },
-                        'cream': '#faf7f2',
-                        'gold': '#d4a574',
-                    }
-                }
-            }
-        }
-    </script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #faf7f2;
-            -webkit-tap-highlight-color: transparent;
+            background-color: #fafaf9;
         }
-        .font-serif { font-family: 'Playfair Display', serif; }
-        
-        /* Smooth scrolling */
-        html { scroll-behavior: smooth; }
-        
-        /* Hide scrollbar for Chrome, Safari and Opera */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        /* Animations */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        @keyframes pulse-soft { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        
-        .animate-fade-in { animation: fadeIn 0.4s ease-out; }
-        .animate-slide-up { animation: slideUp 0.3s ease-out; }
-        .animate-pulse-soft { animation: pulse-soft 2s infinite; }
-        
-        /* Glassmorphism */
-        .glass {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+        h1, h2, h3, .brand-font {
+            font-family: 'Playfair Display', serif;
         }
-        
-        /* Product card hover effect */
-        .product-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .admin-card {
+            transition: all 0.2s ease;
         }
-        .product-card:active { transform: scale(0.98); }
-        
-        /* Category pill active state */
-        .category-pill.active {
-            background: linear-gradient(135deg, #d9664e 0%, #c44d36 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(196, 77, 54, 0.3);
+        .admin-card:hover {
+            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.1);
         }
-        
-        /* Floating cart button */
-        .fab {
-            box-shadow: 0 8px 30px rgba(196, 77, 54, 0.4);
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
         }
-        
-        /* Modal overlay */
-        .modal-overlay {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
         }
-        
-        /* Image loading skeleton */
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
         }
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
         }
-        
-        /* Admin panel hidden by default */
-        .admin-section { display: none; }
-        .admin-section.visible { display: block; }
-        
-        /* Custom scrollbar for admin */
-        .custom-scroll::-webkit-scrollbar { width: 6px; }
-        .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #d9664e; border-radius: 3px; }
+        input:checked + .slider {
+            background-color: #10b981;
+        }
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+        .modal {
+            backdrop-filter: blur(5px);
+        }
     </style>
 <base target="_blank">
 </head>
-<body class="text-gray-800 antialiased pb-24">
+<body class="text-stone-800">
 
-    <!-- Header -->
-    <header class="sticky top-0 z-40 glass shadow-sm">
-        <div class="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-atelier-400 to-atelier-600 flex items-center justify-center text-white font-serif text-lg font-bold shadow-lg">
-                    M
+    <!-- Login Screen -->
+    <div id="loginScreen" class="fixed inset-0 bg-stone-900 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-lock text-amber-700 text-2xl"></i>
                 </div>
-                <div>
-                    <h1 class="font-serif text-lg font-bold text-gray-900 leading-tight">Ateliê Mariana</h1>
-                    <p class="text-xs text-atelier-600 font-medium">Bolos & Doces Artesanais</p>
-                </div>
+                <h2 class="text-2xl font-bold text-stone-900">Área Administrativa</h2>
+                <p class="text-stone-500 mt-2">Ateliê Mariana Almeida</p>
             </div>
-            <button onclick="toggleCart()" class="relative p-2 rounded-full hover:bg-atelier-100 transition-colors">
-                <i class="fas fa-shopping-bag text-atelier-700 text-xl"></i>
-                <span id="cart-badge" class="absolute -top-1 -right-1 w-5 h-5 bg-atelier-500 text-white text-xs font-bold rounded-full flex items-center justify-center hidden">0</span>
-            </button>
-        </div>
-    </header>
-
-    <!-- Categories Navigation -->
-    <div class="sticky top-16 z-30 bg-cream/95 backdrop-blur-sm border-b border-atelier-100">
-        <div class="max-w-md mx-auto px-4 py-3">
-            <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1" id="category-container">
-                <button onclick="filterCategory('all')" class="category-pill active whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium bg-white border border-atelier-200 text-gray-700 transition-all">
-                    Todos
-                </button>
-                <button onclick="filterCategory('pronta-entrega')" class="category-pill whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium bg-white border border-atelier-200 text-gray-700 transition-all">
-                    Pronta Entrega
-                </button>
-                <button onclick="filterCategory('encomendas')" class="category-pill whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium bg-white border border-atelier-200 text-gray-700 transition-all">
-                    Encomendas
-                </button>
-                <button onclick="filterCategory('promocoes')" class="category-pill whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium bg-white border border-atelier-200 text-gray-700 transition-all">
-                    Promoções
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <main class="max-w-md mx-auto px-4 pt-4">
-        
-        <!-- Hero Section -->
-        <div class="mb-6 rounded-2xl overflow-hidden relative h-32 bg-gradient-to-r from-atelier-400 to-atelier-600 shadow-lg">
-            <div class="absolute inset-0 bg-black/10"></div>
-            <div class="absolute inset-0 flex items-center justify-center text-center p-4">
-                <div>
-                    <p class="text-white/90 text-xs font-medium mb-1 tracking-wider uppercase">Feito com amor</p>
-                    <h2 class="font-serif text-2xl text-white font-bold">Doces Artesanais</h2>
-                </div>
-            </div>
-            <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/30 to-transparent"></div>
-        </div>
-
-        <!-- Products Grid -->
-        <div id="products-grid" class="grid grid-cols-2 gap-3 pb-6">
-            <!-- Products will be injected here by JavaScript -->
-        </div>
-
-        <!-- Empty State -->
-        <div id="empty-state" class="hidden text-center py-12">
-            <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-atelier-100 flex items-center justify-center">
-                <i class="fas fa-cookie-bite text-3xl text-atelier-400"></i>
-            </div>
-            <p class="text-gray-500 text-sm">Nenhum produto nesta categoria</p>
-        </div>
-    </main>
-
-    <!-- Floating Action Button (Cart) -->
-    <button id="fab-cart" onclick="toggleCart()" class="fab fixed bottom-6 right-4 z-50 bg-gradient-to-r from-atelier-500 to-atelier-600 text-white px-6 py-4 rounded-full font-semibold flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300 hover:scale-105 active:scale-95">
-        <span class="text-sm">Finalizar Pedido</span>
-        <span id="fab-total" class="bg-white/20 px-2 py-1 rounded-lg text-sm">R$ 0,00</span>
-    </button>
-
-    <!-- Cart Modal -->
-    <div id="cart-modal" class="fixed inset-0 z-50 hidden">
-        <div class="modal-overlay absolute inset-0" onclick="toggleCart()"></div>
-        <div class="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl animate-slide-up max-h-[85vh] overflow-hidden flex flex-col">
             
-            <!-- Cart Header -->
-            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-white">
+            <form id="loginForm" class="space-y-4">
                 <div>
-                    <h3 class="font-serif text-xl font-bold text-gray-900">Seu Pedido</h3>
-                    <p class="text-xs text-gray-500 mt-0.5">Revise os itens antes de enviar</p>
+                    <label class="block text-sm font-medium text-stone-700 mb-2">Senha de Acesso</label>
+                    <input type="password" id="adminPassword" placeholder="Digite a senha" 
+                           class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 outline-none transition-all">
                 </div>
-                <button onclick="toggleCart()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors">
-                    <i class="fas fa-times text-sm"></i>
+                <button type="submit" class="w-full bg-stone-900 hover:bg-stone-800 text-white py-3 rounded-xl font-medium transition-colors">
+                    Entrar
                 </button>
-            </div>
-
-            <!-- Cart Items -->
-            <div id="cart-items" class="flex-1 overflow-y-auto px-6 py-4 space-y-3 custom-scroll">
-                <!-- Cart items injected here -->
-            </div>
-
-            <!-- Cart Empty State -->
-            <div id="cart-empty" class="hidden flex-1 flex flex-col items-center justify-center py-8 text-center">
-                <div class="w-16 h-16 rounded-full bg-atelier-50 flex items-center justify-center mb-3">
-                    <i class="fas fa-shopping-basket text-2xl text-atelier-300"></i>
-                </div>
-                <p class="text-gray-400 text-sm">Seu carrinho está vazio</p>
-                <button onclick="toggleCart()" class="mt-3 text-atelier-600 text-sm font-medium">Ver cardápio</button>
-            </div>
-
-            <!-- Cart Footer -->
-            <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 space-y-3">
-                <div class="flex justify-between items-center text-sm">
-                    <span class="text-gray-600">Subtotal</span>
-                    <span id="cart-subtotal" class="font-medium text-gray-900">R$ 0,00</span>
-                </div>
-                <div class="flex justify-between items-center text-lg font-bold">
-                    <span class="text-gray-900">Total</span>
-                    <span id="cart-total" class="text-atelier-600 font-serif text-xl">R$ 0,00</span>
-                </div>
-                <button onclick="sendWhatsAppOrder()" class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-4 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all active:scale-[0.98]">
-                    <i class="fab fa-whatsapp text-xl"></i>
-                    <span>Enviar Pedido via WhatsApp</span>
-                </button>
-                <p class="text-xs text-center text-gray-400 mt-2">
-                    Você será redirecionado para o WhatsApp da Mariana
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Admin Toggle Button (Discreet) -->
-    <div class="fixed bottom-6 left-4 z-40">
-        <button onclick="toggleAdmin()" class="w-10 h-10 rounded-full bg-gray-200/80 hover:bg-gray-300/80 flex items-center justify-center text-gray-500 transition-all" title="Gerenciar Itens">
-            <i class="fas fa-cog text-sm"></i>
-        </button>
-    </div>
-
-    <!-- Admin Panel -->
-    <div id="admin-panel" class="admin-section fixed inset-0 z-50 bg-white">
-        <div class="h-full flex flex-col max-w-md mx-auto">
-            
-            <!-- Admin Header -->
-            <div class="px-4 py-3 bg-atelier-600 text-white flex items-center justify-between shadow-lg">
-                <div class="flex items-center gap-2">
-                    <i class="fas fa-lock text-sm"></i>
-                    <h2 class="font-semibold text-sm">Painel Administrativo</h2>
-                </div>
-                <button onclick="toggleAdmin()" class="text-white/80 hover:text-white">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-
-            <!-- Admin Content -->
-            <div class="flex-1 overflow-y-auto custom-scroll p-4 space-y-4 bg-gray-50">
-                
-                <!-- Add New Product -->
-                <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                    <h3 class="font-serif text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-                        <i class="fas fa-plus-circle text-atelier-500 text-sm"></i>
-                        Adicionar Produto
-                    </h3>
-                    <form id="add-product-form" onsubmit="addProduct(event)" class="space-y-3">
-                        <div>
-                            <label class="block text-xs font-medium text-gray-600 mb-1">Nome do Produto</label>
-                            <input type="text" id="new-name" required class="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-atelier-400 focus:ring-2 focus:ring-atelier-100 outline-none text-sm" placeholder="Ex: Bolo de Chocolate">
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="block text-xs font-medium text-gray-600 mb-1">Preço (R$)</label>
-                                <input type="number" id="new-price" required step="0.01" min="0" class="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-atelier-400 focus:ring-2 focus:ring-atelier-100 outline-none text-sm" placeholder="0,00">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-medium text-gray-600 mb-1">Categoria</label>
-                                <select id="new-category" class="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-atelier-400 focus:ring-2 focus:ring-atelier-100 outline-none text-sm">
-                                    <option value="pronta-entrega">Pronta Entrega</option>
-                                    <option value="encomendas">Encomendas</option>
-                                    <option value="promocoes">Promoções</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-600 mb-1">URL da Imagem</label>
-                            <input type="url" id="new-image" required class="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-atelier-400 focus:ring-2 focus:ring-atelier-100 outline-none text-sm" placeholder="https://exemplo.com/imagem.jpg">
-                        </div>
-                        <button type="submit" class="w-full bg-atelier-500 text-white py-2.5 rounded-lg font-medium text-sm hover:bg-atelier-600 transition-colors flex items-center justify-center gap-2">
-                            <i class="fas fa-save text-xs"></i>
-                            Salvar Produto
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Manage Existing Products -->
-                <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                    <h3 class="font-serif text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-                        <i class="fas fa-edit text-atelier-500 text-sm"></i>
-                        Gerenciar Produtos
-                    </h3>
-                    <div id="admin-products-list" class="space-y-2">
-                        <!-- Admin product items injected here -->
-                    </div>
-                </div>
-
-                <!-- Data Management -->
-                <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                    <h3 class="font-serif text-lg font-bold text-gray-900 mb-3">Dados</h3>
-                    <div class="space-y-2">
-                        <button onclick="resetToDefault()" class="w-full px-3 py-2 rounded-lg border border-red-200 text-red-600 text-sm hover:bg-red-50 transition-colors text-left flex items-center gap-2">
-                            <i class="fas fa-undo text-xs"></i>
-                            Restaurar Padrões de Fábrica
-                        </button>
-                        <p class="text-xs text-gray-400">Os dados são salvos automaticamente no navegador deste dispositivo.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Product Modal -->
-    <div id="edit-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 modal-overlay">
-        <div class="bg-white rounded-2xl w-full max-w-sm p-6 animate-fade-in shadow-2xl">
-            <h3 class="font-serif text-xl font-bold text-gray-900 mb-4">Editar Produto</h3>
-            <form id="edit-form" onsubmit="saveEdit(event)" class="space-y-3">
-                <input type="hidden" id="edit-id">
-                <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Nome</label>
-                    <input type="text" id="edit-name" required class="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-atelier-400 focus:ring-2 focus:ring-atelier-100 outline-none text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">Preço (R$)</label>
-                    <input type="number" id="edit-price" required step="0.01" min="0" class="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-atelier-400 focus:ring-2 focus:ring-atelier-100 outline-none text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">URL da Imagem</label>
-                    <input type="url" id="edit-image" required class="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-atelier-400 focus:ring-2 focus:ring-atelier-100 outline-none text-sm">
-                </div>
-                <div class="flex gap-2 pt-2">
-                    <button type="button" onclick="closeEditModal()" class="flex-1 px-4 py-2 rounded-lg border border-gray-200 text-gray-600 text-sm hover:bg-gray-50 transition-colors">Cancelar</button>
-                    <button type="submit" class="flex-1 px-4 py-2 rounded-lg bg-atelier-500 text-white text-sm hover:bg-atelier-600 transition-colors">Salvar</button>
-                </div>
+                <p id="loginError" class="text-red-500 text-sm text-center hidden">Senha incorreta!</p>
             </form>
         </div>
     </div>
 
-    <script>
-        // Configurações
-        const WHATSAPP_NUMBER = '5512996733698'; // Número da Mariana
-        const STORAGE_KEY = 'atelie_mariana_products';
-        
-        // Dados padrão
-        const defaultProducts = [
-            {
-                id: 1,
-                name: 'Bolo de Chocolate Belga',
-                price: 85.00,
-                category: 'encomendas',
-                image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=400&fit=crop'
-            },
-            {
-                id: 2,
-                name: 'Cupcake Red Velvet',
-                price: 12.00,
-                category: 'pronta-entrega',
-                image: 'https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=400&h=400&fit=crop'
-            },
-            {
-                id: 3,
-                name: 'Torta de Limão Siciliano',
-                price: 65.00,
-                category: 'pronta-entrega',
-                image: 'https://images.unsplash.com/photo-1519915028121-7d3463d20b13?w=400&h=400&fit=crop'
-            },
-            {
-                id: 4,
-                name: 'Brigadeiro Gourmet (10un)',
-                price: 25.00,
-                category: 'promocoes',
-                image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=400&fit=crop'
-            },
-            {
-                id: 5,
-                name: 'Bolo de Cenoura com Cobertura',
-                price: 55.00,
-                category: 'pronta-entrega',
-                image: 'https://images.unsplash.com/photo-1565958011703-1f31be3fd4a4?w=400&h=400&fit=crop'
-            },
-            {
-                id: 6,
-                name: 'Cheesecake de Frutas Vermelhas',
-                price: 90.00,
-                category: 'encomendas',
-                image: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=400&h=400&fit=crop'
-            }
-        ];
-
-        // Estado da aplicação
-        let products = [];
-        let cart = {};
-        let currentCategory = 'all';
-
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', () => {
-            loadProducts();
-            renderProducts();
-            updateCartUI();
-        });
-
-        // Carregar produtos do localStorage ou usar padrão
-        function loadProducts() {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) {
-                products = JSON.parse(stored);
-            } else {
-                products = [...defaultProducts];
-                saveProducts();
-            }
-        }
-
-        // Salvar produtos no localStorage
-        function saveProducts() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-        }
-
-        // Renderizar produtos
-        function renderProducts() {
-            const grid = document.getElementById('products-grid');
-            const emptyState = document.getElementById('empty-state');
-            
-            const filtered = currentCategory === 'all' 
-                ? products 
-                : products.filter(p => p.category === currentCategory);
-            
-            if (filtered.length === 0) {
-                grid.innerHTML = '';
-                emptyState.classList.remove('hidden');
-                return;
-            }
-            
-            emptyState.classList.add('hidden');
-            grid.innerHTML = filtered.map(product => `
-                <div class="product-card bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 animate-fade-in">
-                    <div class="relative aspect-square overflow-hidden bg-gray-100">
-                        <img src="${product.image}" 
-                             alt="${product.name}" 
-                             class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                             onerror="this.src='https://via.placeholder.com/400x400/f5d5c8/d9664e?text=Ateliê+Mariana'">
-                        ${product.category === 'promocoes' ? '<span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">PROMO</span>' : ''}
+    <!-- Admin Dashboard (Hidden initially) -->
+    <div id="adminDashboard" class="hidden">
+        <!-- Header -->
+        <header class="bg-white shadow-sm sticky top-0 z-40">
+            <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-cog text-amber-700"></i>
                     </div>
-                    <div class="p-3">
-                        <h3 class="font-serif text-sm font-bold text-gray-900 leading-tight mb-1 line-clamp-2">${product.name}</h3>
-                        <div class="flex items-center justify-between mt-2">
-                            <span class="text-atelier-600 font-bold text-sm">R$ ${formatPrice(product.price)}</span>
-                            <button onclick="addToCart(${product.id})" 
-                                    class="w-8 h-8 rounded-full bg-atelier-100 hover:bg-atelier-500 hover:text-white text-atelier-600 flex items-center justify-center transition-all active:scale-90 shadow-sm">
-                                <i class="fas fa-plus text-xs"></i>
-                            </button>
+                    <div>
+                        <h1 class="text-xl font-bold text-stone-900">Dashboard</h1>
+                        <p class="text-xs text-stone-500">Gerencie seus produtos</p>
+                    </div>
+                </div>
+                <button onclick="logout()" class="text-stone-500 hover:text-stone-700 px-4 py-2 rounded-lg hover:bg-stone-100 transition-colors">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Sair
+                </button>
+            </div>
+        </header>
+
+        <main class="max-w-6xl mx-auto px-4 py-8">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-stone-500 text-sm">Total de Produtos</p>
+                            <p class="text-2xl font-bold text-stone-900" id="totalProducts">0</p>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center">
+                            <i class="fas fa-box text-blue-600"></i>
                         </div>
                     </div>
                 </div>
-            `).join('');
-        }
-
-        // Filtrar categoria
-        function filterCategory(category) {
-            currentCategory = category;
-            
-            // Atualizar UI das tabs
-            document.querySelectorAll('.category-pill').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            renderProducts();
-        }
-
-        // Adicionar ao carrinho
-        function addToCart(productId) {
-            if (cart[productId]) {
-                cart[productId]++;
-            } else {
-                cart[productId] = 1;
-            }
-            
-            updateCartUI();
-            
-            // Animação de feedback
-            const btn = event.currentTarget;
-            btn.innerHTML = '<i class="fas fa-check text-xs"></i>';
-            setTimeout(() => {
-                btn.innerHTML = '<i class="fas fa-plus text-xs"></i>';
-            }, 1000);
-        }
-
-        // Remover do carrinho
-        function removeFromCart(productId) {
-            if (cart[productId] > 1) {
-                cart[productId]--;
-            } else {
-                delete cart[productId];
-            }
-            updateCartUI();
-        }
-
-        // Atualizar UI do carrinho
-        function updateCartUI() {
-            const cartItems = document.getElementById('cart-items');
-            const cartEmpty = document.getElementById('cart-empty');
-            const cartBadge = document.getElementById('cart-badge');
-            const fabCart = document.getElementById('fab-cart');
-            const fabTotal = document.getElementById('fab-total');
-            
-            const items = Object.entries(cart);
-            const totalItems = items.reduce((sum, [, qty]) => sum + qty, 0);
-            const totalValue = items.reduce((sum, [id, qty]) => {
-                const product = products.find(p => p.id === parseInt(id));
-                return sum + (product ? product.price * qty : 0);
-            }, 0);
-            
-            // Atualizar badge
-            if (totalItems > 0) {
-                cartBadge.textContent = totalItems;
-                cartBadge.classList.remove('hidden');
-                fabCart.classList.remove('translate-y-20', 'opacity-0');
-                fabTotal.textContent = `R$ ${formatPrice(totalValue)}`;
-            } else {
-                cartBadge.classList.add('hidden');
-                fabCart.classList.add('translate-y-20', 'opacity-0');
-            }
-            
-            // Atualizar modal do carrinho
-            if (items.length === 0) {
-                cartItems.innerHTML = '';
-                cartEmpty.classList.remove('hidden');
-            } else {
-                cartEmpty.classList.add('hidden');
-                cartItems.innerHTML = items.map(([id, qty]) => {
-                    const product = products.find(p => p.id === parseInt(id));
-                    if (!product) return '';
-                    return `
-                        <div class="flex items-center gap-3 bg-gray-50 p-3 rounded-xl">
-                            <img src="${product.image}" class="w-16 h-16 rounded-lg object-cover bg-gray-200">
-                            <div class="flex-1 min-w-0">
-                                <h4 class="font-medium text-sm text-gray-900 truncate">${product.name}</h4>
-                                <p class="text-atelier-600 text-sm font-semibold">R$ ${formatPrice(product.price * qty)}</p>
-                            </div>
-                            <div class="flex items-center gap-2 bg-white rounded-lg p-1 shadow-sm">
-                                <button onclick="removeFromCart(${product.id})" class="w-6 h-6 rounded hover:bg-gray-100 text-gray-600 flex items-center justify-center text-xs">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                                <span class="text-sm font-semibold w-4 text-center">${qty}</span>
-                                <button onclick="addToCart(${product.id})" class="w-6 h-6 rounded hover:bg-gray-100 text-atelier-600 flex items-center justify-center text-xs">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-stone-500 text-sm">Disponíveis</p>
+                            <p class="text-2xl font-bold text-green-600" id="availableProducts">0</p>
                         </div>
-                    `;
-                }).join('');
-            }
-            
-            // Atualizar totais
-            document.getElementById('cart-subtotal').textContent = `R$ ${formatPrice(totalValue)}`;
-            document.getElementById('cart-total').textContent = `R$ ${formatPrice(totalValue)}`;
-        }
-
-        // Toggle cart modal
-        function toggleCart() {
-            const modal = document.getElementById('cart-modal');
-            if (modal.classList.contains('hidden')) {
-                modal.classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-            } else {
-                modal.classList.add('hidden');
-                document.body.style.overflow = '';
-            }
-        }
-
-        // Enviar pedido via WhatsApp
-        function sendWhatsAppOrder() {
-            const items = Object.entries(cart);
-            if (items.length === 0) return;
-            
-            let message = '🧁 *Pedido Ateliê Mariana*%0A%0A';
-            let total = 0;
-            
-            items.forEach(([id, qty]) => {
-                const product = products.find(p => p.id === parseInt(id));
-                if (product) {
-                    const subtotal = product.price * qty;
-                    total += subtotal;
-                    message += `• ${qty}x ${product.name}%0A`;
-                    message += `  R$ ${formatPrice(subtotal)}%0A%0A`;
-                }
-            });
-            
-            message += `%0A*Total: R$ ${formatPrice(total)}*`;
-            message += `%0A%0A_Olá Mariana! Gostaria de fazer este pedido._`;
-            
-            const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
-            window.open(whatsappUrl, '_blank');
-        }
-
-        // Toggle admin panel
-        function toggleAdmin() {
-            const panel = document.getElementById('admin-panel');
-            panel.classList.toggle('visible');
-            if (panel.classList.contains('visible')) {
-                renderAdminProducts();
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = '';
-            }
-        }
-
-        // Renderizar lista de produtos no admin
-        function renderAdminProducts() {
-            const list = document.getElementById('admin-products-list');
-            list.innerHTML = products.map(product => `
-                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                    <img src="${product.image}" class="w-12 h-12 rounded-lg object-cover bg-gray-200">
-                    <div class="flex-1 min-w-0">
-                        <h4 class="font-medium text-sm text-gray-900 truncate">${product.name}</h4>
-                        <p class="text-xs text-gray-500">R$ ${formatPrice(product.price)} • ${getCategoryName(product.category)}</p>
-                    </div>
-                    <div class="flex gap-1">
-                        <button onclick="openEditModal(${product.id})" class="w-8 h-8 rounded-lg bg-white border border-gray-200 text-gray-600 hover:text-atelier-600 flex items-center justify-center">
-                            <i class="fas fa-pen text-xs"></i>
-                        </button>
-                        <button onclick="deleteProduct(${product.id})" class="w-8 h-8 rounded-lg bg-white border border-gray-200 text-gray-600 hover:text-red-600 flex items-center justify-center">
-                            <i class="fas fa-trash text-xs"></i>
-                        </button>
+                        <div class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center">
+                            <i class="fas fa-check-circle text-green-600"></i>
+                        </div>
                     </div>
                 </div>
-            `).join('');
-        }
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-stone-500 text-sm">Esgotados</p>
+                            <p class="text-2xl font-bold text-red-600" id="unavailableProducts">0</p>
+                        </div>
+                        <div class="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center">
+                            <i class="fas fa-times-circle text-red-600"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        // Adicionar produto
-        function addProduct(e) {
-            e.preventDefault();
-            
-            const newProduct = {
-                id: Date.now(),
-                name: document.getElementById('new-name').value,
-                price: parseFloat(document.getElementById('new-price').value),
-                category: document.getElementById('new-category').value,
-                image: document.getElementById('new-image').value
-            };
-            
-            products.push(newProduct);
-            saveProducts();
-            renderProducts();
-            renderAdminProducts();
-            
-            // Limpar formulário
-            document.getElementById('add-product-form').reset();
-            
-            // Feedback
-            showToast('Produto adicionado com sucesso!');
-        }
+            <!-- Action Bar -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                <h2 class="text-xl font-bold text-stone-900">Produtos</h2>
+                <button onclick="openModal()" class="bg-stone-900 hover:bg-stone-800 text-white px-6 py-3 rounded-xl font-medium transition-colors flex items-center gap-2">
+                    <i class="fas fa-plus"></i>
+                    Novo Produto
+                </button>
+            </div>
 
-        // Abrir modal de edição
-        function openEditModal(id) {
-            const product = products.find(p => p.id === id);
-            if (!product) return;
-            
-            document.getElementById('edit-id').value = product.id;
-            document.getElementById('edit-name').value = product.name;
-            document.getElementById('edit-price').value = product.price;
-            document.getElementById('edit-image').value = product.image;
-            
-            document.getElementById('edit-modal').classList.remove('hidden');
-            document.getElementById('edit-modal').classList.add('flex');
-        }
+            <!-- Products Table -->
+            <div class="bg-white rounded-2xl shadow-sm border border-stone-100 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-stone-50 border-b border-stone-200">
+                            <tr>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-stone-700">Produto</th>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-stone-700">Categoria</th>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-stone-700">Preço</th>
+                                <th class="text-center px-6 py-4 text-sm font-semibold text-stone-700">Status</th>
+                                <th class="text-right px-6 py-4 text-sm font-semibold text-stone-700">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTableBody" class="divide-y divide-stone-100">
+                            <!-- Products will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="emptyTable" class="hidden text-center py-12">
+                    <div class="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-inbox text-stone-400 text-2xl"></i>
+                    </div>
+                    <p class="text-stone-500">Nenhum produto cadastrado</p>
+                </div>
+            </div>
+        </main>
+    </div>
 
-        // Fechar modal de edição
-        function closeEditModal() {
-            document.getElementById('edit-modal').classList.add('hidden');
-            document.getElementById('edit-modal').classList.remove('flex');
-        }
-
-        // Salvar edição
-        function saveEdit(e) {
-            e.preventDefault();
+    <!-- Product Modal -->
+    <div id="productModal" class="fixed inset-0 bg-black/50 z-50 hidden modal flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div class="p-6 border-b border-stone-100 flex items-center justify-between sticky top-0 bg-white rounded-t-3xl">
+                <h3 class="text-xl font-bold text-stone-900" id="modalTitle">Novo Produto</h3>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-full hover:bg-stone-100 flex items-center justify-center transition-colors">
+                    <i class="fas fa-times text-stone-500"></i>
+                </button>
+            </div>
             
-            const id = parseInt(document.getElementById('edit-id').value);
-            const product = products.find(p => p.id === id);
-            
-            if (product) {
-                product.name = document.getElementById('edit-name').value;
-                product.price = parseFloat(document.getElementById('edit-price').value);
-                product.image = document.getElementById('edit-image').value;
+            <form id="productForm" class="p-6 space-y-4">
+                <input type="hidden" id="productId">
                 
-                saveProducts();
-                renderProducts();
-                renderAdminProducts();
-                closeEditModal();
-                showToast('Produto atualizado!');
-            }
-        }
+                <div>
+                    <label class="block text-sm font-medium text-stone-700 mb-2">Nome do Produto *</label>
+                    <input type="text" id="productName" required placeholder="Ex: Bolo de Chocolate"
+                           class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 outline-none transition-all">
+                </div>
 
-        // Deletar produto
-        function deleteProduct(id) {
-            if (confirm('Tem certeza que deseja excluir este produto?')) {
-                products = products.filter(p => p.id !== id);
-                
-                // Remover do carrinho se estiver lá
-                if (cart[id]) delete cart[id];
-                
-                saveProducts();
-                renderProducts();
-                renderAdminProducts();
-                updateCartUI();
-                showToast('Produto removido');
-            }
-        }
-
-        // Resetar para padrão
-        function resetToDefault() {
-            if (confirm('Isso apagará todos os produtos personalizados. Deseja continuar?')) {
-                products = [...defaultProducts];
-                cart = {};
-                saveProducts();
-                renderProducts();
-                renderAdminProducts();
-                updateCartUI();
-                showToast('Dados restaurados!');
-            }
-        }
-
-        // Utilitários
-        function formatPrice(price) {
-            return price.toFixed(2).replace('.', ',');
-        }
-
-        function getCategoryName(cat) {
-            const names = {
-                'pronta-entrega': 'Pronta Entrega',
-                'encomendas': 'Encomendas',
-                'promocoes': 'Promoções'
-            };
-            return names[cat] || cat;
-        }
-
-        function showToast(message) {
-            // Criar toast temporário
-            const toast = document.createElement('div');
-            toast.className = 'fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-full text-sm shadow-lg z-50 animate-fade-in';
-            toast.textContent = message;
-            document.body.appendChild(toast);
-            setTimeout(() => {
-                toast.remove();
-            }, 2000);
-        }
-
-        // Fechar modal ao clicar fora
-        document.getElementById('edit-modal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('edit-modal')) {
-                closeEditModal();
-            }
-        });
-    </script>
-</body>
-</html>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-2">Preço (R$) *</label>
+                        <input type="number" id="productPrice" required step="0.01" min="0" placeholder="0,00"
+                               class="w-full px-4 py-3 rounded-xl border border-stone-300 focus:border-amber-500 focus:ring-2 focus
