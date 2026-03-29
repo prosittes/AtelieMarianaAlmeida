@@ -3,41 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel - Mariana Almeida</title>
+    <title>Painel Mariana - Upload Direto</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Montserrat', sans-serif; }</style>
 </head>
-<body class="bg-gray-100 p-4">
-    <div id="login-area" class="max-w-sm mx-auto mt-20 bg-white p-8 rounded-xl shadow-lg">
-        <h2 class="text-xl font-bold mb-4">Acesso Restrito</h2>
-        <input type="password" id="senha" placeholder="Senha de Acesso" class="w-full border p-2 mb-4 rounded">
-        <button onclick="verificarSenha()" class="w-full bg-black text-white p-2 rounded">Entrar</button>
+<body class="bg-gray-50 p-4 pb-20">
+
+    <div id="login-area" class="max-w-sm mx-auto mt-20 bg-white p-8 rounded-2xl shadow-xl border border-gray-100 text-center">
+        <h2 class="text-2xl font-bold text-[#5d4037] mb-6">Acesso Ateliê</h2>
+        <input type="password" id="senha" placeholder="Senha (mariana2026)" class="w-full border p-3 mb-4 rounded-xl outline-none focus:ring-2 focus:ring-[#d7ccc8]">
+        <button onclick="verificarSenha()" class="w-full bg-[#5d4037] text-white p-3 rounded-xl font-bold">Entrar</button>
     </div>
 
-    <div id="admin-area" class="max-w-2xl mx-auto hidden">
-        <header class="flex justify-between items-center mb-8">
-            <h1 class="text-2xl font-bold">Gerenciar Cardápio</h1>
-            <button onclick="location.reload()" class="text-sm text-red-500">Sair</button>
-        </header>
-
-        <div class="bg-white p-6 rounded-xl shadow-md mb-8">
-            <h3 class="font-bold mb-4">Adicionar Novo Doce</h3>
-            <div class="grid gap-4">
-                <input type="text" id="nome" placeholder="Nome do Doce" class="border p-2 rounded">
-                <input type="text" id="desc" placeholder="Descrição curta" class="border p-2 rounded">
-                <div class="flex gap-2">
-                    <input type="number" id="preco" placeholder="Preço (Ex: 15.50)" class="border p-2 rounded w-1/2">
-                    <input type="text" id="foto" placeholder="Link da Foto (ImgBB)" class="border p-2 rounded w-1/2">
-                </div>
-                <button onclick="salvarProduto()" class="bg-green-600 text-white p-3 rounded font-bold">Salvar no Cardápio</button>
-            </div>
+    <div id="admin-area" class="max-w-xl mx-auto hidden">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-xl font-bold text-[#5d4037]">Novo Doce no Cardápio</h1>
+            <button onclick="location.reload()" class="text-xs text-red-400">Sair</button>
         </div>
 
-        <div id="lista-admin" class="grid gap-4"></div>
+        <div class="bg-white p-6 rounded-2xl shadow-md space-y-4">
+            <input type="text" id="nome" placeholder="Nome do Bolo" class="w-full border p-3 rounded-xl outline-none">
+            <textarea id="desc" placeholder="Descrição (ex: Recheio de brigadeiro)" class="w-full border p-3 rounded-xl outline-none"></textarea>
+            <input type="number" id="preco" placeholder="Preço (Ex: 25.00)" class="w-full border p-3 rounded-xl outline-none">
+            
+            <div class="border-2 border-dashed border-[#d7ccc8] p-6 rounded-2xl text-center bg-[#faf9f8]">
+                <label class="cursor-pointer block">
+                    <span class="text-3xl">📸</span>
+                    <p class="text-[#5d4037] font-semibold mt-2">Toque para escolher da Galeria</p>
+                    <input type="file" id="arquivo-foto" accept="image/*" class="hidden" onchange="mostrarNome()">
+                </label>
+                <p id="nome-arquivo" class="text-xs text-gray-400 mt-2 italic">Nenhuma foto selecionada</p>
+            </div>
+
+            <button onclick="salvarTudo()" id="btn-salvar" class="w-full bg-[#5d4037] text-white p-4 rounded-xl font-bold shadow-lg active:scale-95 transition-all">POSTAR NO SITE</button>
+        </div>
+
+        <h3 class="font-bold text-[#5d4037] mt-10 mb-4 text-center">Itens que estão no seu site:</h3>
+        <div id="lista-admin" class="space-y-3"></div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA93ymW78OYYHc2qGoF-5D_RgWdCzkxh58",
@@ -50,50 +59,77 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const storage = getStorage(app);
 
         window.verificarSenha = () => {
-            const senha = document.getElementById('senha').value;
-            if(senha === 'mariana2026') {
+            if(document.getElementById('senha').value === 'mariana2026') {
                 document.getElementById('login-area').classList.add('hidden');
                 document.getElementById('admin-area').classList.remove('hidden');
-                carregarAdmin();
-            } else { alert('Senha incorreta!'); }
+                carregarLista();
+            } else { alert("Senha incorreta!"); }
         };
 
-        window.salvarProduto = async () => {
+        window.mostrarNome = () => {
+            const file = document.getElementById('arquivo-foto').files[0];
+            document.getElementById('nome-arquivo').innerText = file ? "✓ " + file.name : "Nenhuma foto selecionada";
+        };
+
+        window.salvarTudo = async () => {
+            const btn = document.getElementById('btn-salvar');
+            const file = document.getElementById('arquivo-foto').files[0];
             const nome = document.getElementById('nome').value;
-            const preco = parseFloat(document.getElementById('preco').value);
-            const foto = document.getElementById('foto').value;
-            const descricao = document.getElementById('desc').value;
+            const preco = document.getElementById('preco').value;
 
-            await addDoc(collection(db, "produtos"), { nome, preco, foto, descricao, status: "disponivel" });
-            alert("Sucesso!");
-            location.reload();
+            if(!file || !nome || !preco) return alert("Preencha o nome, preço e escolha uma foto!");
+
+            btn.innerText = "Enviando para o Google...";
+            btn.disabled = true;
+
+            try {
+                // 1. Sobe a foto para o Storage
+                const storageRef = ref(storage, 'bolos/' + Date.now() + "_" + file.name);
+                await uploadBytes(storageRef, file);
+                const urlFinal = await getDownloadURL(storageRef);
+
+                // 2. Salva no Banco de Dados
+                await addDoc(collection(db, "produtos"), {
+                    nome: nome,
+                    descricao: document.getElementById('desc').value,
+                    preco: parseFloat(preco),
+                    foto: urlFinal,
+                    status: "disponivel"
+                });
+
+                alert("Sucesso! Já está no seu site.");
+                location.reload();
+            } catch (e) {
+                alert("Erro ao salvar: " + e.message);
+                btn.disabled = false;
+                btn.innerText = "POSTAR NO SITE";
+            }
         };
 
-        function carregarAdmin() {
-            onSnapshot(collection(db, "produtos"), (snapshot) => {
-                const list = document.getElementById('lista-admin');
-                list.innerHTML = '';
-                snapshot.forEach((d) => {
+        function carregarLista() {
+            onSnapshot(collection(db, "produtos"), (snap) => {
+                const container = document.getElementById('lista-admin');
+                container.innerHTML = '';
+                snap.forEach(d => {
                     const p = d.data();
-                    list.innerHTML += `
-                        <div class="bg-white p-4 rounded-lg flex justify-between items-center shadow-sm">
-                            <div>
-                                <p class="font-bold">${p.nome}</p>
-                                <p class="text-sm text-green-600 font-bold">R$ ${p.preco}</p>
+                    container.innerHTML += `
+                        <div class="bg-white p-3 rounded-xl flex items-center justify-between shadow-sm border border-gray-100">
+                            <div class="flex items-center gap-3">
+                                <img src="${p.foto}" class="w-10 h-10 rounded-lg object-cover">
+                                <div><p class="text-sm font-bold text-[#5d4037]">${p.nome}</p><p class="text-xs text-gray-400">R$ ${p.preco.toFixed(2)}</p></div>
                             </div>
-                            <button onclick="excluir('${d.id}')" class="text-red-500 text-sm">Excluir</button>
+                            <button onclick="excluirItem('${d.id}')" class="text-red-400 text-xs font-bold p-2">Apagar</button>
                         </div>
                     `;
                 });
             });
         }
 
-        window.excluir = async (id) => {
-            if(confirm("Deseja apagar este item?")) {
-                await deleteDoc(doc(db, "produtos", id));
-            }
+        window.excluirItem = async (id) => {
+            if(confirm("Deseja apagar este item?")) await deleteDoc(doc(db, "produtos", id));
         };
     </script>
 </body>
