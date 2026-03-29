@@ -11,6 +11,7 @@
         .preview-img { max-height: 200px; object-fit: cover; }
         textarea { resize: vertical; }
     </style>
+<base target="_blank">
 </head>
 <body class="bg-gray-50 p-4 min-h-screen flex flex-col">
 
@@ -80,4 +81,285 @@ Exemplo de formato:
 
                 <!-- ÁREA DE UPLOAD DE FOTO -->
                 <div class="border-2 border-dashed border-[#d7ccc8] rounded-xl p-6 text-center bg-[#faf7f5]">
-                    <input type="file" id="input-foto" accept="image/png,image/jpeg,image
+                    <input type="file" id="input-foto" accept="image/png,image/jpeg,image/jpg,image/webp" class="hidden" onchange="previewFoto(this)">
+                    
+                    <div id="upload-area" onclick="document.getElementById('input-foto').click()">
+                        <div class="text-4xl mb-2">📷</div>
+                        <p class="text-[#5d4037] font-semibold">Clique para adicionar foto</p>
+                        <p class="text-xs text-gray-500 mt-1">Escolha da galeria ou tire uma foto</p>
+                    </div>
+
+                    <!-- PREVIEW DA IMAGEM -->
+                    <div id="preview-area" class="hidden mt-4">
+                        <img id="preview-img" class="preview-img rounded-lg mx-auto shadow-md">
+                        <p class="text-sm text-green-600 mt-2 font-medium">✓ Foto selecionada</p>
+                        <button onclick="removerFoto()" class="text-xs text-red-500 mt-2 underline">Remover foto</button>
+                    </div>
+
+                    <!-- BARRA DE PROGRESSO -->
+                    <div id="progress-container" class="hidden mt-4">
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div id="progress-bar" class="bg-[#5d4037] h-2 rounded-full transition-all" style="width: 0%"></div>
+                        </div>
+                        <p id="progress-text" class="text-xs text-gray-600 mt-1">Enviando...</p>
+                    </div>
+                </div>
+
+                <button onclick="salvarProduto()" id="btn-salvar" class="bg-[#5d4037] text-white p-4 rounded-xl font-bold shadow-lg hover:shadow-none transition-all">Salvar no Cardápio</button>
+            </div>
+        </div>
+
+        <h3 class="font-bold text-[#5d4037] mb-4">Itens Atuais no Site:</h3>
+        <div id="lista-admin" class="grid gap-4 mb-8"></div>
+    </div>
+
+    <!-- FOOTER COM CRÉDITOS -->
+    <footer class="mt-auto py-6 text-center border-t border-[#d7ccc8] bg-white rounded-t-2xl shadow-sm max-w-2xl mx-auto w-full">
+        <div class="space-y-2">
+            <p class="text-[#5d4037] font-semibold text-sm">Ateliê Mariana Almeida</p>
+            <p class="text-[#8d6e63] text-xs italic">"Feito com amor ❤️"</p>
+            <div class="pt-2 border-t border-gray-100 mt-2">
+                <p class="text-[#a1887f] text-xs">
+                    Desenvolvido por <span class="font-semibold text-[#5d4037]">Prosittes</span> © 2026
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA93ymW78OYYHc2qGoF-5D_RgWdCzkxh58",
+            authDomain: "atelie-mariana.firebaseapp.com",
+            projectId: "atelie-mariana",
+            storageBucket: "atelie-mariana.firebasestorage.app",
+            messagingSenderId: "416743252478",
+            appId: "1:416743252478:web:543a9c03574dfca3d960af"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        let fotoSelecionada = null;
+        let fotoURL = "";
+
+        // FUNÇÕES GLOBAIS
+        window.verificarSenha = () => {
+            if(document.getElementById('senha').value === 'mariana2026') {
+                document.getElementById('login-area').classList.add('hidden');
+                document.getElementById('admin-area').classList.remove('hidden');
+                carregarAdmin();
+            } else { 
+                alert('Senha incorreta!'); 
+            }
+        };
+
+        // PREVIEW DA FOTO SELECIONADA
+        window.previewFoto = (input) => {
+            const file = input.files[0];
+            if (file) {
+                fotoSelecionada = file;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('preview-img').src = e.target.result;
+                    document.getElementById('upload-area').classList.add('hidden');
+                    document.getElementById('preview-area').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        // REMOVER FOTO SELECIONADA
+        window.removerFoto = () => {
+            fotoSelecionada = null;
+            document.getElementById('input-foto').value = '';
+            document.getElementById('upload-area').classList.remove('hidden');
+            document.getElementById('preview-area').classList.add('hidden');
+        };
+
+        // UPLOAD DA FOTO PARA FIREBASE STORAGE
+        async function uploadFoto(file) {
+            return new Promise((resolve, reject) => {
+                const nomeArquivo = `produtos/${Date.now()}_${file.name}`;
+                const storageRef = ref(storage, nomeArquivo);
+                const uploadTask = uploadBytesResumable(storageRef, file);
+
+                document.getElementById('progress-container').classList.remove('hidden');
+                document.getElementById('btn-salvar').disabled = true;
+                document.getElementById('btn-salvar').innerText = "Enviando foto...";
+
+                uploadTask.on('state_changed', 
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        document.getElementById('progress-bar').style.width = progress + '%';
+                        document.getElementById('progress-text').innerText = `Enviando... ${Math.round(progress)}%`;
+                    },
+                    (error) => {
+                        console.error("Erro no upload:", error);
+                        reject(error);
+                    },
+                    async () => {
+                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                        resolve(downloadURL);
+                    }
+                );
+            });
+        }
+
+        // SALVAR PRODUTO
+        window.salvarProduto = async (dadosManuais = null) => {
+            const btn = document.getElementById('btn-salvar');
+            
+            if (!dadosManuais) {
+                // Validações
+                if (!document.getElementById('nome').value) {
+                    alert("Digite o nome do produto!");
+                    return;
+                }
+                if (!fotoSelecionada && !dadosManuais) {
+                    alert("Selecione uma foto do produto!");
+                    return;
+                }
+
+                btn.innerText = "Salvando...";
+                btn.disabled = true;
+
+                try {
+                    fotoURL = await uploadFoto(fotoSelecionada);
+                    
+                    // PRODUTO COM O NOVO CAMPO ESPECIFICACOES
+                    const produto = {
+                        nome: document.getElementById('nome').value,
+                        preco: parseFloat(document.getElementById('preco').value) || 0,
+                        foto: fotoURL,
+                        descricao: document.getElementById('desc').value,
+                        especificacoes: document.getElementById('especificacoes').value, // NOVO CAMPO
+                        status: "disponivel",
+                        dataCriacao: new Date().toISOString()
+                    };
+
+                    await addDoc(collection(db, "produtos"), produto);
+                    
+                    // LIMPAR TODOS OS CAMPOS
+                    document.getElementById('nome').value = '';
+                    document.getElementById('desc').value = '';
+                    document.getElementById('especificacoes').value = ''; // LIMPAR ESPECIFICAÇÕES
+                    document.getElementById('preco').value = '';
+                    removerFoto();
+                    document.getElementById('progress-container').classList.add('hidden');
+                    document.getElementById('progress-bar').style.width = '0%';
+                    
+                    alert("Produto cadastrado com sucesso! 🎂");
+                    
+                } catch (e) { 
+                    console.error(e);
+                    alert("Erro ao salvar. Tente novamente.");
+                }
+
+                btn.innerText = "Salvar no Cardápio";
+                btn.disabled = false;
+            } else {
+                // Para dados manuais (demo)
+                try {
+                    await addDoc(collection(db, "produtos"), dadosManuais);
+                } catch (e) { 
+                    console.error(e); 
+                }
+            }
+        };
+
+        // GERAR ITENS DEMO
+        window.gerarDemo = async () => {
+            const demos = [
+                { 
+                    nome: "Bolo de Red Velvet", 
+                    preco: 85.00, 
+                    descricao: "Massa aveludada com recheio de cream cheese.", 
+                    especificacoes: "📌 INFORMAÇÕES IMPORTANTES\n• Serve 15 pessoas\n• Pedido com 2 dias de antecedência\n\n🍰 MASSAS\n• Red Velvet tradicional\n\n🍫 RECHEIOS\n• Cream cheese\n• Brigadeiro branco\n\n✨ ADICIONAIS\n• Morangos frescos: +R$10\n• Topo personalizado: +R$15", 
+                    foto: "https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?w=500", 
+                    status: "disponivel" 
+                },
+                { 
+                    nome: "Fatia de Chocolate Belga", 
+                    preco: 18.50, 
+                    descricao: "Chocolate 70% cacau e morangos frescos.", 
+                    especificacoes: "📌 INFORMAÇÕES\n• Fatia individual\n• Disponível apenas sexta e sábado\n\n🍫 OPÇÕES\n• Com morango\n• Com nozes\n• Tradicional", 
+                    foto: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500", 
+                    status: "disponivel" 
+                },
+                { 
+                    nome: "Bento Cake Personalizado", 
+                    preco: 45.00, 
+                    descricao: "Mini bolo para presentear quem você ama.", 
+                    especificacoes: "📌 INFORMAÇÕES IMPORTANTES\n• Serve 1-2 pessoas\n• Acompanha cartão personalizado\n\n🍰 MASSAS\n• Chocolate\n• Baunilha\n• Red Velvet\n\n🍫 RECHEIOS\n• Brigadeiro\n• Ninho\n• Doce de leite\n\n✨ PERSONALIZAÇÃO\n• Desenho no topo: incluso\n• Vela especial: +R$5", 
+                    foto: "https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=500", 
+                    status: "disponivel" 
+                }
+            ];
+            
+            const btn = document.getElementById('btn-salvar');
+            btn.innerText = "Carregando demos...";
+            btn.disabled = true;
+            
+            for(let item of demos) { 
+                await salvarProduto(item); 
+            }
+            
+            alert("Itens de demonstração adicionados! ✅");
+            btn.innerText = "Salvar no Cardápio";
+            btn.disabled = false;
+        };
+
+        // CARREGAR LISTA ADMIN
+        function carregarAdmin() {
+            onSnapshot(collection(db, "produtos"), (snapshot) => {
+                const list = document.getElementById('lista-admin');
+                list.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    list.innerHTML = '<p class="text-center text-gray-400 py-4">Nenhum produto cadastrado ainda.</p>';
+                    return;
+                }
+                
+                snapshot.forEach((d) => {
+                    const p = d.data();
+                    // Mostrar indicador se tem especificações
+                    const temEspec = p.especificacoes && p.especificacoes.trim() !== '' ? 
+                        '<span class="inline-block bg-green-100 text-green-700 text-[10px] px-2 py-1 rounded-full mt-1">📋 Com cardápio completo</span>' : '';
+                    
+                    list.innerHTML += `
+                        <div class="bg-white p-4 rounded-xl flex items-start gap-4 shadow-sm border border-gray-100 hover:shadow-md transition-all">
+                            <img src="${p.foto}" class="w-16 h-16 rounded-lg object-cover border border-gray-200 flex-shrink-0" onerror="this.src='https://via.placeholder.com/64?text=Sem+Foto'">
+                            <div class="flex-1 min-w-0">
+                                <p class="font-bold text-[#5d4037] truncate">${p.nome}</p>
+                                <p class="text-sm text-[#a1887f]">R$ ${p.preco ? p.preco.toFixed(2) : '0.00'}</p>
+                                <p class="text-xs text-gray-500 truncate">${p.descricao || ''}</p>
+                                ${temEspec}
+                            </div>
+                            <button onclick="excluir('${d.id}')" class="bg-red-50 text-red-500 p-2 rounded-lg hover:bg-red-500 hover:text-white transition-all text-sm font-medium flex-shrink-0">Apagar</button>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        // EXCLUIR PRODUTO
+        window.excluir = async (id) => {
+            if(confirm("Deseja apagar este item do cardápio?")) {
+                try {
+                    await deleteDoc(doc(db, "produtos", id));
+                    alert("Item removido!");
+                } catch (e) {
+                    console.error(e);
+                    alert("Erro ao remover item.");
+                }
+            }
+        };
+    </script>
+</body>
+</html>
