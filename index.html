@@ -3,38 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ateliê Mariana Almeida - Cardápio</title>
+    <title>Ateliê Mariana Almeida - Bolos & Doces Artesanais</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Montserrat', sans-serif; background-color: #fdfaf7; }
-        h1, h2 { font-family: 'Playfair Display', serif; }
-        .card-produto { transition: transform 0.2s; }
-        .card-produto:hover { transform: translateY(-5px); }
+        :root {
+            --rose-pastel: #fdf2f2;
+            --rose-medio: #fce7e7;
+            --rose-escuro: #fda4af;
+            --bege: #faf7f5;
+            --marrom-claro: #a67c52;
+            --marrom: #5d4037;
+            --marrom-escuro: #3e2723;
+            --creme: #fff8f0;
+        }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--bege);
+            color: var(--marrom-escuro);
+        }
+        
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .gradient-rose {
+            background: linear-gradient(135deg, #fdf2f2 0%, #fce7e7 100%);
+        }
+        
+        .gradient-hero {
+            background: linear-gradient(135deg, var(--rose-pastel) 0%, var(--creme) 50%, var(--bege) 100%);
+        }
+        
+        .card-shadow {
+            box-shadow: 0 10px 40px -10px rgba(166, 124, 82, 0.15);
+        }
+        
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -10px rgba(166, 124, 82, 0.25);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--marrom) 0%, var(--marrom-escuro) 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(93, 64, 55, 0.3);
+        }
+        
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .checkbox-custom {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--marrom-claro);
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .checkbox-custom:checked {
+            background-color: var(--marrom);
+            border-color: var(--marrom);
+        }
+        
+        .checkbox-custom:checked::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 14px;
+            top: -2px;
+            left: 3px;
+        }
+        
+        .modal-backdrop {
+            backdrop-filter: blur(5px);
+        }
+        
+        .status-aberto {
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+        }
+        
+        .status-fechado {
+            background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+        }
+        
+        .decorative-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, var(--marrom-claro) 50%, transparent 100%);
+        }
     </style>
+<base target="_blank">
 </head>
-<body class="pb-24">
+<body class="antialiased">
 
-    <header class="text-center py-10 bg-white shadow-sm">
-        <h1 class="text-3xl text-[#5d4037]">Ateliê Mariana Almeida</h1>
-        <p class="text-[#8d6e63] italic text-sm mt-2">Bolos e Doces Artesanais</p>
-    </header>
-
-    <main id="lista-produtos" class="max-w-md mx-auto px-4 mt-8 grid gap-6">
-        <p class="text-center text-gray-400 italic">Carregando delícias...</p>
-    </main>
-
-    <div id="btn-carrinho" class="fixed bottom-6 right-6 left-6 bg-[#5d4037] text-white p-4 rounded-2xl shadow-2xl flex justify-between items-center hidden cursor-pointer transition-all active:scale-95" onclick="enviarWhatsApp()">
-        <div class="flex flex-col">
-            <span id="itens-contagem" class="text-xs opacity-80">0 itens selecionados</span>
-            <span class="font-bold">Pedir pelo WhatsApp</span>
-        </div>
-        <span id="total-carrinho" class="text-xl font-bold">R$ 0,00</span>
+    <!-- BARRA DE STATUS DA LOJA -->
+    <div id="status-loja-bar" class="fixed top-0 left-0 right-0 z-50 text-white text-center py-2 px-4 text-sm font-semibold transition-all duration-300">
+        <span id="status-loja-texto">Carregando...</span>
     </div>
 
+    <!-- HEADER -->
+    <header class="pt-16 pb-8 px-4 gradient-hero">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="mb-4 text-[#a67c52] text-sm tracking-[0.3em] uppercase font-semibold">Confeitaria Artesanal</div>
+            <h1 class="text-5xl md:text-7xl font-bold text-[#5d4037] mb-4 italic">
+                Ateliê Mariana Almeida
+            </h1>
+            <div class="decorative-line w-32 mx-auto mb-4"></div>
+            <p class="text-lg text-[#8d6e63] max-w-2xl mx-auto font-light leading-relaxed">
+                Bolos e doces feitos com amor, ingredientes selecionados e muito carinho para tornar seus momentos ainda mais especiais.
+            </p>
+            <div class="mt-6 flex justify-center gap-4 text-[#a67c52]">
+                <i class="fas fa-heart"></i>
+                <i class="fas fa-birthday-cake"></i>
+                <i class="fas fa-heart"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- SEÇÃO DE PRODUTOS -->
+    <main class="max-w-6xl mx-auto px-4 py-12">
+        
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-[#5d4037] mb-3">Nossos Bolos</h2>
+            <p class="text-[#a1887f]">Escolha seu favorito e personalize do seu jeito</p>
+            <div class="decorative-line w-24 mx-auto mt-4"></div>
+        </div>
+
+        <!-- GRID DE PRODUTOS -->
+        <div id="produtos-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="col-span-full text-center py-12 text-[#a1887f]">
+                <i class="fas fa-spinner fa-spin text-3xl mb-4"></i>
+                <p>Carregando delícias...</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MODAL DE PEDIDO -->
+    <div id="modal-pedido" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl transform transition-all scale-95 opacity-0" id="modal-content">
+            
+            <!-- HEADER MODAL -->
+            <div class="relative h-48 bg-gradient-to-br from-[#fdf2f2] to-[#fce7e7] rounded-t-3xl overflow-hidden">
+                <img id="modal-img" src="" class="w-full h-full object-cover">
+                <button onclick="fecharModal()" class="absolute top-4 right-4 bg-white rounded-full p-2 shadow-lg hover:scale-110 transition-transform">
+                    <i class="fas fa-times text-[#5d4037]"></i>
+                </button>
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
+                    <h3 id="modal-nome" class="text-2xl font-bold text-white font-serif"></h3>
+                    <p id="modal-preco" class="text-white font-bold text-lg"></p>
+                </div>
+            </div>
+
+            <!-- CONTEÚDO MODAL -->
+            <div class="p-6 space-y-6">
+                
+                <!-- DESCRIÇÃO -->
+                <div>
+                    <p id="modal-desc" class="text-[#8d6e63] text-sm leading-relaxed"></p>
+                </div>
+
+                <!-- ESPECIFICAÇÕES -->
+                <div id="modal-especificacoes-container" class="hidden">
+                    <h4 class="font-bold text-[#5d4037] mb-2 text-sm uppercase tracking-wider">Detalhes do Produto</h4>
+                    <div id="modal-especificacoes" class="bg-[#faf7f5] p-4 rounded-xl text-sm text-[#6d4c41] whitespace-pre-line"></div>
+                </div>
+
+                <!-- ADICIONAIS -->
+                <div id="modal-adicionais-container">
+                    <h4 class="font-bold text-[#5d4037] mb-3 text-sm uppercase tracking-wider flex items-center gap-2">
+                        <i class="fas fa-plus-circle text-[#a67c52]"></i>
+                        Adicionais
+                    </h4>
+                    <div id="lista-adicionais" class="space-y-2">
+                        <!-- Adicionais carregados dinamicamente -->
+                    </div>
+                </div>
+
+                <!-- TOTAL -->
+                <div class="bg-gradient-to-r from-[#5d4037] to-[#3e2723] text-white p-4 rounded-2xl flex justify-between items-center">
+                    <span class="font-semibold">Total do Pedido:</span>
+                    <span id="modal-total" class="text-2xl font-bold">R$ 0,00</span>
+                </div>
+
+                <!-- BOTÃO WHATSAPP -->
+                <button id="btn-whatsapp" onclick="enviarWhatsApp()" class="w-full btn-whatsapp text-white py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 hover:shadow-lg transition-all">
+                    <i class="fab fa-whatsapp text-2xl"></i>
+                    <span>Fazer Pedido pelo WhatsApp</span>
+                </button>
+                
+                <!-- AVISO LOJA FECHADA -->
+                <div id="aviso-fechado" class="hidden bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl text-center">
+                    <i class="fas fa-clock mb-2 text-2xl"></i>
+                    <p class="font-semibold">Loja Fechada no Momento</p>
+                    <p class="text-sm">Volte mais tarde ou entre em contato para agendar seu pedido.</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-[#e8d5c4] mt-16">
+        <div class="max-w-6xl mx-auto px-4 py-12">
+            <div class="text-center space-y-4">
+                <h3 class="text-2xl font-serif font-bold text-[#5d4037]">Ateliê Mariana Almeida</h3>
+                <p class="text-[#a67c52] italic">"Feito com amor ❤️"</p>
+                
+                <div class="flex justify-center gap-6 my-6">
+                    <a href="#" class="w-10 h-10 rounded-full bg-[#fdf2f2] flex items-center justify-center text-[#5d4037] hover:bg-[#5d4037] hover:text-white transition-all">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-[#fdf2f2] flex items-center justify-center text-[#5d4037] hover:bg-[#5d4037] hover:text-white transition-all">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-[#fdf2f2] flex items-center justify-center text-[#5d4037] hover:bg-[#5d4037] hover:text-white transition-all">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
+                
+                <div class="pt-6 border-t border-[#f0e6e0]">
+                    <p class="text-[#a1887f] text-sm">
+                        Desenvolvido por <span class="font-semibold text-[#5d4037]">Prosittes</span> © 2026
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA93ymW78OYYHc2qGoF-5D_RgWdCzkxh58",
@@ -47,61 +278,252 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        let carrinho = [];
 
-        // Carregar Produtos em Tempo Real
-        onSnapshot(collection(db, "produtos"), (snapshot) => {
-            const container = document.getElementById('lista-produtos');
-            container.innerHTML = '';
-            snapshot.forEach((doc) => {
-                const p = doc.data();
-                if(p.status !== "indisponivel") {
-                    container.innerHTML += `
-                        <div class="card-produto bg-white rounded-2xl overflow-hidden shadow-md border border-gray-50">
-                            <img src="${p.foto}" class="w-full h-48 object-cover">
-                            <div class="p-4">
-                                <h3 class="font-semibold text-lg text-[#5d4037]">${p.nome}</h3>
-                                <p class="text-xs text-gray-500 mb-3">${p.descricao}</p>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-[#a1887f] font-bold text-xl">R$ ${parseFloat(p.preco).toFixed(2).replace('.',',')}</span>
-                                    <button onclick="addCarrinho('${p.nome}', ${p.preco})" class="bg-[#d7ccc8] text-[#5d4037] px-4 py-2 rounded-lg font-bold active:bg-[#bcaaa4] transition-colors">+ Add</button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
-            });
+        // VARIÁVEIS GLOBAIS
+        let produtoAtual = null;
+        let adicionaisSelecionados = [];
+        let todosAdicionais = [];
+        let statusLoja = 'fechada';
+
+        // INICIALIZAR
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarStatusLoja();
+            carregarProdutos();
+            carregarAdicionais();
         });
 
-        window.addCarrinho = (nome, preco) => {
-            carrinho.push({nome, preco});
-            atualizarCarrinho();
-        };
+        // CARREGAR STATUS DA LOJA
+        function carregarStatusLoja() {
+            onSnapshot(doc(db, "config", "loja"), (doc) => {
+                if (doc.exists()) {
+                    statusLoja = doc.data().status || 'fechada';
+                    atualizarBarraStatus();
+                }
+            });
+        }
 
-        function atualizarCarrinho() {
-            const btn = document.getElementById('btn-carrinho');
-            const totalElement = document.getElementById('total-carrinho');
-            const contagem = document.getElementById('itens-contagem');
+        function atualizarBarraStatus() {
+            const barra = document.getElementById('status-loja-bar');
+            const texto = document.getElementById('status-loja-texto');
             
-            const total = carrinho.reduce((sum, item) => sum + item.preco, 0);
-            
-            if(carrinho.length > 0) {
-                btn.classList.remove('hidden');
-                totalElement.innerText = `R$ ${total.toFixed(2).replace('.',',')}`;
-                contagem.innerText = `${carrinho.length} itens selecionados`;
+            if (statusLoja === 'aberta') {
+                barra.className = 'fixed top-0 left-0 right-0 z-50 status-aberto text-white text-center py-2 px-4 text-sm font-semibold transition-all duration-300';
+                texto.innerHTML = '<i class="fas fa-store mr-2"></i> Loja Aberta - Faça seu pedido!';
+            } else {
+                barra.className = 'fixed top-0 left-0 right-0 z-50 status-fechado text-white text-center py-2 px-4 text-sm font-semibold transition-all duration-300';
+                texto.innerHTML = '<i class="fas fa-clock mr-2"></i> Loja Fechada - Volte mais tarde';
             }
         }
 
-        window.enviarWhatsApp = () => {
-            let texto = "🧁 *Olá Mariana! Gostaria de fazer um pedido:*%0a%0a";
-            carrinho.forEach(item => {
-                texto += `• ${item.nome} - R$ ${item.preco.toFixed(2)}%0a`;
+        // CARREGAR PRODUTOS
+        function carregarProdutos() {
+            onSnapshot(collection(db, "produtos"), (snapshot) => {
+                const grid = document.getElementById('produtos-grid');
+                grid.innerHTML = '';
+                
+                const produtosAtivos = [];
+                snapshot.forEach((doc) => {
+                    const produto = { id: doc.id, ...doc.data() };
+                    if (produto.status === 'ativo') {
+                        produtosAtivos.push(produto);
+                    }
+                });
+
+                if (produtosAtivos.length === 0) {
+                    grid.innerHTML = `
+                        <div class="col-span-full text-center py-12 text-[#a1887f]">
+                            <i class="fas fa-cookie-bite text-4xl mb-4"></i>
+                            <p>Nenhum produto disponível no momento</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                produtosAtivos.forEach((produto, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-3xl overflow-hidden card-shadow hover-lift fade-in';
+                    card.style.animationDelay = `${index * 0.1}s`;
+                    
+                    card.innerHTML = `
+                        <div class="relative h-64 overflow-hidden group">
+                            <img src="${produto.foto || 'https://via.placeholder.com/400x300?text=Sem+Foto'}" 
+                                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                 onerror="this.src='https://via.placeholder.com/400x300?text=Sem+Foto'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-[#5d4037] mb-2 font-serif">${produto.nome}</h3>
+                            <p class="text-[#a1887f] text-sm mb-4 line-clamp-2">${produto.descricao || ''}</p>
+                            
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl font-bold text-[#5d4037]">R$ ${produto.preco ? produto.preco.toFixed(2) : '0.00'}</span>
+                                <button onclick="abrirModal('${produto.id}')" class="btn-primary text-white px-6 py-3 rounded-full font-semibold text-sm flex items-center gap-2">
+                                    <span>Pedir</span>
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
             });
-            const total = carrinho.reduce((sum, item) => sum + item.preco, 0);
-            texto += `%0a*Total: R$ ${total.toFixed(2)}*%0a%0a_Por favor, me confirme a disponibilidade!_`;
+        }
+
+        // CARREGAR ADICIONAIS
+        function carregarAdicionais() {
+            onSnapshot(collection(db, "adicionais"), (snapshot) => {
+                todosAdicionais = [];
+                snapshot.forEach((doc) => {
+                    const adicional = { id: doc.id, ...doc.data() };
+                    if (adicional.status === 'ativo') {
+                        todosAdicionais.push(adicional);
+                    }
+                });
+            });
+        }
+
+        // ABRIR MODAL DE PEDIDO
+        window.abrirModal = async (produtoId) => {
+            const docRef = doc(db, "produtos", produtoId);
+            const docSnap = await getDoc(docRef);
             
-            window.open(`https://wa.me/5512996733698?text=${texto}`); // COLOQUE O WHATS DA MARIANA AQUI
+            if (!docSnap.exists()) return;
+            
+            produtoAtual = { id: produtoId, ...docSnap.data() };
+            adicionaisSelecionados = [];
+            
+            // Preencher dados
+            document.getElementById('modal-img').src = produtoAtual.foto || '';
+            document.getElementById('modal-nome').textContent = produtoAtual.nome;
+            document.getElementById('modal-preco').textContent = `R$ ${produtoAtual.preco.toFixed(2)}`;
+            document.getElementById('modal-desc').textContent = produtoAtual.descricao || '';
+            
+            // Especificações
+            const espContainer = document.getElementById('modal-especificacoes-container');
+            if (produtoAtual.especificacoes && produtoAtual.especificacoes.trim()) {
+                document.getElementById('modal-especificacoes').textContent = produtoAtual.especificacoes;
+                espContainer.classList.remove('hidden');
+            } else {
+                espContainer.classList.add('hidden');
+            }
+            
+            // Carregar adicionais
+            renderizarAdicionais();
+            
+            // Atualizar total
+            atualizarTotal();
+            
+            // Configurar botão WhatsApp baseado no status da loja
+            const btnWhats = document.getElementById('btn-whatsapp');
+            const avisoFechado = document.getElementById('aviso-fechado');
+            
+            if (statusLoja === 'aberta') {
+                btnWhats.classList.remove('hidden');
+                avisoFechado.classList.add('hidden');
+            } else {
+                btnWhats.classList.add('hidden');
+                avisoFechado.classList.remove('hidden');
+            }
+            
+            // Mostrar modal
+            const modal = document.getElementById('modal-pedido');
+            const content = document.getElementById('modal-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
         };
+
+        function renderizarAdicionais() {
+            const container = document.getElementById('lista-adicionais');
+            container.innerHTML = '';
+            
+            if (todosAdicionais.length === 0) {
+                container.innerHTML = '<p class="text-[#a1887f] text-sm italic">Nenhum adicional disponível</p>';
+                return;
+            }
+            
+            todosAdicionais.forEach((adicional) => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between p-3 bg-[#faf7f5] rounded-xl hover:bg-[#f5ebe0] transition-colors cursor-pointer';
+                div.onclick = (e) => {
+                    if (e.target.type !== 'checkbox') {
+                        const checkbox = div.querySelector('input[type="checkbox"]');
+                        checkbox.checked = !checkbox.checked;
+                        toggleAdicional(adicional, checkbox.checked);
+                    }
+                };
+                
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" 
+                               class="checkbox-custom" 
+                               onchange="toggleAdicional(${JSON.stringify(adicional).replace(/"/g, '&quot;')}, this.checked)">
+                        <span class="text-[#5d4037] font-medium">${adicional.nome}</span>
+                    </div>
+                    <span class="text-[#a67c52] font-bold">+ R$ ${adicional.valor.toFixed(2)}</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        window.toggleAdicional = (adicional, checked) => {
+            if (checked) {
+                adicionaisSelecionados.push(adicional);
+            } else {
+                adicionaisSelecionados = adicionaisSelecionados.filter(a => a.id !== adicional.id);
+            }
+            atualizarTotal();
+        };
+
+        function atualizarTotal() {
+            let total = produtoAtual ? produtoAtual.preco : 0;
+            adicionaisSelecionados.forEach(a => total += a.valor);
+            document.getElementById('modal-total').textContent = `R$ ${total.toFixed(2)}`;
+        }
+
+        window.fecharModal = () => {
+            const modal = document.getElementById('modal-pedido');
+            const content = document.getElementById('modal-content');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        };
+
+        window.enviarWhatsApp = () => {
+            if (!produtoAtual) return;
+            
+            const numeroWhatsApp = "5512996733698"; // Número do Ateliê
+            
+            let mensagem = `🧁 *Pedido - Ateliê Mariana Almeida*\n\n`;
+            mensagem += `*Produto:* ${produtoAtual.nome}\n`;
+            mensagem += `*Preço Base:* R$ ${produtoAtual.preco.toFixed(2)}\n\n`;
+            
+            if (adicionaisSelecionados.length > 0) {
+                mensagem += `*Adicionais:*\n`;
+                adicionaisSelecionados.forEach(a => {
+                    mensagem += `• ${a.nome} (+R$ ${a.valor.toFixed(2)})\n`;
+                });
+                mensagem += `\n`;
+            }
+            
+            const total = produtoAtual.preco + adicionaisSelecionados.reduce((sum, a) => sum + a.valor, 0);
+            mensagem += `*💰 Total:* R$ ${total.toFixed(2)}\n\n`;
+            mensagem += `Gostaria de finalizar meu pedido! 😊`;
+            
+            const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+            window.open(url, '_blank');
+        };
+
+        // Fechar modal ao clicar fora
+        document.getElementById('modal-pedido').addEventListener('click', (e) => {
+            if (e.target.id === 'modal-pedido') {
+                fecharModal();
+            }
+        });
     </script>
 </body>
 </html>
