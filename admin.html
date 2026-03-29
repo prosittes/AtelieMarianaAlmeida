@@ -3,50 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Mariana - Upload Direto</title>
+    <title>Painel ADM - Ateliê Mariana Almeida</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <style>body { font-family: 'Montserrat', sans-serif; }</style>
 </head>
-<body class="bg-gray-50 p-4 pb-20">
+<body class="bg-gray-50 p-4">
 
-    <div id="login-area" class="max-w-sm mx-auto mt-20 bg-white p-8 rounded-2xl shadow-xl border border-gray-100 text-center">
-        <h2 class="text-2xl font-bold text-[#5d4037] mb-6">Acesso Ateliê</h2>
-        <input type="password" id="senha" placeholder="Senha (mariana2026)" class="w-full border p-3 mb-4 rounded-xl outline-none focus:ring-2 focus:ring-[#d7ccc8]">
-        <button onclick="verificarSenha()" class="w-full bg-[#5d4037] text-white p-3 rounded-xl font-bold">Entrar</button>
+    <div id="login-area" class="max-w-sm mx-auto mt-20 bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-bold text-[#5d4037]">Acesso da Mariana</h2>
+            <p class="text-gray-400 text-sm">Digite sua senha para gerenciar</p>
+        </div>
+        <input type="password" id="senha" placeholder="Senha (mariana2026)" class="w-full border p-3 mb-4 rounded-xl focus:ring-2 focus:ring-[#d7ccc8] outline-none">
+        <button onclick="verificarSenha()" class="w-full bg-[#5d4037] text-white p-3 rounded-xl font-bold hover:bg-[#4e342e] transition-all">Entrar no Painel</button>
     </div>
 
-    <div id="admin-area" class="max-w-xl mx-auto hidden">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-xl font-bold text-[#5d4037]">Novo Doce no Cardápio</h1>
-            <button onclick="location.reload()" class="text-xs text-red-400">Sair</button>
-        </div>
-
-        <div class="bg-white p-6 rounded-2xl shadow-md space-y-4">
-            <input type="text" id="nome" placeholder="Nome do Bolo" class="w-full border p-3 rounded-xl outline-none">
-            <textarea id="desc" placeholder="Descrição (ex: Recheio de brigadeiro)" class="w-full border p-3 rounded-xl outline-none"></textarea>
-            <input type="number" id="preco" placeholder="Preço (Ex: 25.00)" class="w-full border p-3 rounded-xl outline-none">
-            
-            <div class="border-2 border-dashed border-[#d7ccc8] p-6 rounded-2xl text-center bg-[#faf9f8]">
-                <label class="cursor-pointer block">
-                    <span class="text-3xl">📸</span>
-                    <p class="text-[#5d4037] font-semibold mt-2">Toque para escolher da Galeria</p>
-                    <input type="file" id="arquivo-foto" accept="image/*" class="hidden" onchange="mostrarNome()">
-                </label>
-                <p id="nome-arquivo" class="text-xs text-gray-400 mt-2 italic">Nenhuma foto selecionada</p>
+    <div id="admin-area" class="max-w-2xl mx-auto hidden">
+        <header class="flex justify-between items-center mb-8 bg-white p-4 rounded-2xl shadow-sm">
+            <div>
+                <h1 class="text-xl font-bold text-[#5d4037]">Gerenciar Ateliê</h1>
+                <p class="text-xs text-green-600 font-semibold">● Online e Sincronizado</p>
             </div>
+            <button onclick="location.reload()" class="text-sm bg-gray-100 px-4 py-2 rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-500 transition-all">Sair</button>
+        </header>
 
-            <button onclick="salvarTudo()" id="btn-salvar" class="w-full bg-[#5d4037] text-white p-4 rounded-xl font-bold shadow-lg active:scale-95 transition-all">POSTAR NO SITE</button>
+        <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl mb-6 flex justify-between items-center">
+            <span class="text-amber-800 text-sm font-medium">Deseja carregar itens de teste para demonstração?</span>
+            <button onclick="gerarDemo()" class="bg-amber-500 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-sm">Sim, Carregar!</button>
         </div>
 
-        <h3 class="font-bold text-[#5d4037] mt-10 mb-4 text-center">Itens que estão no seu site:</h3>
-        <div id="lista-admin" class="space-y-3"></div>
+        <div class="bg-white p-6 rounded-2xl shadow-md mb-8">
+            <h3 class="font-bold text-[#5d4037] mb-4 flex items-center gap-2">
+                <span class="bg-[#d7ccc8] p-1 rounded-md">➕</span> Adicionar Novo Item
+            </h3>
+            <div class="grid gap-4">
+                <input type="text" id="nome" placeholder="Nome do Bolo/Doce" class="border p-3 rounded-xl outline-none focus:border-[#5d4037]">
+                <textarea id="desc" placeholder="Descrição (ex: Massa fofinha com recheio gourmet)" class="border p-3 rounded-xl outline-none focus:border-[#5d4037]"></textarea>
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="number" id="preco" placeholder="Preço (Ex: 25.00)" class="border p-3 rounded-xl">
+                    <input type="text" id="foto" placeholder="Link da Foto (ImgBB)" class="border p-3 rounded-xl">
+                </div>
+                <button onclick="salvarProduto()" id="btn-salvar" class="bg-[#5d4037] text-white p-4 rounded-xl font-bold shadow-lg hover:shadow-none transition-all">Salvar no Cardápio</button>
+            </div>
+        </div>
+
+        <h3 class="font-bold text-[#5d4037] mb-4">Itens Atuais no Site:</h3>
+        <div id="lista-admin" class="grid gap-4"></div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA93ymW78OYYHc2qGoF-5D_RgWdCzkxh58",
@@ -59,77 +67,71 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const storage = getStorage(app);
 
         window.verificarSenha = () => {
             if(document.getElementById('senha').value === 'mariana2026') {
                 document.getElementById('login-area').classList.add('hidden');
                 document.getElementById('admin-area').classList.remove('hidden');
-                carregarLista();
-            } else { alert("Senha incorreta!"); }
+                carregarAdmin();
+            } else { alert('Senha incorreta!'); }
         };
 
-        window.mostrarNome = () => {
-            const file = document.getElementById('arquivo-foto').files[0];
-            document.getElementById('nome-arquivo').innerText = file ? "✓ " + file.name : "Nenhuma foto selecionada";
-        };
-
-        window.salvarTudo = async () => {
+        window.salvarProduto = async (dadosManuais = null) => {
             const btn = document.getElementById('btn-salvar');
-            const file = document.getElementById('arquivo-foto').files[0];
-            const nome = document.getElementById('nome').value;
-            const preco = document.getElementById('preco').value;
-
-            if(!file || !nome || !preco) return alert("Preencha o nome, preço e escolha uma foto!");
-
-            btn.innerText = "Enviando para o Google...";
+            btn.innerText = "Salvando...";
             btn.disabled = true;
 
+            const produto = dadosManuais || {
+                nome: document.getElementById('nome').value,
+                preco: parseFloat(document.getElementById('preco').value),
+                foto: document.getElementById('foto').value,
+                descricao: document.getElementById('desc').value,
+                status: "disponivel"
+            };
+
             try {
-                // 1. Sobe a foto para o Storage
-                const storageRef = ref(storage, 'bolos/' + Date.now() + "_" + file.name);
-                await uploadBytes(storageRef, file);
-                const urlFinal = await getDownloadURL(storageRef);
+                await addDoc(collection(db, "produtos"), produto);
+                if(!dadosManuais) alert("Produto cadastrado com sucesso!");
+            } catch (e) { console.error(e); }
 
-                // 2. Salva no Banco de Dados
-                await addDoc(collection(db, "produtos"), {
-                    nome: nome,
-                    descricao: document.getElementById('desc').value,
-                    preco: parseFloat(preco),
-                    foto: urlFinal,
-                    status: "disponivel"
-                });
-
-                alert("Sucesso! Já está no seu site.");
-                location.reload();
-            } catch (e) {
-                alert("Erro ao salvar: " + e.message);
-                btn.disabled = false;
-                btn.innerText = "POSTAR NO SITE";
-            }
+            btn.innerText = "Salvar no Cardápio";
+            btn.disabled = false;
         };
 
-        function carregarLista() {
-            onSnapshot(collection(db, "produtos"), (snap) => {
-                const container = document.getElementById('lista-admin');
-                container.innerHTML = '';
-                snap.forEach(d => {
+        window.gerarDemo = async () => {
+            const demos = [
+                { nome: "Bolo de Red Velvet", preco: 85.00, descricao: "Massa aveludada com recheio de cream cheese.", foto: "https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?w=500", status: "disponivel" },
+                { nome: "Fatia de Chocolate Belga", preco: 18.50, descricao: "Chocolate 70% cacau e morangos frescos.", foto: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500", status: "disponivel" },
+                { nome: "Bento Cake Personalizado", preco: 45.00, descricao: "Mini bolo para presentear quem você ama.", foto: "https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=500", status: "disponivel" }
+            ];
+            for(let item of demos) { await salvarProduto(item); }
+            alert("Itens de demonstração adicionados!");
+        };
+
+        function carregarAdmin() {
+            onSnapshot(collection(db, "produtos"), (snapshot) => {
+                const list = document.getElementById('lista-admin');
+                list.innerHTML = '';
+                snapshot.forEach((d) => {
                     const p = d.data();
-                    container.innerHTML += `
-                        <div class="bg-white p-3 rounded-xl flex items-center justify-between shadow-sm border border-gray-100">
-                            <div class="flex items-center gap-3">
-                                <img src="${p.foto}" class="w-10 h-10 rounded-lg object-cover">
-                                <div><p class="text-sm font-bold text-[#5d4037]">${p.nome}</p><p class="text-xs text-gray-400">R$ ${p.preco.toFixed(2)}</p></div>
+                    list.innerHTML += `
+                        <div class="bg-white p-4 rounded-xl flex items-center gap-4 shadow-sm border border-gray-100">
+                            <img src="${p.foto}" class="w-12 h-12 rounded-lg object-cover">
+                            <div class="flex-1">
+                                <p class="font-bold text-[#5d4037]">${p.nome}</p>
+                                <p class="text-sm text-[#a1887f]">R$ ${p.preco.toFixed(2)}</p>
                             </div>
-                            <button onclick="excluirItem('${d.id}')" class="text-red-400 text-xs font-bold p-2">Apagar</button>
+                            <button onclick="excluir('${d.id}')" class="bg-red-50 text-red-500 p-2 rounded-lg hover:bg-red-500 hover:text-white transition-all">Apagar</button>
                         </div>
                     `;
                 });
             });
         }
 
-        window.excluirItem = async (id) => {
-            if(confirm("Deseja apagar este item?")) await deleteDoc(doc(db, "produtos", id));
+        window.excluir = async (id) => {
+            if(confirm("Deseja apagar este item do cardápio?")) {
+                await deleteDoc(doc(db, "produtos", id));
+            }
         };
     </script>
 </body>
