@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel ADM - Ateliê Mariana Almeida</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Montserrat', sans-serif; }
         .preview-img { max-height: 200px; object-fit: cover; }
         textarea { resize: vertical; }
+        .toggle-checkbox:checked { right: 0; border-color: #5d4037; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #5d4037; }
+        .status-aberta { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .status-fechada { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
     </style>
 <base target="_blank">
 </head>
@@ -26,95 +30,206 @@
     </div>
 
     <!-- ÁREA ADMIN -->
-    <div id="admin-area" class="max-w-2xl mx-auto hidden flex-1 w-full">
-        <header class="flex justify-between items-center mb-8 bg-white p-4 rounded-2xl shadow-sm">
-            <div>
-                <h1 class="text-xl font-bold text-[#5d4037]">Gerenciar Ateliê</h1>
-                <p class="text-xs text-green-600 font-semibold">● Online e Sincronizado</p>
+    <div id="admin-area" class="max-w-4xl mx-auto hidden flex-1 w-full">
+        
+        <!-- HEADER COM STATUS DA LOJA -->
+        <header class="mb-6">
+            <div class="bg-white p-4 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+                <div>
+                    <h1 class="text-xl font-bold text-[#5d4037]">Gerenciar Ateliê</h1>
+                    <p class="text-xs text-gray-500">Sistema completo de cardápio</p>
+                </div>
+                
+                <!-- CONTROLE STATUS DA LOJA -->
+                <div class="flex items-center gap-3 bg-gray-50 px-4 py-3 rounded-xl border border-gray-200">
+                    <span class="text-sm font-semibold text-gray-600">Status da Loja:</span>
+                    <button onclick="toggleStatusLoja()" id="btn-status-loja" class="px-4 py-2 rounded-lg text-white font-bold text-sm transition-all shadow-md hover:shadow-lg transform hover:scale-105">
+                        Carregando...
+                    </button>
+                </div>
+                
+                <button onclick="location.reload()" class="text-sm bg-gray-100 px-4 py-2 rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-500 transition-all">Sair</button>
             </div>
-            <button onclick="location.reload()" class="text-sm bg-gray-100 px-4 py-2 rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-500 transition-all">Sair</button>
         </header>
 
-        <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl mb-6 flex justify-between items-center">
-            <span class="text-amber-800 text-sm font-medium">Deseja carregar itens de teste para demonstração?</span>
-            <button onclick="gerarDemo()" class="bg-amber-500 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-sm">Sim, Carregar!</button>
+        <!-- NAVEGAÇÃO POR ABAS -->
+        <div class="bg-white rounded-2xl shadow-sm mb-6 overflow-hidden">
+            <div class="flex border-b border-gray-200">
+                <button onclick="mostrarAba('produtos')" id="aba-produtos" class="flex-1 py-4 px-6 font-semibold text-[#5d4037] border-b-2 border-[#5d4037] bg-[#faf7f5] transition-all">
+                    🧁 Produtos
+                </button>
+                <button onclick="mostrarAba('adicionais')" id="aba-adicionais" class="flex-1 py-4 px-6 font-semibold text-gray-500 hover:text-[#5d4037] transition-all">
+                    ➕ Adicionais
+                </button>
+            </div>
         </div>
 
-        <!-- FORMULÁRIO DE ADICIONAR PRODUTO -->
-        <div class="bg-white p-6 rounded-2xl shadow-md mb-8">
-            <h3 class="font-bold text-[#5d4037] mb-4 flex items-center gap-2">
-                <span class="bg-[#d7ccc8] p-1 rounded-md">➕</span> Adicionar Novo Item
-            </h3>
-            <div class="grid gap-4">
-                <input type="text" id="nome" placeholder="Nome do Bolo/Doce" class="border p-3 rounded-xl outline-none focus:border-[#5d4037]">
-                
-                <textarea id="desc" placeholder="Descrição curta (ex: Massa fofinha com recheio gourmet)" class="border p-3 rounded-xl outline-none focus:border-[#5d4037] h-20"></textarea>
-                
-                <!-- NOVO CAMPO: ESPECIFICAÇÕES -->
-                <div class="relative">
-                    <textarea id="especificacoes" placeholder="Especificações completas do cardápio...
+        <!-- ABA PRODUTOS -->
+        <div id="conteudo-produtos" class="space-y-6">
+            
+            <!-- BOTÃO NOVO PRODUTO -->
+            <button onclick="abrirModalProduto()" class="w-full bg-[#5d4037] text-white p-4 rounded-xl font-bold shadow-lg hover:shadow-none transition-all flex items-center justify-center gap-2">
+                <span class="text-2xl">+</span> Adicionar Novo Produto
+            </button>
 
-Exemplo de formato:
-📌 INFORMAÇÕES IMPORTANTES
-• Serve 15 pessoas
-• Pedido com 2 dias de antecedência
+            <!-- LISTA DE PRODUTOS -->
+            <div class="bg-white rounded-2xl shadow-md p-6">
+                <h3 class="font-bold text-[#5d4037] mb-4 flex items-center gap-2">
+                    📦 Produtos Cadastrados
+                </h3>
+                <div id="lista-produtos" class="grid gap-4">
+                    <p class="text-center text-gray-400 py-8">Carregando produtos...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABA ADICIONAIS -->
+        <div id="conteudo-adicionais" class="space-y-6 hidden">
+            
+            <!-- BOTÃO NOVO ADICIONAL -->
+            <button onclick="abrirModalAdicional()" class="w-full bg-amber-600 text-white p-4 rounded-xl font-bold shadow-lg hover:shadow-none transition-all flex items-center justify-center gap-2">
+                <span class="text-2xl">+</span> Adicionar Novo Adicional
+            </button>
+
+            <!-- LISTA DE ADICIONAIS -->
+            <div class="bg-white rounded-2xl shadow-md p-6">
+                <h3 class="font-bold text-amber-700 mb-4 flex items-center gap-2">
+                    ➕ Adicionais Disponíveis
+                </h3>
+                <div id="lista-adicionais" class="grid gap-4">
+                    <p class="text-center text-gray-400 py-8">Carregando adicionais...</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MODAL PRODUTO (ADD/EDIT) -->
+    <div id="modal-produto" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div class="sticky top-0 bg-white border-b p-4 flex justify-between items-center rounded-t-2xl">
+                <h3 id="titulo-modal-produto" class="text-xl font-bold text-[#5d4037]">Novo Produto</h3>
+                <button onclick="fecharModalProduto()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            
+            <div class="p-6 space-y-4">
+                <input type="hidden" id="produto-id">
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Nome do Produto *</label>
+                    <input type="text" id="produto-nome" placeholder="Ex: Bolo de Chocolate" class="w-full border p-3 rounded-xl outline-none focus:border-[#5d4037] focus:ring-2 focus:ring-[#d7ccc8]">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Preço Base (R$) *</label>
+                        <input type="number" id="produto-preco" placeholder="0.00" step="0.01" class="w-full border p-3 rounded-xl outline-none focus:border-[#5d4037]">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Status</label>
+                        <select id="produto-status" class="w-full border p-3 rounded-xl outline-none focus:border-[#5d4037]">
+                            <option value="ativo">✅ Ativo</option>
+                            <option value="inativo">❌ Inativo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Descrição Curta</label>
+                    <textarea id="produto-desc" placeholder="Breve descrição do produto..." class="w-full border p-3 rounded-xl outline-none focus:border-[#5d4037] h-20"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Especificações / Cardápio Completo</label>
+                    <textarea id="produto-especificacoes" placeholder="📌 INFORMAÇÕES IMPORTANTES
+• Serve X pessoas
+• Prazo de entrega
 
 🍰 MASSAS DISPONÍVEIS
 • Chocolate
 • Baunilha
-• Red Velvet
 
 🍫 RECHEIOS
-• Brigadeiro gourmet
-• Ninho com morango
-• Doce de leite
+• Brigadeiro
+• Ninho
 
 ✨ ADICIONAIS
-• Topo personalizado: +R$15
-• Confeitos especiais: +R$10" class="border p-3 rounded-xl outline-none focus:border-[#5d4037] focus:ring-2 focus:ring-[#d7ccc8] h-48 text-sm"></textarea>
-                    <p class="text-xs text-gray-400 mt-1 ml-1">Use esse campo para o cardápio completo com massas, recheios e adicionais</p>
+• Topo personalizado: +R$X" class="w-full border p-3 rounded-xl outline-none focus:border-[#5d4037] focus:ring-2 focus:ring-[#d7ccc8] h-48 text-sm"></textarea>
+                    <p class="text-xs text-gray-500 mt-1">Use emojis e organize por categorias</p>
+                </div>
+
+                <!-- UPLOAD DE FOTO -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Foto do Produto</label>
+                    <div class="border-2 border-dashed border-[#d7ccc8] rounded-xl p-4 text-center bg-[#faf7f5]">
+                        <input type="file" id="produto-foto-input" accept="image/png,image/jpeg,image/jpg,image/webp" class="hidden" onchange="previewFotoProduto(this)">
+                        
+                        <div id="produto-upload-area" onclick="document.getElementById('produto-foto-input').click()">
+                            <div class="text-3xl mb-2">📷</div>
+                            <p class="text-[#5d4037] font-medium text-sm">Clique para adicionar foto</p>
+                        </div>
+
+                        <div id="produto-preview-area" class="hidden mt-3">
+                            <img id="produto-preview-img" class="h-32 rounded-lg mx-auto object-cover shadow-md">
+                            <button onclick="removerFotoProduto()" class="text-xs text-red-500 mt-2 underline">Trocar foto</button>
+                        </div>
+
+                        <div id="produto-progress" class="hidden mt-3">
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div id="produto-progress-bar" class="bg-[#5d4037] h-2 rounded-full transition-all" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-3 pt-4 border-t">
+                    <button onclick="fecharModalProduto()" class="flex-1 bg-gray-200 text-gray-700 p-3 rounded-xl font-semibold hover:bg-gray-300 transition-all">Cancelar</button>
+                    <button onclick="salvarProduto()" id="btn-salvar-produto" class="flex-1 bg-[#5d4037] text-white p-3 rounded-xl font-bold shadow-lg hover:shadow-none transition-all">Salvar Produto</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ADICIONAL (ADD/EDIT) -->
+    <div id="modal-adicional" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl">
+            <div class="p-4 border-b flex justify-between items-center rounded-t-2xl">
+                <h3 id="titulo-modal-adicional" class="text-lg font-bold text-amber-700">Novo Adicional</h3>
+                <button onclick="fecharModalAdicional()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            
+            <div class="p-6 space-y-4">
+                <input type="hidden" id="adicional-id">
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Nome do Adicional *</label>
+                    <input type="text" id="adicional-nome" placeholder="Ex: Morango Extra" class="w-full border p-3 rounded-xl outline-none focus:border-amber-600">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
-                    <input type="number" id="preco" placeholder="Preço base (Ex: 25.00)" class="border p-3 rounded-xl" step="0.01">
-                </div>
-
-                <!-- ÁREA DE UPLOAD DE FOTO -->
-                <div class="border-2 border-dashed border-[#d7ccc8] rounded-xl p-6 text-center bg-[#faf7f5]">
-                    <input type="file" id="input-foto" accept="image/png,image/jpeg,image/jpg,image/webp" class="hidden" onchange="previewFoto(this)">
-                    
-                    <div id="upload-area" onclick="document.getElementById('input-foto').click()">
-                        <div class="text-4xl mb-2">📷</div>
-                        <p class="text-[#5d4037] font-semibold">Clique para adicionar foto</p>
-                        <p class="text-xs text-gray-500 mt-1">Escolha da galeria ou tire uma foto</p>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Valor (R$) *</label>
+                        <input type="number" id="adicional-valor" placeholder="0.00" step="0.01" class="w-full border p-3 rounded-xl outline-none focus:border-amber-600">
                     </div>
-
-                    <!-- PREVIEW DA IMAGEM -->
-                    <div id="preview-area" class="hidden mt-4">
-                        <img id="preview-img" class="preview-img rounded-lg mx-auto shadow-md">
-                        <p class="text-sm text-green-600 mt-2 font-medium">✓ Foto selecionada</p>
-                        <button onclick="removerFoto()" class="text-xs text-red-500 mt-2 underline">Remover foto</button>
-                    </div>
-
-                    <!-- BARRA DE PROGRESSO -->
-                    <div id="progress-container" class="hidden mt-4">
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div id="progress-bar" class="bg-[#5d4037] h-2 rounded-full transition-all" style="width: 0%"></div>
-                        </div>
-                        <p id="progress-text" class="text-xs text-gray-600 mt-1">Enviando...</p>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Status</label>
+                        <select id="adicional-status" class="w-full border p-3 rounded-xl outline-none focus:border-amber-600">
+                            <option value="ativo">✅ Ativo</option>
+                            <option value="inativo">❌ Inativo</option>
+                        </select>
                     </div>
                 </div>
 
-                <button onclick="salvarProduto()" id="btn-salvar" class="bg-[#5d4037] text-white p-4 rounded-xl font-bold shadow-lg hover:shadow-none transition-all">Salvar no Cardápio</button>
+                <div class="flex gap-3 pt-4 border-t">
+                    <button onclick="fecharModalAdicional()" class="flex-1 bg-gray-200 text-gray-700 p-3 rounded-xl font-semibold hover:bg-gray-300 transition-all">Cancelar</button>
+                    <button onclick="salvarAdicional()" id="btn-salvar-adicional" class="flex-1 bg-amber-600 text-white p-3 rounded-xl font-bold shadow-lg hover:shadow-none transition-all">Salvar</button>
+                </div>
             </div>
         </div>
-
-        <h3 class="font-bold text-[#5d4037] mb-4">Itens Atuais no Site:</h3>
-        <div id="lista-admin" class="grid gap-4 mb-8"></div>
     </div>
 
-    <!-- FOOTER COM CRÉDITOS -->
-    <footer class="mt-auto py-6 text-center border-t border-[#d7ccc8] bg-white rounded-t-2xl shadow-sm max-w-2xl mx-auto w-full">
+    <!-- FOOTER -->
+    <footer class="mt-auto py-6 text-center border-t border-[#d7ccc8] bg-white rounded-t-2xl shadow-sm max-w-4xl mx-auto w-full">
         <div class="space-y-2">
             <p class="text-[#5d4037] font-semibold text-sm">Ateliê Mariana Almeida</p>
             <p class="text-[#8d6e63] text-xs italic">"Feito com amor ❤️"</p>
@@ -129,7 +244,7 @@ Exemplo de formato:
     <!-- SCRIPTS -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
         const firebaseConfig = {
@@ -145,218 +260,396 @@ Exemplo de formato:
         const db = getFirestore(app);
         const storage = getStorage(app);
 
-        let fotoSelecionada = null;
-        let fotoURL = "";
+        // VARIÁVEIS GLOBAIS
+        let statusLojaAtual = 'fechada';
+        let fotoNovaProduto = null;
+        let fotoURLProduto = '';
+        let produtoEditando = null;
 
-        // FUNÇÕES GLOBAIS
+        // LOGIN
         window.verificarSenha = () => {
             if(document.getElementById('senha').value === 'mariana2026') {
                 document.getElementById('login-area').classList.add('hidden');
                 document.getElementById('admin-area').classList.remove('hidden');
-                carregarAdmin();
+                initSistema();
             } else { 
                 alert('Senha incorreta!'); 
             }
         };
 
-        // PREVIEW DA FOTO SELECIONADA
-        window.previewFoto = (input) => {
-            const file = input.files[0];
-            if (file) {
-                fotoSelecionada = file;
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.getElementById('preview-img').src = e.target.result;
-                    document.getElementById('upload-area').classList.add('hidden');
-                    document.getElementById('preview-area').classList.remove('hidden');
-                };
-                reader.readAsDataURL(file);
-            }
+        // INICIALIZAR SISTEMA
+        function initSistema() {
+            carregarStatusLoja();
+            carregarProdutos();
+            carregarAdicionais();
+        }
+
+        // NAVEGAÇÃO ENTRE ABAS
+        window.mostrarAba = (aba) => {
+            // Esconder todas
+            document.getElementById('conteudo-produtos').classList.add('hidden');
+            document.getElementById('conteudo-adicionais').classList.add('hidden');
+            
+            // Resetar estilos
+            document.getElementById('aba-produtos').className = 'flex-1 py-4 px-6 font-semibold text-gray-500 hover:text-[#5d4037] transition-all';
+            document.getElementById('aba-adicionais').className = 'flex-1 py-4 px-6 font-semibold text-gray-500 hover:text-[#5d4037] transition-all';
+            
+            // Mostrar selecionada
+            document.getElementById(`conteudo-${aba}`).classList.remove('hidden');
+            document.getElementById(`aba-${aba}`).className = 'flex-1 py-4 px-6 font-semibold text-[#5d4037] border-b-2 border-[#5d4037] bg-[#faf7f5] transition-all';
         };
 
-        // REMOVER FOTO SELECIONADA
-        window.removerFoto = () => {
-            fotoSelecionada = null;
-            document.getElementById('input-foto').value = '';
-            document.getElementById('upload-area').classList.remove('hidden');
-            document.getElementById('preview-area').classList.add('hidden');
-        };
-
-        // UPLOAD DA FOTO PARA FIREBASE STORAGE
-        async function uploadFoto(file) {
-            return new Promise((resolve, reject) => {
-                const nomeArquivo = `produtos/${Date.now()}_${file.name}`;
-                const storageRef = ref(storage, nomeArquivo);
-                const uploadTask = uploadBytesResumable(storageRef, file);
-
-                document.getElementById('progress-container').classList.remove('hidden');
-                document.getElementById('btn-salvar').disabled = true;
-                document.getElementById('btn-salvar').innerText = "Enviando foto...";
-
-                uploadTask.on('state_changed', 
-                    (snapshot) => {
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        document.getElementById('progress-bar').style.width = progress + '%';
-                        document.getElementById('progress-text').innerText = `Enviando... ${Math.round(progress)}%`;
-                    },
-                    (error) => {
-                        console.error("Erro no upload:", error);
-                        reject(error);
-                    },
-                    async () => {
-                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                        resolve(downloadURL);
-                    }
-                );
+        // ==================== CONTROLE STATUS DA LOJA ====================
+        
+        async function carregarStatusLoja() {
+            onSnapshot(doc(db, "config", "loja"), (doc) => {
+                if (doc.exists()) {
+                    statusLojaAtual = doc.data().status || 'fechada';
+                    atualizarBotaoStatusLoja();
+                } else {
+                    // Criar documento padrão
+                    setDoc(doc(db, "config", "loja"), { status: 'fechada', atualizadoEm: new Date().toISOString() });
+                }
             });
         }
 
-        // SALVAR PRODUTO
-        window.salvarProduto = async (dadosManuais = null) => {
-            const btn = document.getElementById('btn-salvar');
-            
-            if (!dadosManuais) {
-                // Validações
-                if (!document.getElementById('nome').value) {
-                    alert("Digite o nome do produto!");
-                    return;
-                }
-                if (!fotoSelecionada && !dadosManuais) {
-                    alert("Selecione uma foto do produto!");
-                    return;
-                }
-
-                btn.innerText = "Salvando...";
-                btn.disabled = true;
-
-                try {
-                    fotoURL = await uploadFoto(fotoSelecionada);
-                    
-                    // PRODUTO COM O NOVO CAMPO ESPECIFICACOES
-                    const produto = {
-                        nome: document.getElementById('nome').value,
-                        preco: parseFloat(document.getElementById('preco').value) || 0,
-                        foto: fotoURL,
-                        descricao: document.getElementById('desc').value,
-                        especificacoes: document.getElementById('especificacoes').value, // NOVO CAMPO
-                        status: "disponivel",
-                        dataCriacao: new Date().toISOString()
-                    };
-
-                    await addDoc(collection(db, "produtos"), produto);
-                    
-                    // LIMPAR TODOS OS CAMPOS
-                    document.getElementById('nome').value = '';
-                    document.getElementById('desc').value = '';
-                    document.getElementById('especificacoes').value = ''; // LIMPAR ESPECIFICAÇÕES
-                    document.getElementById('preco').value = '';
-                    removerFoto();
-                    document.getElementById('progress-container').classList.add('hidden');
-                    document.getElementById('progress-bar').style.width = '0%';
-                    
-                    alert("Produto cadastrado com sucesso! 🎂");
-                    
-                } catch (e) { 
-                    console.error(e);
-                    alert("Erro ao salvar. Tente novamente.");
-                }
-
-                btn.innerText = "Salvar no Cardápio";
-                btn.disabled = false;
+        function atualizarBotaoStatusLoja() {
+            const btn = document.getElementById('btn-status-loja');
+            if (statusLojaAtual === 'aberta') {
+                btn.textContent = '🟢 Loja Aberta';
+                btn.className = 'px-4 py-2 rounded-lg text-white font-bold text-sm transition-all shadow-md hover:shadow-lg transform hover:scale-105 status-aberta';
             } else {
-                // Para dados manuais (demo)
-                try {
-                    await addDoc(collection(db, "produtos"), dadosManuais);
-                } catch (e) { 
-                    console.error(e); 
-                }
+                btn.textContent = '🔴 Loja Fechada';
+                btn.className = 'px-4 py-2 rounded-lg text-white font-bold text-sm transition-all shadow-md hover:shadow-lg transform hover:scale-105 status-fechada';
+            }
+        }
+
+        window.toggleStatusLoja = async () => {
+            const novoStatus = statusLojaAtual === 'aberta' ? 'fechada' : 'aberta';
+            try {
+                await setDoc(doc(db, "config", "loja"), { 
+                    status: novoStatus, 
+                    atualizadoEm: new Date().toISOString() 
+                });
+                alert(`Loja ${novoStatus === 'aberta' ? 'ABERTA' : 'FECHADA'} com sucesso!`);
+            } catch (e) {
+                console.error(e);
+                alert('Erro ao alterar status');
             }
         };
 
-        // GERAR ITENS DEMO
-        window.gerarDemo = async () => {
-            const demos = [
-                { 
-                    nome: "Bolo de Red Velvet", 
-                    preco: 85.00, 
-                    descricao: "Massa aveludada com recheio de cream cheese.", 
-                    especificacoes: "📌 INFORMAÇÕES IMPORTANTES\n• Serve 15 pessoas\n• Pedido com 2 dias de antecedência\n\n🍰 MASSAS\n• Red Velvet tradicional\n\n🍫 RECHEIOS\n• Cream cheese\n• Brigadeiro branco\n\n✨ ADICIONAIS\n• Morangos frescos: +R$10\n• Topo personalizado: +R$15", 
-                    foto: "https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?w=500", 
-                    status: "disponivel" 
-                },
-                { 
-                    nome: "Fatia de Chocolate Belga", 
-                    preco: 18.50, 
-                    descricao: "Chocolate 70% cacau e morangos frescos.", 
-                    especificacoes: "📌 INFORMAÇÕES\n• Fatia individual\n• Disponível apenas sexta e sábado\n\n🍫 OPÇÕES\n• Com morango\n• Com nozes\n• Tradicional", 
-                    foto: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500", 
-                    status: "disponivel" 
-                },
-                { 
-                    nome: "Bento Cake Personalizado", 
-                    preco: 45.00, 
-                    descricao: "Mini bolo para presentear quem você ama.", 
-                    especificacoes: "📌 INFORMAÇÕES IMPORTANTES\n• Serve 1-2 pessoas\n• Acompanha cartão personalizado\n\n🍰 MASSAS\n• Chocolate\n• Baunilha\n• Red Velvet\n\n🍫 RECHEIOS\n• Brigadeiro\n• Ninho\n• Doce de leite\n\n✨ PERSONALIZAÇÃO\n• Desenho no topo: incluso\n• Vela especial: +R$5", 
-                    foto: "https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=500", 
-                    status: "disponivel" 
-                }
-            ];
-            
-            const btn = document.getElementById('btn-salvar');
-            btn.innerText = "Carregando demos...";
-            btn.disabled = true;
-            
-            for(let item of demos) { 
-                await salvarProduto(item); 
-            }
-            
-            alert("Itens de demonstração adicionados! ✅");
-            btn.innerText = "Salvar no Cardápio";
-            btn.disabled = false;
-        };
+        // ==================== PRODUTOS ====================
 
-        // CARREGAR LISTA ADMIN
-        function carregarAdmin() {
+        function carregarProdutos() {
             onSnapshot(collection(db, "produtos"), (snapshot) => {
-                const list = document.getElementById('lista-admin');
-                list.innerHTML = '';
+                const lista = document.getElementById('lista-produtos');
+                lista.innerHTML = '';
                 
                 if (snapshot.empty) {
-                    list.innerHTML = '<p class="text-center text-gray-400 py-4">Nenhum produto cadastrado ainda.</p>';
+                    lista.innerHTML = '<p class="text-center text-gray-400 py-8">Nenhum produto cadastrado</p>';
                     return;
                 }
                 
                 snapshot.forEach((d) => {
                     const p = d.data();
-                    // Mostrar indicador se tem especificações
-                    const temEspec = p.especificacoes && p.especificacoes.trim() !== '' ? 
-                        '<span class="inline-block bg-green-100 text-green-700 text-[10px] px-2 py-1 rounded-full mt-1">📋 Com cardápio completo</span>' : '';
+                    const isAtivo = p.status === 'ativo';
                     
-                    list.innerHTML += `
-                        <div class="bg-white p-4 rounded-xl flex items-start gap-4 shadow-sm border border-gray-100 hover:shadow-md transition-all">
-                            <img src="${p.foto}" class="w-16 h-16 rounded-lg object-cover border border-gray-200 flex-shrink-0" onerror="this.src='https://via.placeholder.com/64?text=Sem+Foto'">
+                    lista.innerHTML += `
+                        <div class="bg-white border rounded-xl p-4 flex items-center gap-4 ${isAtivo ? 'border-gray-200' : 'border-red-200 bg-red-50 opacity-75'}">
+                            <img src="${p.foto || 'https://via.placeholder.com/80?text=Sem+Foto'}" class="w-20 h-20 rounded-lg object-cover border flex-shrink-0">
+                            
                             <div class="flex-1 min-w-0">
-                                <p class="font-bold text-[#5d4037] truncate">${p.nome}</p>
-                                <p class="text-sm text-[#a1887f]">R$ ${p.preco ? p.preco.toFixed(2) : '0.00'}</p>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <h4 class="font-bold text-[#5d4037] truncate">${p.nome}</h4>
+                                    ${!isAtivo ? '<span class="text-[10px] bg-red-200 text-red-700 px-2 py-1 rounded-full">INATIVO</span>' : ''}
+                                </div>
+                                <p class="text-sm text-[#a1887f] font-semibold">R$ ${p.preco ? p.preco.toFixed(2) : '0.00'}</p>
                                 <p class="text-xs text-gray-500 truncate">${p.descricao || ''}</p>
-                                ${temEspec}
+                                ${p.especificacoes ? '<span class="inline-block bg-blue-100 text-blue-700 text-[10px] px-2 py-1 rounded-full mt-1">📋 Com especificações</span>' : ''}
                             </div>
-                            <button onclick="excluir('${d.id}')" class="bg-red-50 text-red-500 p-2 rounded-lg hover:bg-red-500 hover:text-white transition-all text-sm font-medium flex-shrink-0">Apagar</button>
+                            
+                            <div class="flex flex-col gap-2 flex-shrink-0">
+                                <button onclick="editarProduto('${d.id}')" class="bg-blue-50 text-blue-600 p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-all text-xs font-semibold">Editar</button>
+                                <button onclick="excluirProduto('${d.id}')" class="bg-red-50 text-red-500 p-2 rounded-lg hover:bg-red-500 hover:text-white transition-all text-xs font-semibold">Excluir</button>
+                            </div>
                         </div>
                     `;
                 });
             });
         }
 
-        // EXCLUIR PRODUTO
-        window.excluir = async (id) => {
-            if(confirm("Deseja apagar este item do cardápio?")) {
+        window.abrirModalProduto = () => {
+            produtoEditando = null;
+            fotoNovaProduto = null;
+            fotoURLProduto = '';
+            
+            document.getElementById('titulo-modal-produto').textContent = 'Novo Produto';
+            document.getElementById('produto-id').value = '';
+            document.getElementById('produto-nome').value = '';
+            document.getElementById('produto-preco').value = '';
+            document.getElementById('produto-desc').value = '';
+            document.getElementById('produto-especificacoes').value = '';
+            document.getElementById('produto-status').value = 'ativo';
+            
+            document.getElementById('produto-upload-area').classList.remove('hidden');
+            document.getElementById('produto-preview-area').classList.add('hidden');
+            document.getElementById('produto-progress').classList.add('hidden');
+            
+            document.getElementById('modal-produto').classList.remove('hidden');
+        };
+
+        window.editarProduto = async (id) => {
+            const docRef = doc(db, "produtos", id);
+            const docSnap = await getDoc(docRef);
+            
+            if (docSnap.exists()) {
+                const p = docSnap.data();
+                produtoEditando = id;
+                fotoURLProduto = p.foto || '';
+                
+                document.getElementById('titulo-modal-produto').textContent = 'Editar Produto';
+                document.getElementById('produto-id').value = id;
+                document.getElementById('produto-nome').value = p.nome || '';
+                document.getElementById('produto-preco').value = p.preco || '';
+                document.getElementById('produto-desc').value = p.descricao || '';
+                document.getElementById('produto-especificacoes').value = p.especificacoes || '';
+                document.getElementById('produto-status').value = p.status || 'ativo';
+                
+                if (p.foto) {
+                    document.getElementById('produto-preview-img').src = p.foto;
+                    document.getElementById('produto-upload-area').classList.add('hidden');
+                    document.getElementById('produto-preview-area').classList.remove('hidden');
+                } else {
+                    document.getElementById('produto-upload-area').classList.remove('hidden');
+                    document.getElementById('produto-preview-area').classList.add('hidden');
+                }
+                
+                document.getElementById('produto-progress').classList.add('hidden');
+                document.getElementById('modal-produto').classList.remove('hidden');
+            }
+        };
+
+        window.fecharModalProduto = () => {
+            document.getElementById('modal-produto').classList.add('hidden');
+        };
+
+        window.previewFotoProduto = (input) => {
+            const file = input.files[0];
+            if (file) {
+                fotoNovaProduto = file;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('produto-preview-img').src = e.target.result;
+                    document.getElementById('produto-upload-area').classList.add('hidden');
+                    document.getElementById('produto-preview-area').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        window.removerFotoProduto = () => {
+            fotoNovaProduto = null;
+            fotoURLProduto = '';
+            document.getElementById('produto-foto-input').value = '';
+            document.getElementById('produto-upload-area').classList.remove('hidden');
+            document.getElementById('produto-preview-area').classList.add('hidden');
+        };
+
+        async function uploadFotoProduto(file) {
+            return new Promise((resolve, reject) => {
+                const nomeArquivo = `produtos/${Date.now()}_${file.name}`;
+                const storageRef = ref(storage, nomeArquivo);
+                const uploadTask = uploadBytesResumable(storageRef, file);
+
+                document.getElementById('produto-progress').classList.remove('hidden');
+                
+                uploadTask.on('state_changed', 
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        document.getElementById('produto-progress-bar').style.width = progress + '%';
+                    },
+                    (error) => reject(error),
+                    async () => {
+                        const url = await getDownloadURL(uploadTask.snapshot.ref);
+                        resolve(url);
+                    }
+                );
+            });
+        }
+
+        window.salvarProduto = async () => {
+            const btn = document.getElementById('btn-salvar-produto');
+            const nome = document.getElementById('produto-nome').value;
+            const preco = parseFloat(document.getElementById('produto-preco').value);
+            
+            if (!nome || !preco) {
+                alert('Preencha nome e preço!');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Salvando...';
+
+            try {
+                let urlFoto = fotoURLProduto;
+                
+                // Se tem foto nova, faz upload
+                if (fotoNovaProduto) {
+                    urlFoto = await uploadFotoProduto(fotoNovaProduto);
+                }
+
+                const dados = {
+                    nome: nome,
+                    preco: preco,
+                    descricao: document.getElementById('produto-desc').value,
+                    especificacoes: document.getElementById('produto-especificacoes').value,
+                    status: document.getElementById('produto-status').value,
+                    foto: urlFoto,
+                    atualizadoEm: new Date().toISOString()
+                };
+
+                if (produtoEditando) {
+                    await updateDoc(doc(db, "produtos", produtoEditando), dados);
+                    alert('Produto atualizado!');
+                } else {
+                    dados.criadoEm = new Date().toISOString();
+                    await addDoc(collection(db, "produtos"), dados);
+                    alert('Produto criado!');
+                }
+
+                fecharModalProduto();
+            } catch (e) {
+                console.error(e);
+                alert('Erro ao salvar');
+            }
+            
+            btn.disabled = false;
+            btn.textContent = 'Salvar Produto';
+        };
+
+        window.excluirProduto = async (id) => {
+            if(confirm('Tem certeza que deseja excluir este produto?')) {
                 try {
                     await deleteDoc(doc(db, "produtos", id));
-                    alert("Item removido!");
+                    alert('Produto excluído!');
                 } catch (e) {
-                    console.error(e);
-                    alert("Erro ao remover item.");
+                    alert('Erro ao excluir');
+                }
+            }
+        };
+
+        // ==================== ADICIONAIS ====================
+
+        function carregarAdicionais() {
+            onSnapshot(collection(db, "adicionais"), (snapshot) => {
+                const lista = document.getElementById('lista-adicionais');
+                lista.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    lista.innerHTML = '<p class="text-center text-gray-400 py-8">Nenhum adicional cadastrado</p>';
+                    return;
+                }
+                
+                snapshot.forEach((d) => {
+                    const a = d.data();
+                    const isAtivo = a.status === 'ativo';
+                    
+                    lista.innerHTML += `
+                        <div class="bg-white border rounded-xl p-4 flex items-center justify-between ${isAtivo ? 'border-gray-200' : 'border-gray-300 bg-gray-50 opacity-75'}">
+                            <div>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <h4 class="font-bold text-gray-800">${a.nome}</h4>
+                                    ${!isAtivo ? '<span class="text-[10px] bg-gray-300 text-gray-600 px-2 py-1 rounded-full">INATIVO</span>' : ''}
+                                </div>
+                                <p class="text-sm text-amber-600 font-semibold">+ R$ ${a.valor ? a.valor.toFixed(2) : '0.00'}</p>
+                            </div>
+                            
+                            <div class="flex gap-2">
+                                <button onclick="editarAdicional('${d.id}')" class="bg-blue-50 text-blue-600 p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-all text-xs font-semibold">Editar</button>
+                                <button onclick="excluirAdicional('${d.id}')" class="bg-red-50 text-red-500 p-2 rounded-lg hover:bg-red-500 hover:text-white transition-all text-xs font-semibold">Excluir</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        window.abrirModalAdicional = () => {
+            document.getElementById('titulo-modal-adicional').textContent = 'Novo Adicional';
+            document.getElementById('adicional-id').value = '';
+            document.getElementById('adicional-nome').value = '';
+            document.getElementById('adicional-valor').value = '';
+            document.getElementById('adicional-status').value = 'ativo';
+            document.getElementById('modal-adicional').classList.remove('hidden');
+        };
+
+        window.editarAdicional = async (id) => {
+            const docRef = doc(db, "adicionais", id);
+            const docSnap = await getDoc(docRef);
+            
+            if (docSnap.exists()) {
+                const a = docSnap.data();
+                document.getElementById('titulo-modal-adicional').textContent = 'Editar Adicional';
+                document.getElementById('adicional-id').value = id;
+                document.getElementById('adicional-nome').value = a.nome || '';
+                document.getElementById('adicional-valor').value = a.valor || '';
+                document.getElementById('adicional-status').value = a.status || 'ativo';
+                document.getElementById('modal-adicional').classList.remove('hidden');
+            }
+        };
+
+        window.fecharModalAdicional = () => {
+            document.getElementById('modal-adicional').classList.add('hidden');
+        };
+
+        window.salvarAdicional = async () => {
+            const btn = document.getElementById('btn-salvar-adicional');
+            const id = document.getElementById('adicional-id').value;
+            const nome = document.getElementById('adicional-nome').value;
+            const valor = parseFloat(document.getElementById('adicional-valor').value);
+            
+            if (!nome || !valor) {
+                alert('Preencha nome e valor!');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Salvando...';
+
+            try {
+                const dados = {
+                    nome: nome,
+                    valor: valor,
+                    status: document.getElementById('adicional-status').value,
+                    atualizadoEm: new Date().toISOString()
+                };
+
+                if (id) {
+                    await updateDoc(doc(db, "adicionais", id), dados);
+                    alert('Adicional atualizado!');
+                } else {
+                    dados.criadoEm = new Date().toISOString();
+                    await addDoc(collection(db, "adicionais"), dados);
+                    alert('Adicional criado!');
+                }
+
+                fecharModalAdicional();
+            } catch (e) {
+                console.error(e);
+                alert('Erro ao salvar');
+            }
+            
+            btn.disabled = false;
+            btn.textContent = 'Salvar';
+        };
+
+        window.excluirAdicional = async (id) => {
+            if(confirm('Tem certeza que deseja excluir este adicional?')) {
+                try {
+                    await deleteDoc(doc(db, "adicionais", id));
+                    alert('Adicional excluído!');
+                } catch (e) {
+                    alert('Erro ao excluir');
                 }
             }
         };
