@@ -3,249 +3,375 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel ADM - Ateliê Mariana Almeida</title>
+    <title>Painel Administrativo - Ateliê Mariana Almeida</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Montserrat', sans-serif; }
-        .preview-img { max-height: 200px; object-fit: cover; }
-        textarea { resize: vertical; }
-        .toggle-checkbox:checked { right: 0; border-color: #5d4037; }
-        .toggle-checkbox:checked + .toggle-label { background-color: #5d4037; }
-        .status-aberta { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-        .status-fechada { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+        :root {
+            --rose-pastel: #fdf2f2;
+            --rose-medio: #fce7e7;
+            --rose-escuro: #fda4af;
+            --bege: #faf7f5;
+            --marrom-claro: #a67c52;
+            --marrom: #5d4037;
+            --marrom-escuro: #3e2723;
+            --creme: #fff8f0;
+        }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--bege);
+            color: var(--marrom-escuro);
+        }
+        
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .gradient-rose {
+            background: linear-gradient(135deg, #fdf2f2 0%, #fce7e7 100%);
+        }
+        
+        .card-shadow {
+            box-shadow: 0 10px 40px -10px rgba(166, 124, 82, 0.15);
+        }
+        
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -10px rgba(166, 124, 82, 0.25);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--marrom) 0%, var(--marrom-escuro) 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(93, 64, 55, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        
+        .category-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .cat-massas { background: #fef3c7; color: #92400e; }
+        .cat-recheios-trad { background: #dbeafe; color: #1e40af; }
+        .cat-recheios-gourmet { background: #fce7f3; color: #be185d; }
+        .cat-coberturas { background: #e0e7ff; color: #3730a3; }
+        .cat-decoracoes { background: #f3e8ff; color: #7c3aed; }
+        .cat-extras { background: #d1fae5; color: #065f46; }
+        .cat-sem { background: #f3f4f6; color: #4b5563; }
+        
+        .tab-active {
+            border-bottom: 3px solid var(--marrom);
+            color: var(--marrom);
+        }
+        
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #10b981;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #10b981;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.4s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .sortable-ghost {
+            opacity: 0.4;
+            background: var(--rose-medio);
+        }
     </style>
-<base target="_blank">
 </head>
-<body class="bg-gray-50 p-4 min-h-screen flex flex-col">
+<body class="antialiased">
 
-    <!-- ÁREA DE LOGIN -->
-    <div id="login-area" class="max-w-sm mx-auto mt-20 bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
-        <div class="text-center mb-6">
-            <h2 class="text-2xl font-bold text-[#5d4037]">Acesso da Mariana</h2>
-            <p class="text-gray-400 text-sm">Digite sua senha para gerenciar</p>
+    <!-- HEADER -->
+    <header class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-[#5d4037] to-[#3e2723] rounded-2xl flex items-center justify-center text-white">
+                    <i class="fas fa-cog text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-[#5d4037] font-serif">Painel Administrativo</h1>
+                    <p class="text-sm text-[#a67c52]">Ateliê Mariana Almeida</p>
+                </div>
+            </div>
+            
+            <!-- CONTROLE DA LOJA -->
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-3 bg-gray-100 rounded-full px-4 py-2">
+                    <span class="text-sm font-semibold text-[#5d4037]">Status da Loja:</span>
+                    <button id="btn-status-loja" onclick="toggleStatusLoja()" class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#5d4037] focus:ring-offset-2 bg-gray-300">
+                        <span id="toggle-status" class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1"></span>
+                    </button>
+                    <span id="texto-status" class="text-sm font-bold text-gray-500">Fechada</span>
+                </div>
+            </div>
         </div>
-        <input type="password" id="senha" placeholder="Senha (mariana2026)" class="w-full border p-3 mb-4 rounded-xl focus:ring-2 focus:ring-[#d7ccc8] outline-none">
-        <button onclick="verificarSenha()" class="w-full bg-[#5d4037] text-white p-3 rounded-xl font-bold hover:bg-[#4e342e] transition-all">Entrar no Painel</button>
+    </header>
+
+    <!-- NAVEGAÇÃO POR ABAS -->
+    <div class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4">
+            <nav class="flex gap-8">
+                <button onclick="mostrarAba('produtos')" id="tab-produtos" class="tab-active py-4 px-2 font-semibold text-[#5d4037] hover:text-[#8d6e63] transition-colors">
+                    <i class="fas fa-birthday-cake mr-2"></i>Produtos
+                </button>
+                <button onclick="mostrarAba('opcoes')" id="tab-opcoes" class="py-4 px-2 font-semibold text-gray-500 hover:text-[#8d6e63] transition-colors">
+                    <i class="fas fa-list-ul mr-2"></i>Opções de Personalização
+                </button>
+            </nav>
+        </div>
     </div>
 
-    <!-- ÁREA ADMIN -->
-    <div id="admin-area" class="max-w-4xl mx-auto hidden flex-1 w-full">
+    <main class="max-w-7xl mx-auto px-4 py-8">
         
-        <!-- HEADER COM STATUS DA LOJA -->
-        <header class="mb-6">
-            <div class="bg-white p-4 rounded-2xl shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+        <!-- ABA PRODUTOS -->
+        <div id="aba-produtos" class="fade-in">
+            <div class="flex justify-between items-center mb-6">
                 <div>
-                    <h1 class="text-xl font-bold text-[#5d4037]">Gerenciar Ateliê</h1>
-                    <p class="text-xs text-gray-500">Sistema completo de cardápio</p>
+                    <h2 class="text-2xl font-bold text-[#5d4037] font-serif">Gerenciar Produtos</h2>
+                    <p class="text-[#a1887f]">Adicione, edite ou remova bolos e doces</p>
                 </div>
-                
-                <!-- CONTROLE STATUS DA LOJA -->
-                <div class="flex items-center gap-3 bg-gray-50 px-4 py-3 rounded-xl border border-gray-200">
-                    <span class="text-sm font-semibold text-gray-600">Status da Loja:</span>
-                    <button onclick="toggleStatusLoja()" id="btn-status-loja" class="px-4 py-2 rounded-lg text-white font-bold text-sm transition-all shadow-md hover:shadow-lg transform hover:scale-105">
-                        Carregando...
+                <button onclick="abrirModalProduto()" class="btn-primary text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
+                    <i class="fas fa-plus"></i>
+                    Novo Produto
+                </button>
+            </div>
+
+            <!-- GRID DE PRODUTOS -->
+            <div id="produtos-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="col-span-full text-center py-12 text-[#a1887f]">
+                    <i class="fas fa-spinner fa-spin text-3xl mb-4"></i>
+                    <p>Carregando produtos...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABA OPÇÕES -->
+        <div id="aba-opcoes" class="hidden fade-in">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-[#5d4037] font-serif">Opções de Personalização</h2>
+                    <p class="text-[#a1887f]">Gerencie massas, recheios, coberturas e decorações disponíveis para montagem dos bolos</p>
+                </div>
+                <button onclick="abrirModalOpcao()" class="btn-primary text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
+                    <i class="fas fa-plus"></i>
+                    Nova Opção
+                </button>
+            </div>
+
+            <!-- FILTROS POR CATEGORIA -->
+            <div class="bg-white rounded-2xl p-4 mb-6 card-shadow">
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="filtrarCategoria('todos')" class="filtro-categoria active px-4 py-2 rounded-full text-sm font-semibold bg-[#5d4037] text-white transition-all" data-cat="todos">
+                        Todas
+                    </button>
+                    <button onclick="filtrarCategoria('massas')" class="filtro-categoria px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-[#fef3c7] transition-all" data-cat="massas">
+                        🍰 Massas
+                    </button>
+                    <button onclick="filtrarCategoria('recheiosTradicionais')" class="filtro-categoria px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-[#dbeafe] transition-all" data-cat="recheiosTradicionais">
+                        🥄 Recheios Tradicionais
+                    </button>
+                    <button onclick="filtrarCategoria('recheiosGourmet')" class="filtro-categoria px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-[#fce7f3] transition-all" data-cat="recheiosGourmet">
+                        ✨ Recheios Gourmet
+                    </button>
+                    <button onclick="filtrarCategoria('coberturas')" class="filtro-categoria px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-[#e0e7ff] transition-all" data-cat="coberturas">
+                        🍫 Coberturas
+                    </button>
+                    <button onclick="filtrarCategoria('decoracoes')" class="filtro-categoria px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-[#f3e8ff] transition-all" data-cat="decoracoes">
+                        🎨 Decorações
+                    </button>
+                    <button onclick="filtrarCategoria('extras')" class="filtro-categoria px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-[#d1fae5] transition-all" data-cat="extras">
+                        ➕ Extras
+                    </button>
+                    <button onclick="filtrarCategoria('semCategoria')" class="filtro-categoria px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all" data-cat="semCategoria">
+                        📦 Sem Categoria
                     </button>
                 </div>
-                
-                <button onclick="location.reload()" class="text-sm bg-gray-100 px-4 py-2 rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-500 transition-all">Sair</button>
             </div>
-        </header>
 
-        <!-- NAVEGAÇÃO POR ABAS -->
-        <div class="bg-white rounded-2xl shadow-sm mb-6 overflow-hidden">
-            <div class="flex border-b border-gray-200">
-                <button onclick="mostrarAba('produtos')" id="aba-produtos" class="flex-1 py-4 px-6 font-semibold text-[#5d4037] border-b-2 border-[#5d4037] bg-[#faf7f5] transition-all">
-                    🧁 Produtos
-                </button>
-                <button onclick="mostrarAba('adicionais')" id="aba-adicionais" class="flex-1 py-4 px-6 font-semibold text-gray-500 hover:text-[#5d4037] transition-all">
-                    ➕ Adicionais
-                </button>
-            </div>
-        </div>
-
-        <!-- ABA PRODUTOS -->
-        <div id="conteudo-produtos" class="space-y-6">
-            
-            <!-- BOTÃO NOVO PRODUTO -->
-            <button onclick="abrirModalProduto()" class="w-full bg-[#5d4037] text-white p-4 rounded-xl font-bold shadow-lg hover:shadow-none transition-all flex items-center justify-center gap-2">
-                <span class="text-2xl">+</span> Adicionar Novo Produto
-            </button>
-
-            <!-- LISTA DE PRODUTOS -->
-            <div class="bg-white rounded-2xl shadow-md p-6">
-                <h3 class="font-bold text-[#5d4037] mb-4 flex items-center gap-2">
-                    📦 Produtos Cadastrados
-                </h3>
-                <div id="lista-produtos" class="grid gap-4">
-                    <p class="text-center text-gray-400 py-8">Carregando produtos...</p>
+            <!-- LISTA DE OPÇÕES -->
+            <div id="opcoes-lista" class="space-y-3">
+                <div class="text-center py-12 text-[#a1887f]">
+                    <i class="fas fa-spinner fa-spin text-3xl mb-4"></i>
+                    <p>Carregando opções...</p>
                 </div>
             </div>
         </div>
 
-        <!-- ABA ADICIONAIS -->
-        <div id="conteudo-adicionais" class="space-y-6 hidden">
-            
-            <!-- BOTÃO NOVO ADICIONAL -->
-            <button onclick="abrirModalAdicional()" class="w-full bg-amber-600 text-white p-4 rounded-xl font-bold shadow-lg hover:shadow-none transition-all flex items-center justify-center gap-2">
-                <span class="text-2xl">+</span> Adicionar Novo Adicional
-            </button>
+    </main>
 
-            <!-- LISTA DE ADICIONAIS -->
-            <div class="bg-white rounded-2xl shadow-md p-6">
-                <h3 class="font-bold text-amber-700 mb-4 flex items-center gap-2">
-                    ➕ Adicionais Disponíveis
-                </h3>
-                <div id="lista-adicionais" class="grid gap-4">
-                    <p class="text-center text-gray-400 py-8">Carregando adicionais...</p>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- MODAL PRODUTO (ADD/EDIT) -->
-    <div id="modal-produto" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div class="sticky top-0 bg-white border-b p-4 flex justify-between items-center rounded-t-2xl">
-                <h3 id="titulo-modal-produto" class="text-xl font-bold text-[#5d4037]">Novo Produto</h3>
-                <button onclick="fecharModalProduto()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+    <!-- MODAL PRODUTO -->
+    <div id="modal-produto" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl transform transition-all scale-95 opacity-0" id="modal-produto-content">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                <h3 id="titulo-modal-produto" class="text-2xl font-bold text-[#5d4037] font-serif">Novo Produto</h3>
+                <button onclick="fecharModalProduto()" class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+                    <i class="fas fa-times text-[#5d4037]"></i>
+                </button>
             </div>
             
-            <div class="p-6 space-y-4">
+            <form id="form-produto" class="p-6 space-y-6">
                 <input type="hidden" id="produto-id">
                 
+                <!-- NOME -->
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Nome do Produto *</label>
-                    <input type="text" id="produto-nome" placeholder="Ex: Bolo de Chocolate" class="w-full border p-3 rounded-xl outline-none focus:border-[#5d4037] focus:ring-2 focus:ring-[#d7ccc8]">
+                    <label class="block text-sm font-semibold text-[#5d4037] mb-2">Nome do Produto *</label>
+                    <input type="text" id="produto-nome" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#a67c52] focus:ring-2 focus:ring-[#a67c52]/20 outline-none transition-all" placeholder="Ex: Bolo de Chocolate">
                 </div>
 
+                <!-- DESCRIÇÃO -->
+                <div>
+                    <label class="block text-sm font-semibold text-[#5d4037] mb-2">Descrição</label>
+                    <textarea id="produto-descricao" rows="3" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#a67c52] focus:ring-2 focus:ring-[#a67c52]/20 outline-none transition-all resize-none" placeholder="Descreva o produto..."></textarea>
+                </div>
+
+                <!-- PREÇO E STATUS -->
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Preço Base (R$) *</label>
-                        <input type="number" id="produto-preco" placeholder="0.00" step="0.01" class="w-full border p-3 rounded-xl outline-none focus:border-[#5d4037]">
+                        <label class="block text-sm font-semibold text-[#5d4037] mb-2">Preço Base (R$) *</label>
+                        <input type="number" id="produto-preco" step="0.01" min="0" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#a67c52] focus:ring-2 focus:ring-[#a67c52]/20 outline-none transition-all" placeholder="0,00">
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Status</label>
-                        <select id="produto-status" class="w-full border p-3 rounded-xl outline-none focus:border-[#5d4037]">
-                            <option value="ativo">✅ Ativo</option>
-                            <option value="inativo">❌ Inativo</option>
+                        <label class="block text-sm font-semibold text-[#5d4037] mb-2">Status</label>
+                        <select id="produto-status" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#a67c52] focus:ring-2 focus:ring-[#a67c52]/20 outline-none transition-all bg-white">
+                            <option value="ativo">Ativo</option>
+                            <option value="inativo">Inativo</option>
                         </select>
                     </div>
                 </div>
 
+                <!-- FOTO -->
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Descrição Curta</label>
-                    <textarea id="produto-desc" placeholder="Breve descrição do produto..." class="w-full border p-3 rounded-xl outline-none focus:border-[#5d4037] h-20"></textarea>
+                    <label class="block text-sm font-semibold text-[#5d4037] mb-2">URL da Foto</label>
+                    <input type="url" id="produto-foto" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#a67c52] focus:ring-2 focus:ring-[#a67c52]/20 outline-none transition-all" placeholder="https://exemplo.com/foto.jpg">
+                    <p class="text-xs text-[#a1887f] mt-1">Deixe em branco para usar imagem padrão</p>
                 </div>
 
+                <!-- ESPECIFICAÇÕES -->
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Especificações / Cardápio Completo</label>
-                    <textarea id="produto-especificacoes" placeholder="📌 INFORMAÇÕES IMPORTANTES
-• Serve X pessoas
-• Prazo de entrega
-
-🍰 MASSAS DISPONÍVEIS
-• Chocolate
-• Baunilha
-
-🍫 RECHEIOS
-• Brigadeiro
-• Ninho
-
-✨ ADICIONAIS
-• Topo personalizado: +R$X" class="w-full border p-3 rounded-xl outline-none focus:border-[#5d4037] focus:ring-2 focus:ring-[#d7ccc8] h-48 text-sm"></textarea>
-                    <p class="text-xs text-gray-500 mt-1">Use emojis e organize por categorias</p>
+                    <label class="block text-sm font-semibold text-[#5d4037] mb-2">Especificações Técnicas</label>
+                    <textarea id="produto-especificacoes" rows="4" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#a67c52] focus:ring-2 focus:ring-[#a67c52]/20 outline-none transition-all resize-none font-mono text-sm" placeholder="Peso: 1kg&#10;Rendimento: 15 fatias&#10;Validade: 5 dias"></textarea>
                 </div>
 
-                <!-- UPLOAD DE FOTO -->
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Foto do Produto</label>
-                    <div class="border-2 border-dashed border-[#d7ccc8] rounded-xl p-4 text-center bg-[#faf7f5]">
-                        <input type="file" id="produto-foto-input" accept="image/png,image/jpeg,image/jpg,image/webp" class="hidden" onchange="previewFotoProduto(this)">
-                        
-                        <div id="produto-upload-area" onclick="document.getElementById('produto-foto-input').click()">
-                            <div class="text-3xl mb-2">📷</div>
-                            <p class="text-[#5d4037] font-medium text-sm">Clique para adicionar foto</p>
-                        </div>
-
-                        <div id="produto-preview-area" class="hidden mt-3">
-                            <img id="produto-preview-img" class="h-32 rounded-lg mx-auto object-cover shadow-md">
-                            <button onclick="removerFotoProduto()" class="text-xs text-red-500 mt-2 underline">Trocar foto</button>
-                        </div>
-
-                        <div id="produto-progress" class="hidden mt-3">
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div id="produto-progress-bar" class="bg-[#5d4037] h-2 rounded-full transition-all" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
+                <!-- BOTÕES -->
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="fecharModalProduto()" class="flex-1 px-6 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-gray-50 transition-all">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="flex-1 btn-primary text-white px-6 py-3 rounded-xl font-semibold">
+                        Salvar Produto
+                    </button>
                 </div>
-
-                <div class="flex gap-3 pt-4 border-t">
-                    <button onclick="fecharModalProduto()" class="flex-1 bg-gray-200 text-gray-700 p-3 rounded-xl font-semibold hover:bg-gray-300 transition-all">Cancelar</button>
-                    <button onclick="salvarProduto()" id="btn-salvar-produto" class="flex-1 bg-[#5d4037] text-white p-3 rounded-xl font-bold shadow-lg hover:shadow-none transition-all">Salvar Produto</button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 
-    <!-- MODAL ADICIONAL (ADD/EDIT) -->
-    <div id="modal-adicional" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl">
-            <div class="p-4 border-b flex justify-between items-center rounded-t-2xl">
-                <h3 id="titulo-modal-adicional" class="text-lg font-bold text-amber-700">Novo Adicional</h3>
-                <button onclick="fecharModalAdicional()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+    <!-- MODAL OPÇÃO -->
+    <div id="modal-opcao" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl transform transition-all scale-95 opacity-0" id="modal-opcao-content">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                <h3 id="titulo-modal-opcao" class="text-2xl font-bold text-[#5d4037] font-serif">Nova Opção</h3>
+                <button onclick="fecharModalOpcao()" class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+                    <i class="fas fa-times text-[#5d4037]"></i>
+                </button>
             </div>
             
-            <div class="p-6 space-y-4">
-                <input type="hidden" id="adicional-id">
+            <form id="form-opcao" class="p-6 space-y-6">
+                <input type="hidden" id="opcao-id">
                 
+                <!-- NOME -->
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Nome do Adicional *</label>
-                    <input type="text" id="adicional-nome" placeholder="Ex: Morango Extra" class="w-full border p-3 rounded-xl outline-none focus:border-amber-600">
+                    <label class="block text-sm font-semibold text-[#5d4037] mb-2">Nome da Opção *</label>
+                    <input type="text" id="opcao-nome" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#a67c52] focus:ring-2 focus:ring-[#a67c52]/20 outline-none transition-all" placeholder="Ex: Chocolate Belga">
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Valor (R$) *</label>
-                        <input type="number" id="adicional-valor" placeholder="0.00" step="0.01" class="w-full border p-3 rounded-xl outline-none focus:border-amber-600">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Status</label>
-                        <select id="adicional-status" class="w-full border p-3 rounded-xl outline-none focus:border-amber-600">
-                            <option value="ativo">✅ Ativo</option>
-                            <option value="inativo">❌ Inativo</option>
-                        </select>
-                    </div>
+                <!-- CATEGORIA -->
+                <div>
+                    <label class="block text-sm font-semibold text-[#5d4037] mb-2">Categoria *</label>
+                    <select id="opcao-categoria" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#a67c52] focus:ring-2 focus:ring-[#a67c52]/20 outline-none transition-all bg-white">
+                        <option value="">Selecione uma categoria...</option>
+                        <option value="massas">🍰 Massas (escolha obrigatória, valor geralmente 0)</option>
+                        <option value="recheiosTradicionais">🥄 Recheios Tradicionais (escolha 1)</option>
+                        <option value="recheiosGourmet">✨ Recheios Gourmet (substitui tradicional)</option>
+                        <option value="coberturas">🍫 Coberturas (escolha 1)</option>
+                        <option value="decoracoes">🎨 Decorações (múltiplas escolhas)</option>
+                        <option value="extras">➕ Extras (múltiplas escolhas)</option>
+                        <option value="semCategoria">📦 Sem Categoria</option>
+                    </select>
+                    <p class="text-xs text-[#a1887f] mt-1">Itens antigos sem categoria aparecerão em "Sem Categoria"</p>
                 </div>
 
-                <div class="flex gap-3 pt-4 border-t">
-                    <button onclick="fecharModalAdicional()" class="flex-1 bg-gray-200 text-gray-700 p-3 rounded-xl font-semibold hover:bg-gray-300 transition-all">Cancelar</button>
-                    <button onclick="salvarAdicional()" id="btn-salvar-adicional" class="flex-1 bg-amber-600 text-white p-3 rounded-xl font-bold shadow-lg hover:shadow-none transition-all">Salvar</button>
+                <!-- VALOR -->
+                <div>
+                    <label class="block text-sm font-semibold text-[#5d4037] mb-2">Valor Adicional (R$)</label>
+                    <input type="number" id="opcao-valor" step="0.01" min="0" value="0" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#a67c52] focus:ring-2 focus:ring-[#a67c52]/20 outline-none transition-all" placeholder="0,00">
+                    <p class="text-xs text-[#a1887f] mt-1">Use 0,00 para opções incluídas no preço base (ex: massas padrão)</p>
                 </div>
-            </div>
+
+                <!-- STATUS -->
+                <div>
+                    <label class="block text-sm font-semibold text-[#5d4037] mb-2">Status</label>
+                    <select id="opcao-status" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#a67c52] focus:ring-2 focus:ring-[#a67c52]/20 outline-none transition-all bg-white">
+                        <option value="ativo">Ativo</option>
+                        <option value="inativo">Inativo</option>
+                    </select>
+                </div>
+
+                <!-- BOTÕES -->
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="fecharModalOpcao()" class="flex-1 px-6 py-3 rounded-xl border-2 border-gray-200 text-gray-600 font-semibold hover:bg-gray-50 transition-all">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="flex-1 btn-primary text-white px-6 py-3 rounded-xl font-semibold">
+                        Salvar Opção
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="mt-auto py-6 text-center border-t border-[#d7ccc8] bg-white rounded-t-2xl shadow-sm max-w-4xl mx-auto w-full">
-        <div class="space-y-2">
-            <p class="text-[#5d4037] font-semibold text-sm">Ateliê Mariana Almeida</p>
-            <p class="text-[#8d6e63] text-xs italic">"Feito com amor ❤️"</p>
-            <div class="pt-2 border-t border-gray-100 mt-2">
-                <p class="text-[#a1887f] text-xs">
-                    Desenvolvido por <span class="font-semibold text-[#5d4037]">Prosittes</span> © 2026
-                </p>
-            </div>
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-4 right-4 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+        <div class="bg-[#5d4037] text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3">
+            <i id="toast-icon" class="fas fa-check-circle text-green-400"></i>
+            <span id="toast-message" class="font-semibold">Operação realizada com sucesso!</span>
         </div>
-    </footer>
+    </div>
 
-    <!-- SCRIPTS -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+        import { getFirestore, collection, onSnapshot, doc, getDoc, setDoc, deleteDoc, addDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA93ymW78OYYHc2qGoF-5D_RgWdCzkxh58",
@@ -258,144 +384,157 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const storage = getStorage(app);
 
         // VARIÁVEIS GLOBAIS
-        let statusLojaAtual = 'fechada';
-        let fotoNovaProduto = null;
-        let fotoURLProduto = '';
         let produtoEditando = null;
+        let opcaoEditando = null;
+        let filtroAtual = 'todos';
 
-        // LOGIN
-        window.verificarSenha = () => {
-            if(document.getElementById('senha').value === 'mariana2026') {
-                document.getElementById('login-area').classList.add('hidden');
-                document.getElementById('admin-area').classList.remove('hidden');
-                initSistema();
-            } else { 
-                alert('Senha incorreta!'); 
-            }
+        // CATEGORIAS CONFIGURAÇÃO
+        const categoriasConfig = {
+            massas: { nome: 'Massas', cor: 'cat-massas', icone: '🍰' },
+            recheiosTradicionais: { nome: 'Recheios Tradicionais', cor: 'cat-recheios-trad', icone: '🥄' },
+            recheiosGourmet: { nome: 'Recheios Gourmet', cor: 'cat-recheios-gourmet', icone: '✨' },
+            coberturas: { nome: 'Coberturas', cor: 'cat-coberturas', icone: '🍫' },
+            decoracoes: { nome: 'Decorações', cor: 'cat-decoracoes', icone: '🎨' },
+            extras: { nome: 'Extras', cor: 'cat-extras', icone: '➕' },
+            semCategoria: { nome: 'Sem Categoria', cor: 'cat-sem', icone: '📦' }
         };
 
-        // INICIALIZAR SISTEMA
-        function initSistema() {
+        // INICIALIZAR
+        document.addEventListener('DOMContentLoaded', () => {
             carregarStatusLoja();
             carregarProdutos();
-            carregarAdicionais();
-        }
-
-        // NAVEGAÇÃO ENTRE ABAS
-        window.mostrarAba = (aba) => {
-            // Esconder todas
-            document.getElementById('conteudo-produtos').classList.add('hidden');
-            document.getElementById('conteudo-adicionais').classList.add('hidden');
+            carregarOpcoes();
             
-            // Resetar estilos
-            document.getElementById('aba-produtos').className = 'flex-1 py-4 px-6 font-semibold text-gray-500 hover:text-[#5d4037] transition-all';
-            document.getElementById('aba-adicionais').className = 'flex-1 py-4 px-6 font-semibold text-gray-500 hover:text-[#5d4037] transition-all';
-            
-            // Mostrar selecionada
-            document.getElementById(`conteudo-${aba}`).classList.remove('hidden');
-            document.getElementById(`aba-${aba}`).className = 'flex-1 py-4 px-6 font-semibold text-[#5d4037] border-b-2 border-[#5d4037] bg-[#faf7f5] transition-all';
-        };
+            // Formulários
+            document.getElementById('form-produto').addEventListener('submit', salvarProduto);
+            document.getElementById('form-opcao').addEventListener('submit', salvarOpcao);
+        });
 
-        // ==================== CONTROLE STATUS DA LOJA ====================
-        
-        async function carregarStatusLoja() {
-            onSnapshot(doc(db, "config", "loja"), (doc) => {
-                if (doc.exists()) {
-                    statusLojaAtual = doc.data().status || 'fechada';
-                    atualizarBotaoStatusLoja();
-                } else {
-                    // Criar documento padrão
-                    setDoc(doc(db, "config", "loja"), { status: 'fechada', atualizadoEm: new Date().toISOString() });
+        // STATUS DA LOJA
+        function carregarStatusLoja() {
+            onSnapshot(doc(db, "config", "loja"), (docSnap) => {
+                if (docSnap.exists()) {
+                    const status = docSnap.data().status || 'fechada';
+                    atualizarUIStatus(status);
                 }
             });
         }
 
-        function atualizarBotaoStatusLoja() {
+        function atualizarUIStatus(status) {
             const btn = document.getElementById('btn-status-loja');
-            if (statusLojaAtual === 'aberta') {
-                btn.textContent = '🟢 Loja Aberta';
-                btn.className = 'px-4 py-2 rounded-lg text-white font-bold text-sm transition-all shadow-md hover:shadow-lg transform hover:scale-105 status-aberta';
+            const toggle = document.getElementById('toggle-status');
+            const texto = document.getElementById('texto-status');
+            
+            if (status === 'aberta') {
+                btn.classList.remove('bg-gray-300');
+                btn.classList.add('bg-green-500');
+                toggle.classList.remove('translate-x-1');
+                toggle.classList.add('translate-x-6');
+                texto.textContent = 'Aberta';
+                texto.classList.remove('text-gray-500');
+                texto.classList.add('text-green-600');
             } else {
-                btn.textContent = '🔴 Loja Fechada';
-                btn.className = 'px-4 py-2 rounded-lg text-white font-bold text-sm transition-all shadow-md hover:shadow-lg transform hover:scale-105 status-fechada';
+                btn.classList.remove('bg-green-500');
+                btn.classList.add('bg-gray-300');
+                toggle.classList.remove('translate-x-6');
+                toggle.classList.add('translate-x-1');
+                texto.textContent = 'Fechada';
+                texto.classList.remove('text-green-600');
+                texto.classList.add('text-gray-500');
             }
         }
 
         window.toggleStatusLoja = async () => {
-            const novoStatus = statusLojaAtual === 'aberta' ? 'fechada' : 'aberta';
-            try {
-                await setDoc(doc(db, "config", "loja"), { 
-                    status: novoStatus, 
-                    atualizadoEm: new Date().toISOString() 
-                });
-                alert(`Loja ${novoStatus === 'aberta' ? 'ABERTA' : 'FECHADA'} com sucesso!`);
-            } catch (e) {
-                console.error(e);
-                alert('Erro ao alterar status');
-            }
+            const docRef = doc(db, "config", "loja");
+            const docSnap = await getDoc(docRef);
+            const statusAtual = docSnap.exists() ? (docSnap.data().status || 'fechada') : 'fechada';
+            const novoStatus = statusAtual === 'aberta' ? 'fechada' : 'aberta';
+            
+            await setDoc(docRef, { status: novoStatus, updatedAt: new Date() }, { merge: true });
+            mostrarToast(`Loja ${novoStatus === 'aberta' ? 'aberta' : 'fechada'} com sucesso!`, novoStatus === 'aberta' ? 'success' : 'info');
         };
 
-        // ==================== PRODUTOS ====================
+        // NAVEGAÇÃO
+        window.mostrarAba = (aba) => {
+            document.querySelectorAll('[id^="aba-"]').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('[id^="tab-"]').forEach(el => {
+                el.classList.remove('tab-active');
+                el.classList.add('text-gray-500');
+            });
+            
+            document.getElementById(`aba-${aba}`).classList.remove('hidden');
+            const tab = document.getElementById(`tab-${aba}`);
+            tab.classList.add('tab-active');
+            tab.classList.remove('text-gray-500');
+        };
 
+        // PRODUTOS
         function carregarProdutos() {
             onSnapshot(collection(db, "produtos"), (snapshot) => {
-                const lista = document.getElementById('lista-produtos');
-                lista.innerHTML = '';
+                const grid = document.getElementById('produtos-grid');
+                grid.innerHTML = '';
                 
                 if (snapshot.empty) {
-                    lista.innerHTML = '<p class="text-center text-gray-400 py-8">Nenhum produto cadastrado</p>';
-                    return;
-                }
-                
-                snapshot.forEach((d) => {
-                    const p = d.data();
-                    const isAtivo = p.status === 'ativo';
-                    
-                    lista.innerHTML += `
-                        <div class="bg-white border rounded-xl p-4 flex items-center gap-4 ${isAtivo ? 'border-gray-200' : 'border-red-200 bg-red-50 opacity-75'}">
-                            <img src="${p.foto || 'https://via.placeholder.com/80?text=Sem+Foto'}" class="w-20 h-20 rounded-lg object-cover border flex-shrink-0">
-                            
-                            <div class="flex-1 min-w-0">
-                                <div class="flex items-center gap-2 mb-1">
-                                    <h4 class="font-bold text-[#5d4037] truncate">${p.nome}</h4>
-                                    ${!isAtivo ? '<span class="text-[10px] bg-red-200 text-red-700 px-2 py-1 rounded-full">INATIVO</span>' : ''}
-                                </div>
-                                <p class="text-sm text-[#a1887f] font-semibold">R$ ${p.preco ? p.preco.toFixed(2) : '0.00'}</p>
-                                <p class="text-xs text-gray-500 truncate">${p.descricao || ''}</p>
-                                ${p.especificacoes ? '<span class="inline-block bg-blue-100 text-blue-700 text-[10px] px-2 py-1 rounded-full mt-1">📋 Com especificações</span>' : ''}
-                            </div>
-                            
-                            <div class="flex flex-col gap-2 flex-shrink-0">
-                                <button onclick="editarProduto('${d.id}')" class="bg-blue-50 text-blue-600 p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-all text-xs font-semibold">Editar</button>
-                                <button onclick="excluirProduto('${d.id}')" class="bg-red-50 text-red-500 p-2 rounded-lg hover:bg-red-500 hover:text-white transition-all text-xs font-semibold">Excluir</button>
-                            </div>
+                    grid.innerHTML = `
+                        <div class="col-span-full text-center py-12 text-[#a1887f]">
+                            <i class="fas fa-cookie-bite text-4xl mb-4"></i>
+                            <p>Nenhum produto cadastrado</p>
                         </div>
                     `;
+                    return;
+                }
+
+                snapshot.forEach((doc) => {
+                    const produto = { id: doc.id, ...doc.data() };
+                    const card = criarCardProduto(produto);
+                    grid.appendChild(card);
                 });
             });
         }
 
+        function criarCardProduto(produto) {
+            const div = document.createElement('div');
+            div.className = 'bg-white rounded-2xl overflow-hidden card-shadow hover-lift';
+            
+            const statusClass = produto.status === 'ativo' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
+            const statusText = produto.status === 'ativo' ? 'Ativo' : 'Inativo';
+            
+            div.innerHTML = `
+                <div class="relative h-48 overflow-hidden">
+                    <img src="${produto.foto || 'https://via.placeholder.com/400x300?text=Sem+Foto'}" 
+                         class="w-full h-full object-cover"
+                         onerror="this.src='https://via.placeholder.com/400x300?text=Sem+Foto'">
+                    <div class="absolute top-3 right-3">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold ${statusClass}">${statusText}</span>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <h3 class="text-lg font-bold text-[#5d4037] font-serif mb-2">${produto.nome}</h3>
+                    <p class="text-[#a1887f] text-sm mb-3 line-clamp-2">${produto.descricao || 'Sem descrição'}</p>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-2xl font-bold text-[#5d4037]">R$ ${produto.preco ? produto.preco.toFixed(2) : '0.00'}</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="editarProduto('${produto.id}')" class="flex-1 bg-gray-100 hover:bg-gray-200 text-[#5d4037] py-2 rounded-lg font-semibold text-sm transition-colors">
+                            <i class="fas fa-edit mr-1"></i> Editar
+                        </button>
+                        <button onclick="excluirProduto('${produto.id}')" class="flex-1 bg-red-50 hover:bg-red-100 text-red-600 py-2 rounded-lg font-semibold text-sm transition-colors">
+                            <i class="fas fa-trash mr-1"></i> Excluir
+                        </button>
+                    </div>
+                </div>
+            `;
+            return div;
+        }
+
         window.abrirModalProduto = () => {
             produtoEditando = null;
-            fotoNovaProduto = null;
-            fotoURLProduto = '';
-            
             document.getElementById('titulo-modal-produto').textContent = 'Novo Produto';
+            document.getElementById('form-produto').reset();
             document.getElementById('produto-id').value = '';
-            document.getElementById('produto-nome').value = '';
-            document.getElementById('produto-preco').value = '';
-            document.getElementById('produto-desc').value = '';
-            document.getElementById('produto-especificacoes').value = '';
-            document.getElementById('produto-status').value = 'ativo';
-            
-            document.getElementById('produto-upload-area').classList.remove('hidden');
-            document.getElementById('produto-preview-area').classList.add('hidden');
-            document.getElementById('produto-progress').classList.add('hidden');
-            
-            document.getElementById('modal-produto').classList.remove('hidden');
+            mostrarModal('modal-produto');
         };
 
         window.editarProduto = async (id) => {
@@ -403,256 +542,293 @@
             const docSnap = await getDoc(docRef);
             
             if (docSnap.exists()) {
-                const p = docSnap.data();
+                const produto = docSnap.data();
                 produtoEditando = id;
-                fotoURLProduto = p.foto || '';
-                
                 document.getElementById('titulo-modal-produto').textContent = 'Editar Produto';
                 document.getElementById('produto-id').value = id;
-                document.getElementById('produto-nome').value = p.nome || '';
-                document.getElementById('produto-preco').value = p.preco || '';
-                document.getElementById('produto-desc').value = p.descricao || '';
-                document.getElementById('produto-especificacoes').value = p.especificacoes || '';
-                document.getElementById('produto-status').value = p.status || 'ativo';
-                
-                if (p.foto) {
-                    document.getElementById('produto-preview-img').src = p.foto;
-                    document.getElementById('produto-upload-area').classList.add('hidden');
-                    document.getElementById('produto-preview-area').classList.remove('hidden');
+                document.getElementById('produto-nome').value = produto.nome || '';
+                document.getElementById('produto-descricao').value = produto.descricao || '';
+                document.getElementById('produto-preco').value = produto.preco || '';
+                document.getElementById('produto-foto').value = produto.foto || '';
+                document.getElementById('produto-especificacoes').value = produto.especificacoes || '';
+                document.getElementById('produto-status').value = produto.status || 'ativo';
+                mostrarModal('modal-produto');
+            }
+        };
+
+        async function salvarProduto(e) {
+            e.preventDefault();
+            
+            const dados = {
+                nome: document.getElementById('produto-nome').value,
+                descricao: document.getElementById('produto-descricao').value,
+                preco: parseFloat(document.getElementById('produto-preco').value) || 0,
+                foto: document.getElementById('produto-foto').value,
+                especificacoes: document.getElementById('produto-especificacoes').value,
+                status: document.getElementById('produto-status').value,
+                updatedAt: new Date()
+            };
+
+            try {
+                if (produtoEditando) {
+                    await updateDoc(doc(db, "produtos", produtoEditando), dados);
+                    mostrarToast('Produto atualizado com sucesso!');
                 } else {
-                    document.getElementById('produto-upload-area').classList.remove('hidden');
-                    document.getElementById('produto-preview-area').classList.add('hidden');
+                    dados.createdAt = new Date();
+                    await addDoc(collection(db, "produtos"), dados);
+                    mostrarToast('Produto criado com sucesso!');
                 }
-                
-                document.getElementById('produto-progress').classList.add('hidden');
-                document.getElementById('modal-produto').classList.remove('hidden');
+                fecharModalProduto();
+            } catch (error) {
+                mostrarToast('Erro ao salvar: ' + error.message, 'error');
+            }
+        }
+
+        window.excluirProduto = async (id) => {
+            if (confirm('Tem certeza que deseja excluir este produto?')) {
+                try {
+                    await deleteDoc(doc(db, "produtos", id));
+                    mostrarToast('Produto excluído com sucesso!');
+                } catch (error) {
+                    mostrarToast('Erro ao excluir: ' + error.message, 'error');
+                }
             }
         };
 
         window.fecharModalProduto = () => {
-            document.getElementById('modal-produto').classList.add('hidden');
+            fecharModal('modal-produto');
         };
 
-        window.previewFotoProduto = (input) => {
-            const file = input.files[0];
-            if (file) {
-                fotoNovaProduto = file;
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.getElementById('produto-preview-img').src = e.target.result;
-                    document.getElementById('produto-upload-area').classList.add('hidden');
-                    document.getElementById('produto-preview-area').classList.remove('hidden');
-                };
-                reader.readAsDataURL(file);
-            }
-        };
-
-        window.removerFotoProduto = () => {
-            fotoNovaProduto = null;
-            fotoURLProduto = '';
-            document.getElementById('produto-foto-input').value = '';
-            document.getElementById('produto-upload-area').classList.remove('hidden');
-            document.getElementById('produto-preview-area').classList.add('hidden');
-        };
-
-        async function uploadFotoProduto(file) {
-            return new Promise((resolve, reject) => {
-                const nomeArquivo = `produtos/${Date.now()}_${file.name}`;
-                const storageRef = ref(storage, nomeArquivo);
-                const uploadTask = uploadBytesResumable(storageRef, file);
-
-                document.getElementById('produto-progress').classList.remove('hidden');
-                
-                uploadTask.on('state_changed', 
-                    (snapshot) => {
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        document.getElementById('produto-progress-bar').style.width = progress + '%';
-                    },
-                    (error) => reject(error),
-                    async () => {
-                        const url = await getDownloadURL(uploadTask.snapshot.ref);
-                        resolve(url);
-                    }
-                );
+        // OPÇÕES (ADICIONAIS COM CATEGORIA)
+        function carregarOpcoes() {
+            onSnapshot(collection(db, "adicionais"), (snapshot) => {
+                renderizarOpcoes(snapshot);
             });
         }
 
-        window.salvarProduto = async () => {
-            const btn = document.getElementById('btn-salvar-produto');
-            const nome = document.getElementById('produto-nome').value;
-            const preco = parseFloat(document.getElementById('produto-preco').value);
+        function renderizarOpcoes(snapshot) {
+            const container = document.getElementById('opcoes-lista');
+            container.innerHTML = '';
             
-            if (!nome || !preco) {
-                alert('Preencha nome e preço!');
-                return;
-            }
-
-            btn.disabled = true;
-            btn.textContent = 'Salvando...';
-
-            try {
-                let urlFoto = fotoURLProduto;
-                
-                // Se tem foto nova, faz upload
-                if (fotoNovaProduto) {
-                    urlFoto = await uploadFotoProduto(fotoNovaProduto);
+            const opcoes = [];
+            snapshot.forEach((doc) => {
+                const opcao = { id: doc.id, ...doc.data() };
+                // Itens antigos sem categoria vão para "semCategoria"
+                if (!opcao.categoria) {
+                    opcao.categoria = 'semCategoria';
                 }
+                opcoes.push(opcao);
+            });
 
-                const dados = {
-                    nome: nome,
-                    preco: preco,
-                    descricao: document.getElementById('produto-desc').value,
-                    especificacoes: document.getElementById('produto-especificacoes').value,
-                    status: document.getElementById('produto-status').value,
-                    foto: urlFoto,
-                    atualizadoEm: new Date().toISOString()
-                };
+            // Filtrar
+            const opcoesFiltradas = filtroAtual === 'todos' 
+                ? opcoes 
+                : opcoes.filter(o => o.categoria === filtroAtual);
 
-                if (produtoEditando) {
-                    await updateDoc(doc(db, "produtos", produtoEditando), dados);
-                    alert('Produto atualizado!');
-                } else {
-                    dados.criadoEm = new Date().toISOString();
-                    await addDoc(collection(db, "produtos"), dados);
-                    alert('Produto criado!');
-                }
+            // Agrupar por categoria se estiver vendo todas
+            if (filtroAtual === 'todos') {
+                const grupos = {};
+                opcoes.forEach(opcao => {
+                    const cat = opcao.categoria || 'semCategoria';
+                    if (!grupos[cat]) grupos[cat] = [];
+                    grupos[cat].push(opcao);
+                });
 
-                fecharModalProduto();
-            } catch (e) {
-                console.error(e);
-                alert('Erro ao salvar');
-            }
-            
-            btn.disabled = false;
-            btn.textContent = 'Salvar Produto';
-        };
-
-        window.excluirProduto = async (id) => {
-            if(confirm('Tem certeza que deseja excluir este produto?')) {
-                try {
-                    await deleteDoc(doc(db, "produtos", id));
-                    alert('Produto excluído!');
-                } catch (e) {
-                    alert('Erro ao excluir');
-                }
-            }
-        };
-
-        // ==================== ADICIONAIS ====================
-
-        function carregarAdicionais() {
-            onSnapshot(collection(db, "adicionais"), (snapshot) => {
-                const lista = document.getElementById('lista-adicionais');
-                lista.innerHTML = '';
-                
-                if (snapshot.empty) {
-                    lista.innerHTML = '<p class="text-center text-gray-400 py-8">Nenhum adicional cadastrado</p>';
-                    return;
-                }
-                
-                snapshot.forEach((d) => {
-                    const a = d.data();
-                    const isAtivo = a.status === 'ativo';
-                    
-                    lista.innerHTML += `
-                        <div class="bg-white border rounded-xl p-4 flex items-center justify-between ${isAtivo ? 'border-gray-200' : 'border-gray-300 bg-gray-50 opacity-75'}">
-                            <div>
-                                <div class="flex items-center gap-2 mb-1">
-                                    <h4 class="font-bold text-gray-800">${a.nome}</h4>
-                                    ${!isAtivo ? '<span class="text-[10px] bg-gray-300 text-gray-600 px-2 py-1 rounded-full">INATIVO</span>' : ''}
-                                </div>
-                                <p class="text-sm text-amber-600 font-semibold">+ R$ ${a.valor ? a.valor.toFixed(2) : '0.00'}</p>
+                Object.keys(categoriasConfig).forEach(catKey => {
+                    if (grupos[catKey] && grupos[catKey].length > 0) {
+                        const config = categoriasConfig[catKey];
+                        const grupoDiv = document.createElement('div');
+                        grupoDiv.className = 'mb-6';
+                        grupoDiv.innerHTML = `
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-2xl">${config.icone}</span>
+                                <h3 class="text-lg font-bold text-[#5d4037]">${config.nome}</h3>
+                                <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs font-bold">${grupos[catKey].length}</span>
                             </div>
-                            
-                            <div class="flex gap-2">
-                                <button onclick="editarAdicional('${d.id}')" class="bg-blue-50 text-blue-600 p-2 rounded-lg hover:bg-blue-600 hover:text-white transition-all text-xs font-semibold">Editar</button>
-                                <button onclick="excluirAdicional('${d.id}')" class="bg-red-50 text-red-500 p-2 rounded-lg hover:bg-red-500 hover:text-white transition-all text-xs font-semibold">Excluir</button>
+                            <div class="space-y-2">
+                                ${grupos[catKey].map(opcao => criarHTMLItemOpcao(opcao)).join('')}
                             </div>
+                        `;
+                        container.appendChild(grupoDiv);
+                    }
+                });
+            } else {
+                // Lista simples quando filtrado
+                if (opcoesFiltradas.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-12 text-[#a1887f]">
+                            <i class="fas fa-inbox text-4xl mb-4"></i>
+                            <p>Nenhuma opção nesta categoria</p>
                         </div>
                     `;
-                });
-            });
+                } else {
+                    opcoesFiltradas.forEach(opcao => {
+                        container.innerHTML += criarHTMLItemOpcao(opcao);
+                    });
+                }
+            }
         }
 
-        window.abrirModalAdicional = () => {
-            document.getElementById('titulo-modal-adicional').textContent = 'Novo Adicional';
-            document.getElementById('adicional-id').value = '';
-            document.getElementById('adicional-nome').value = '';
-            document.getElementById('adicional-valor').value = '';
-            document.getElementById('adicional-status').value = 'ativo';
-            document.getElementById('modal-adicional').classList.remove('hidden');
+        function criarHTMLItemOpcao(opcao) {
+            const config = categoriasConfig[opcao.categoria] || categoriasConfig.semCategoria;
+            const statusClass = opcao.status === 'ativo' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500';
+            const valorTexto = opcao.valor === 0 ? '<span class="text-green-600 font-medium">Incluído</span>' : `+ R$ ${opcao.valor.toFixed(2)}`;
+            
+            return `
+                <div class="bg-white rounded-xl p-4 card-shadow flex items-center justify-between hover-lift">
+                    <div class="flex items-center gap-4">
+                        <span class="category-badge ${config.cor}">${config.icone} ${config.nome}</span>
+                        <div>
+                            <h4 class="font-bold text-[#5d4037]">${opcao.nome}</h4>
+                            <p class="text-sm text-[#a1887f]">${valorTexto}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold ${statusClass}">${opcao.status === 'ativo' ? 'Ativo' : 'Inativo'}</span>
+                        <button onclick="editarOpcao('${opcao.id}')" class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-[#5d4037] transition-colors">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button onclick="excluirOpcao('${opcao.id}')" class="w-10 h-10 rounded-full bg-red-50 hover:bg-red-100 flex items-center justify-center text-red-600 transition-colors">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        window.filtrarCategoria = (categoria) => {
+            filtroAtual = categoria;
+            
+            // Atualizar botões
+            document.querySelectorAll('.filtro-categoria').forEach(btn => {
+                if (btn.dataset.cat === categoria) {
+                    btn.classList.add('bg-[#5d4037]', 'text-white');
+                    btn.classList.remove('bg-gray-100', 'text-gray-700');
+                } else {
+                    btn.classList.remove('bg-[#5d4037]', 'text-white');
+                    btn.classList.add('bg-gray-100', 'text-gray-700');
+                }
+            });
+
+            // Recarregar
+            onSnapshot(collection(db, "adicionais"), (snapshot) => {
+                renderizarOpcoes(snapshot);
+            });
         };
 
-        window.editarAdicional = async (id) => {
+        window.abrirModalOpcao = () => {
+            opcaoEditando = null;
+            document.getElementById('titulo-modal-opcao').textContent = 'Nova Opção';
+            document.getElementById('form-opcao').reset();
+            document.getElementById('opcao-id').value = '';
+            document.getElementById('opcao-valor').value = '0';
+            mostrarModal('modal-opcao');
+        };
+
+        window.editarOpcao = async (id) => {
             const docRef = doc(db, "adicionais", id);
             const docSnap = await getDoc(docRef);
             
             if (docSnap.exists()) {
-                const a = docSnap.data();
-                document.getElementById('titulo-modal-adicional').textContent = 'Editar Adicional';
-                document.getElementById('adicional-id').value = id;
-                document.getElementById('adicional-nome').value = a.nome || '';
-                document.getElementById('adicional-valor').value = a.valor || '';
-                document.getElementById('adicional-status').value = a.status || 'ativo';
-                document.getElementById('modal-adicional').classList.remove('hidden');
+                const opcao = docSnap.data();
+                opcaoEditando = id;
+                document.getElementById('titulo-modal-opcao').textContent = 'Editar Opção';
+                document.getElementById('opcao-id').value = id;
+                document.getElementById('opcao-nome').value = opcao.nome || '';
+                document.getElementById('opcao-categoria').value = opcao.categoria || 'semCategoria';
+                document.getElementById('opcao-valor').value = opcao.valor || 0;
+                document.getElementById('opcao-status').value = opcao.status || 'ativo';
+                mostrarModal('modal-opcao');
             }
         };
 
-        window.fecharModalAdicional = () => {
-            document.getElementById('modal-adicional').classList.add('hidden');
-        };
-
-        window.salvarAdicional = async () => {
-            const btn = document.getElementById('btn-salvar-adicional');
-            const id = document.getElementById('adicional-id').value;
-            const nome = document.getElementById('adicional-nome').value;
-            const valor = parseFloat(document.getElementById('adicional-valor').value);
+        async function salvarOpcao(e) {
+            e.preventDefault();
             
-            if (!nome || !valor) {
-                alert('Preencha nome e valor!');
-                return;
-            }
-
-            btn.disabled = true;
-            btn.textContent = 'Salvando...';
+            const dados = {
+                nome: document.getElementById('opcao-nome').value,
+                categoria: document.getElementById('opcao-categoria').value,
+                valor: parseFloat(document.getElementById('opcao-valor').value) || 0,
+                status: document.getElementById('opcao-status').value,
+                updatedAt: new Date()
+            };
 
             try {
-                const dados = {
-                    nome: nome,
-                    valor: valor,
-                    status: document.getElementById('adicional-status').value,
-                    atualizadoEm: new Date().toISOString()
-                };
-
-                if (id) {
-                    await updateDoc(doc(db, "adicionais", id), dados);
-                    alert('Adicional atualizado!');
+                if (opcaoEditando) {
+                    await updateDoc(doc(db, "adicionais", opcaoEditando), dados);
+                    mostrarToast('Opção atualizada com sucesso!');
                 } else {
-                    dados.criadoEm = new Date().toISOString();
+                    dados.createdAt = new Date();
                     await addDoc(collection(db, "adicionais"), dados);
-                    alert('Adicional criado!');
+                    mostrarToast('Opção criada com sucesso!');
                 }
-
-                fecharModalAdicional();
-            } catch (e) {
-                console.error(e);
-                alert('Erro ao salvar');
+                fecharModalOpcao();
+            } catch (error) {
+                mostrarToast('Erro ao salvar: ' + error.message, 'error');
             }
-            
-            btn.disabled = false;
-            btn.textContent = 'Salvar';
-        };
+        }
 
-        window.excluirAdicional = async (id) => {
-            if(confirm('Tem certeza que deseja excluir este adicional?')) {
+        window.excluirOpcao = async (id) => {
+            if (confirm('Tem certeza que deseja excluir esta opção?')) {
                 try {
                     await deleteDoc(doc(db, "adicionais", id));
-                    alert('Adicional excluído!');
-                } catch (e) {
-                    alert('Erro ao excluir');
+                    mostrarToast('Opção excluída com sucesso!');
+                } catch (error) {
+                    mostrarToast('Erro ao excluir: ' + error.message, 'error');
                 }
             }
         };
+
+        window.fecharModalOpcao = () => {
+            fecharModal('modal-opcao');
+        };
+
+        // UTILITÁRIOS
+        function mostrarModal(id) {
+            const modal = document.getElementById(id);
+            const content = document.getElementById(id + '-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function fecharModal(id) {
+            const modal = document.getElementById(id);
+            const content = document.getElementById(id + '-content');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function mostrarToast(mensagem, tipo = 'success') {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toast-icon');
+            const msg = document.getElementById('toast-message');
+            
+            msg.textContent = mensagem;
+            icon.className = tipo === 'error' ? 'fas fa-exclamation-circle text-red-400' : 
+                           tipo === 'info' ? 'fas fa-info-circle text-blue-400' : 
+                           'fas fa-check-circle text-green-400';
+            
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Fechar modais ao clicar fora
+        ['modal-produto', 'modal-opcao'].forEach(id => {
+            document.getElementById(id).addEventListener('click', (e) => {
+                if (e.target.id === id) {
+                    fecharModal(id);
+                }
+            });
+        });
     </script>
 </body>
-</html>
+</html>'''
+
