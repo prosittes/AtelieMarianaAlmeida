@@ -90,6 +90,7 @@
             border-radius: 4px;
             cursor: pointer;
             position: relative;
+            transition: all 0.2s ease;
         }
         
         .checkbox-custom:checked {
@@ -104,6 +105,19 @@
             font-size: 14px;
             top: -2px;
             left: 3px;
+        }
+        
+        .adicional-item {
+            transition: all 0.2s ease;
+        }
+        
+        .adicional-item:hover {
+            background-color: #f5ebe0;
+        }
+        
+        .adicional-item.selected {
+            background-color: #e8d5c4;
+            border-color: var(--marrom-claro);
         }
         
         .modal-backdrop {
@@ -121,6 +135,21 @@
         .decorative-line {
             height: 2px;
             background: linear-gradient(90deg, transparent 0%, var(--marrom-claro) 50%, transparent 100%);
+        }
+        
+        /* Badge de adicionais no card */
+        .badge-adicionais {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        
+        /* Animação de pulso para o total */
+        @keyframes pulse-total {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .total-atualizado {
+            animation: pulse-total 0.3s ease;
         }
     </style>
 <base target="_blank">
@@ -182,7 +211,7 @@
                 </button>
                 <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
                     <h3 id="modal-nome" class="text-2xl font-bold text-white font-serif"></h3>
-                    <p id="modal-preco" class="text-white font-bold text-lg"></p>
+                    <p id="modal-preco-base" class="text-white/90 text-sm">Preço base: R$ 0,00</p>
                 </div>
             </div>
 
@@ -200,21 +229,37 @@
                     <div id="modal-especificacoes" class="bg-[#faf7f5] p-4 rounded-xl text-sm text-[#6d4c41] whitespace-pre-line"></div>
                 </div>
 
-                <!-- ADICIONAIS -->
-                <div id="modal-adicionais-container">
+                <!-- ADICIONAIS - ATUALIZADO PARA FILTRAR POR PRODUTO -->
+                <div id="modal-adicionais-container" class="hidden">
                     <h4 class="font-bold text-[#5d4037] mb-3 text-sm uppercase tracking-wider flex items-center gap-2">
                         <i class="fas fa-plus-circle text-[#a67c52]"></i>
-                        Adicionais
+                        Adicionais Disponíveis
                     </h4>
                     <div id="lista-adicionais" class="space-y-2">
-                        <!-- Adicionais carregados dinamicamente -->
+                        <!-- Adicionais carregados dinamicamente baseado no produto -->
                     </div>
+                    <p id="sem-adicionais-msg" class="hidden text-[#a1887f] text-sm italic py-2">Nenhum adicional disponível para este produto</p>
                 </div>
 
-                <!-- TOTAL -->
-                <div class="bg-gradient-to-r from-[#5d4037] to-[#3e2723] text-white p-4 rounded-2xl flex justify-between items-center">
-                    <span class="font-semibold">Total do Pedido:</span>
-                    <span id="modal-total" class="text-2xl font-bold">R$ 0,00</span>
+                <!-- RESUMO DO PEDIDO -->
+                <div class="bg-[#faf7f5] rounded-xl p-4 space-y-2">
+                    <div class="flex justify-between text-sm text-[#8d6e63]">
+                        <span>Produto:</span>
+                        <span id="resumo-produto" class="font-medium text-[#5d4037]">R$ 0,00</span>
+                    </div>
+                    <div id="resumo-adicionais" class="hidden">
+                        <div class="flex justify-between text-sm text-[#8d6e63]">
+                            <span>Adicionais:</span>
+                            <span id="valor-adicionais" class="font-medium text-[#5d4037]">R$ 0,00</span>
+                        </div>
+                        <div id="lista-adicionais-selecionados" class="text-xs text-[#a67c52] mt-1 pl-4 border-l-2 border-[#d7ccc8]"></div>
+                    </div>
+                    <div class="border-t border-[#e8d5c4] pt-2 mt-2">
+                        <div class="flex justify-between items-center">
+                            <span class="font-semibold text-[#5d4037]">Total:</span>
+                            <span id="modal-total" class="text-2xl font-bold text-[#5d4037] total-atualizado">R$ 0,00</span>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- BOTÃO WHATSAPP -->
@@ -282,7 +327,7 @@
         // VARIÁVEIS GLOBAIS
         let produtoAtual = null;
         let adicionaisSelecionados = [];
-        let todosAdicionais = [];
+        let todosAdicionais = []; // Todos os adicionais do Firebase
         let statusLoja = 'fechada';
 
         // INICIALIZAR
@@ -340,9 +385,21 @@
                 }
 
                 produtosAtivos.forEach((produto, index) => {
+                    // Contar quantos adicionais estão disponíveis para este produto
+                    const qtdAdicionais = contarAdicionaisDisponiveis(produto.id);
+                    
                     const card = document.createElement('div');
                     card.className = 'bg-white rounded-3xl overflow-hidden card-shadow hover-lift fade-in';
                     card.style.animationDelay = `${index * 0.1}s`;
+                    
+                    let badgeAdicionais = '';
+                    if (qtdAdicionais > 0) {
+                        badgeAdicionais = `
+                            <div class="absolute top-3 right-3 badge-adicionais text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                                <i class="fas fa-plus mr-1"></i>${qtdAdicionais} adicionais
+                            </div>
+                        `;
+                    }
                     
                     card.innerHTML = `
                         <div class="relative h-64 overflow-hidden group">
@@ -350,6 +407,7 @@
                                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                  onerror="this.src='https://via.placeholder.com/400x300?text=Sem+Foto'">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            ${badgeAdicionais}
                         </div>
                         <div class="p-6">
                             <h3 class="text-xl font-bold text-[#5d4037] mb-2 font-serif">${produto.nome}</h3>
@@ -369,7 +427,17 @@
             });
         }
 
-        // CARREGAR ADICIONAIS
+        // CONTAR ADICIONAIS DISPONÍVEIS PARA UM PRODUTO
+        function contarAdicionaisDisponiveis(produtoId) {
+            return todosAdicionais.filter(adicional => {
+                // Adicional é válido se:
+                // 1. Não tem produtoId (é global) OU
+                // 2. Tem produtoId igual ao produto atual
+                return !adicional.produtoId || adicional.produtoId === produtoId;
+            }).length;
+        }
+
+        // CARREGAR TODOS OS ADICIONAIS DO FIREBASE
         function carregarAdicionais() {
             onSnapshot(collection(db, "adicionais"), (snapshot) => {
                 todosAdicionais = [];
@@ -379,6 +447,17 @@
                         todosAdicionais.push(adicional);
                     }
                 });
+                // Recarregar produtos para atualizar os badges de adicionais
+                carregarProdutos();
+            });
+        }
+
+        // OBTER ADICIONAIS DISPONÍVEIS PARA UM PRODUTO ESPECÍFICO
+        function getAdicionaisDoProduto(produtoId) {
+            return todosAdicionais.filter(adicional => {
+                // Se não tem produtoId, é global (disponível para todos)
+                // Se tem produtoId, só mostra se for igual ao produto atual
+                return !adicional.produtoId || adicional.produtoId === produtoId;
             });
         }
 
@@ -392,10 +471,10 @@
             produtoAtual = { id: produtoId, ...docSnap.data() };
             adicionaisSelecionados = [];
             
-            // Preencher dados
+            // Preencher dados básicos
             document.getElementById('modal-img').src = produtoAtual.foto || '';
             document.getElementById('modal-nome').textContent = produtoAtual.nome;
-            document.getElementById('modal-preco').textContent = `R$ ${produtoAtual.preco.toFixed(2)}`;
+            document.getElementById('modal-preco-base').textContent = `Preço base: R$ ${produtoAtual.preco.toFixed(2)}`;
             document.getElementById('modal-desc').textContent = produtoAtual.descricao || '';
             
             // Especificações
@@ -407,8 +486,8 @@
                 espContainer.classList.add('hidden');
             }
             
-            // Carregar adicionais
-            renderizarAdicionais();
+            // Carregar adicionais específicos deste produto
+            renderizarAdicionais(produtoId);
             
             // Atualizar total
             atualizarTotal();
@@ -435,32 +514,56 @@
             }, 10);
         };
 
-        function renderizarAdicionais() {
+        // RENDERIZAR ADICIONAIS FILTRADOS POR PRODUTO
+        function renderizarAdicionais(produtoId) {
             const container = document.getElementById('lista-adicionais');
+            const containerPai = document.getElementById('modal-adicionais-container');
+            const msgSemAdicionais = document.getElementById('sem-adicionais-msg');
+            
             container.innerHTML = '';
             
-            if (todosAdicionais.length === 0) {
-                container.innerHTML = '<p class="text-[#a1887f] text-sm italic">Nenhum adicional disponível</p>';
+            // Filtrar adicionais para este produto específico
+            const adicionaisDoProduto = getAdicionaisDoProduto(produtoId);
+            
+            if (adicionaisDoProduto.length === 0) {
+                // Não há adicionais para este produto
+                containerPai.classList.add('hidden');
+                msgSemAdicionais.classList.add('hidden');
                 return;
             }
             
-            todosAdicionais.forEach((adicional) => {
+            // Mostrar container de adicionais
+            containerPai.classList.remove('hidden');
+            msgSemAdicionais.classList.add('hidden');
+            
+            adicionaisDoProduto.forEach((adicional) => {
                 const div = document.createElement('div');
-                div.className = 'flex items-center justify-between p-3 bg-[#faf7f5] rounded-xl hover:bg-[#f5ebe0] transition-colors cursor-pointer';
+                div.className = 'adicional-item flex items-center justify-between p-3 bg-[#faf7f5] rounded-xl border border-transparent cursor-pointer';
+                div.dataset.id = adicional.id;
+                
                 div.onclick = (e) => {
                     if (e.target.type !== 'checkbox') {
                         const checkbox = div.querySelector('input[type="checkbox"]');
                         checkbox.checked = !checkbox.checked;
-                        toggleAdicional(adicional, checkbox.checked);
+                        toggleAdicional(adicional, checkbox.checked, div);
                     }
                 };
+                
+                // Verificar se é um adicional global ou específico
+                const tipoAdicional = !adicional.produtoId ? 
+                    '<span class="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full ml-2">Geral</span>' : 
+                    '<span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full ml-2">Específico</span>';
                 
                 div.innerHTML = `
                     <div class="flex items-center gap-3">
                         <input type="checkbox" 
+                               id="adicional-${adicional.id}"
                                class="checkbox-custom" 
-                               onchange="toggleAdicional(${JSON.stringify(adicional).replace(/"/g, '&quot;')}, this.checked)">
-                        <span class="text-[#5d4037] font-medium">${adicional.nome}</span>
+                               onchange="toggleAdicional(${JSON.stringify(adicional).replace(/"/g, '&quot;')}, this.checked, this.closest('.adicional-item'))">
+                        <label for="adicional-${adicional.id}" class="text-[#5d4037] font-medium cursor-pointer select-none flex items-center">
+                            ${adicional.nome}
+                            ${tipoAdicional}
+                        </label>
                     </div>
                     <span class="text-[#a67c52] font-bold">+ R$ ${adicional.valor.toFixed(2)}</span>
                 `;
@@ -468,19 +571,47 @@
             });
         }
 
-        window.toggleAdicional = (adicional, checked) => {
+        window.toggleAdicional = (adicional, checked, elemento) => {
             if (checked) {
                 adicionaisSelecionados.push(adicional);
+                if (elemento) elemento.classList.add('selected');
             } else {
                 adicionaisSelecionados = adicionaisSelecionados.filter(a => a.id !== adicional.id);
+                if (elemento) elemento.classList.remove('selected');
             }
             atualizarTotal();
         };
 
         function atualizarTotal() {
-            let total = produtoAtual ? produtoAtual.preco : 0;
-            adicionaisSelecionados.forEach(a => total += a.valor);
-            document.getElementById('modal-total').textContent = `R$ ${total.toFixed(2)}`;
+            const precoBase = produtoAtual ? produtoAtual.preco : 0;
+            const valorAdicionais = adicionaisSelecionados.reduce((sum, a) => sum + a.valor, 0);
+            const total = precoBase + valorAdicionais;
+            
+            // Atualizar display do total com animação
+            const totalElement = document.getElementById('modal-total');
+            totalElement.textContent = `R$ ${total.toFixed(2)}`;
+            totalElement.classList.remove('total-atualizado');
+            void totalElement.offsetWidth; // Trigger reflow
+            totalElement.classList.add('total-atualizado');
+            
+            // Atualizar resumo
+            document.getElementById('resumo-produto').textContent = `R$ ${precoBase.toFixed(2)}`;
+            
+            const resumoAdicionais = document.getElementById('resumo-adicionais');
+            const listaAdicionaisSelecionados = document.getElementById('lista-adicionais-selecionados');
+            
+            if (adicionaisSelecionados.length > 0) {
+                resumoAdicionais.classList.remove('hidden');
+                document.getElementById('valor-adicionais').textContent = `R$ ${valorAdicionais.toFixed(2)}`;
+                listaAdicionaisSelecionados.innerHTML = adicionaisSelecionados.map(a => 
+                    `<div class="flex justify-between py-0.5">
+                        <span>+ ${a.nome}</span>
+                        <span>R$ ${a.valor.toFixed(2)}</span>
+                    </div>`
+                ).join('');
+            } else {
+                resumoAdicionais.classList.add('hidden');
+            }
         }
 
         window.fecharModal = () => {
@@ -498,20 +629,22 @@
             
             const numeroWhatsApp = "5512996733698"; // Número do Ateliê
             
+            const precoBase = produtoAtual.preco;
+            const valorAdicionais = adicionaisSelecionados.reduce((sum, a) => sum + a.valor, 0);
+            const total = precoBase + valorAdicionais;
+            
             let mensagem = `🧁 *Pedido - Ateliê Mariana Almeida*\n\n`;
             mensagem += `*Produto:* ${produtoAtual.nome}\n`;
-            mensagem += `*Preço Base:* R$ ${produtoAtual.preco.toFixed(2)}\n\n`;
+            mensagem += `*Preço Base:* R$ ${precoBase.toFixed(2)}\n`;
             
             if (adicionaisSelecionados.length > 0) {
-                mensagem += `*Adicionais:*\n`;
+                mensagem += `\n*Adicionais:*\n`;
                 adicionaisSelecionados.forEach(a => {
                     mensagem += `• ${a.nome} (+R$ ${a.valor.toFixed(2)})\n`;
                 });
-                mensagem += `\n`;
             }
             
-            const total = produtoAtual.preco + adicionaisSelecionados.reduce((sum, a) => sum + a.valor, 0);
-            mensagem += `*💰 Total:* R$ ${total.toFixed(2)}\n\n`;
+            mensagem += `\n*💰 Total do Pedido:* R$ ${total.toFixed(2)}\n\n`;
             mensagem += `Gostaria de finalizar meu pedido! 😊`;
             
             const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
@@ -526,4 +659,4 @@
         });
     </script>
 </body>
-</html>
+</html>'''
